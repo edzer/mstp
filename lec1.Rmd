@@ -5,7 +5,8 @@
 ### 1.1 Literature
 
 * C. Chatfield, The analysis of time series: an introduction. Chapman and Hall: chapters 1, 2 and 3 
-* Applied Spatial Data Analysis with R, by R. Bivand, E. Pebesma and V. Gomez-Rubio (Springer; http://www.springer.com/978-0-387-78170-9 or its second edition: http://www.springer.com/statistics/life+sciences%2C+medicine+%26+health/book/978-1-4614-7617-7 ): 
+* Applied Spatial Data Analysis with R, by R. Bivand, E. Pebesma and V. Gomez-Rubio (Springer; 
+[first edition](http://www.springer.com/978-0-387-78170-9) or its [second edition](http://www.springer.com/statistics/life+sciences%2C+medicine+%26+health/book/978-1-4614-7617-7)): 
  * Ch 1, 2, 3
  * Ch 4, 5
  * 1st ed, Ch 6 (customizing classes for spatial data) or 2nd ed, Ch 6 (spatio-temporal data)

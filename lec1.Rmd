@@ -18,6 +18,9 @@ Teachers:
  * Christoph Stasch (exercises)
  * Edzer Pebesma (lectures)
 
+Learnweb:
+ * subscribe! it's free!
+
 Slides:
  * html on http://ifgi.uni-muenster.de/~epebe_01/mstp
  * Rmd sources on on http://github.com/edzer/mstp
@@ -75,7 +78,7 @@ Slides:
 + we can aggregate fields, or objects, but do this differently:
 + population can be summed, temperature cannot
 
-## 3. Aims of modelling
+## 3.4 Aims of modelling
 ... could be
 + curiousity
 + studying models is easier than measuring the world around us
@@ -88,14 +91,14 @@ Scientific aims of modelling are
 + to learn about the world around us
 + to predict the past, current or future, in case where measurement is not feasible.
 
-### 3.1 What is a model?
+### 3.5 What is a model?
 + conceptual models (the water cycle: http://en.wikipedia.org/wiki/File:Water_cycle.png)
 + object models (e.g., UML: http://en.wikipedia.org/wiki/File:UML_diagrams_overview.svg)
 + mathematical models, such as Navier Stokes equation:
 
 ![Navier Stokes equation](http://upload.wikimedia.org/math/4/f/e/4fef570fa684173cbc6e70a904dd5e66.png)
 
-### 3.2 What is a mathematical model?
+### 3.6 What is a mathematical model?
 A mathematical model is an abstract model that uses mathematical
 language to describe the behaviour of a system. 
 

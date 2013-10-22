@@ -1,0 +1,122 @@
+
+## 5. Fitting and choosing models
+
+### 5.1 Back to the temperature series
+
+```{r}
+load("meteo.RData")
+# plot data and trend:
+plot(T.outside~date,meteo,type='l')
+meteo$T.per = 18.2-4.9*sin(pi*(meteo$hours+1.6)/12)
+lines(T.per~date,meteo,col='red')
+```
+
+### 5.2 Removing the diurnal periodicity
+Assuming this is a sinus function, 
+$$\alpha_1 + \alpha_2 \sin(t + \alpha_3)$$,
+we need non-linear regression ($\alpha_3$)
+```{r}
+attach(meteo)
+f = function(x) sum((T.outside - (x[1]+x[2]*sin(pi*(hours+x[3])/12)))^2)
+nlm(f,c(0,0,0))
+```
+
+### 5.3 Temperature anomaly
+```{r}
+plot(T.outside-T.per~date, meteo, type='l')
+title("anomaly")
+```
+
+### 5.4 What can we do with such models?
+* try to find out which model fits best (model selection)
+* learn how they were/could have been generated
+* predict future observations (estimation/prediction/forecasting)
+* generate similar data ourselves (simulation)
+
+### 5.5 How to select a ``best'' model?
+A possible approach is to find the minimum for {\em Akaike's Information
+Criterion} (AIC) for ARMA($p,q$) models and series of length $n$:
+$$AIC = \log \hat{\sigma}^2 + 2(p+q+1)/n$$
+with $\hat{\sigma}^2$ the estimated residual (noise) variance.
+
+Instead of finding a single best model using this single criterion, it
+may be better is to select a small group of ``best'' models, and look
+at model diagnostics for each: is the residual white noise? does it have
+stationary variance?
+
+Even better may be to keep a number of ``fit'' models and consider each as
+(equally?) suitable candidates.
+
+### 5.6 AIC for AR(p), and as as a function of $p$
+```{r}
+n = 10
+aic = numeric(n)
+for (i in 1:n)
+   aic[i] = arima(T.outside, c(i,0,0))$aic  # AR(i)
+aic
+plot(aic[2:10], type='l')
+```
+
+### 5.7 Anomaly AIC as a function of $p$, for AR(p)
+```{r}
+an = T.outside - T.per
+aic_an = numeric(n)
+for (i in 1:n)
+    aic_an[i] = arima(an,c(i,0,0))$aic  # AR(i)
+aic_an
+plot(aic_an[2:10], type='l')
+```
+
+
+```{r}
+# Prediction, e.g. with AR(6)
+x = arima(T.outside, c(6,0,0))
+
+pltpred = function(xlim, Title) {
+  plot(T.outside, xlim = xlim, type='l')
+  start = nrow(meteo) + 1
+  pr = predict(x, n.ahead = xlim[2] - start + 1)
+  lines(start:xlim[2], pr$pred, col='red')
+  lines(start:xlim[2], pr$pred+2*pr$se, col='green')
+  lines(start:xlim[2], pr$pred-2*pr$se, col='green')
+  title(Title)
+}
+pltpred(c(9860, 9900), "10 minutes")
+pltpred(c(9400, 10000), "110 minutes")
+pltpred(c(8000, 11330), "predicting 1 day")
+pltpred(c(1, 19970), "predicting 1 week")
+
+plot(T.outside,xlim=c(1,19970), type='l')
+x.an = arima(an, c(6,0,0)) # model the anomaly by AR(6)
+x.pr = as.numeric(predict(x.an, 10080)$pred) 
+x.se = as.numeric(predict(x.an, 10080)$se)
+hours.all = c(meteo$hours, max(meteo$hours) + (1:10080)/60)
+T.per = 18.2-4.9*sin(pi*(hours.all+1.6)/12)
+lines(T.per, col = 'blue')
+hours.pr = c(max(meteo$hours) + (1:10080)/60)
+T.pr = 18.2-4.9*sin(pi*(hours.pr+1.6)/12)
+lines(9891:19970, T.pr+x.pr, col='red')
+lines(9891:19970, T.pr+x.pr+2*x.se, col='green')
+lines(9891:19970, T.pr+x.pr-2*x.se, col='green')
+title("predicting 1 week: periodic trend + ar(6) for anomaly")
+
+x = arima(T.outside, c(6,0,0))
+plot(T.pr + arima.sim(list(ar = x.an$coef[1:6]), 10080, sd = sqrt(0.002556)), 
+	col = 'red', ylab="Temperature")
+lines(18+arima.sim(list(ar = x$coef[1:6]), 10080, sd=sqrt(0.002589)), 
+	col = 'blue')
+title("red: with trend, blue: without trend")
+```
+
+### 5.8 What can we learn from this?}
+Prediction/forecasting:
+* AR(6) prediction is a compromise between the end of the series and the trend
+* the closer we are to observations, the more similar the prediction is to the
+nearest (last) observation
+* further in the future the prediction converges to the trend
+* the more useful (realistic) the trend is, the more realistic 
+the far-into-the-future prediction becomes
+* the standard error of prediction increases when predictions are further in the
+future.
+
+### 5.9 Next steps: how do we fit coefficients?

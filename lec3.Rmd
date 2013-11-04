@@ -1,7 +1,11 @@
 # 3. Optimization 
 
 # 3.1 linear systems
-Take the example
+Take $x_1$ the example
+
+```{r}
+options("digits")
+```
 
 $$
 	\begin{array}{ll}

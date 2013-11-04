@@ -63,7 +63,7 @@ spplot(meuse.grid["sqrtdist"], col.regions = bpy.colors())
 }
 
 ### Inverse distance weighted interpolation
-Uses a {\color{red} weighted} average:
+Uses a **weighted** average:
 $$\hat{Z}(s_0) = \sum_{i=1}^n \lambda_i Z(s_i)$$
 with $s_0 = \{x_0, y_0\}$,
 or $s_0 = \{x_0, y_0, \mbox{depth}_0\}$
@@ -72,100 +72,118 @@ $$\lambda_i = \frac{|s_i-s_0|^{-p}}{\sum_{i=1}^n |s_i-s_0|^{-p}}$$
 * power $p$: tuning parameter
 * if for some $i$, $|s_i-s_0| = 0$, then $\lambda_i = 1$ and other
 weights become zero
-* $\Rightarrow$ {\color{red} exact} interpolator
+* $\Rightarrow$ **exact** interpolator
 
 ### Effect of power $p$
-\includegraphics[scale=.5]{id}\\
-inverse distance power: {\color{black} 2}, {\color{red} .5}, {\color{green} 10}
-}
+```{r}
+library(sp)
+set.seed(13531)
+pts = data.frame(x = 1:10, y = rep(0,10), z = rnorm(10)*3 + 6)
+coordinates(pts) = ~x+y
+xpts = 0:1100 / 100
+grd = data.frame(x = xpts, y = rep(0, length(xpts)))
+gridded(grd) = ~x+y
+library(gstat)
+plot(z ~ x, as(pts, "data.frame"), xlab ='location', ylab = 'attribute value')
+lines(xpts, idw(z~1, pts, grd, idp = 2)$var1.pred)
+lines(xpts, idw(z~1, pts, grd, idp = 5)$var1.pred, col = 'darkgreen')
+lines(xpts, idw(z~1, pts, grd, idp = .5)$var1.pred, col = 'red')
+legend("bottomright", c("2", ".5", "5"), lty = 1, 
+	col=c("black", "red", "darkgreen"), title = "invese distance power")
+```
 
-\frame{\frametitle{Simple statistical models for interpolation}
-\includegraphics[scale=.5]{lm}
-}
+### Simple statistical models for interpolation
 
-\frame{\frametitle{Time series versus spatial data}
+```{r}
+library(sp)
+data(meuse)
+plot(zinc~dist, meuse)
+plot(log(zinc)~sqrt(dist), meuse)
+```
+
+### Time series versus spatial data
 Differences:
-\begin{itemize}
-\item spatial data live in 2 (or 3) dimensions
-\item there's no past and future
-\item there's no simple conditional independence (AR)
-\end{itemize}
+* spatial data live in 2 (or 3) dimensions
+* there's no past and future
+* there's no simple conditional independence (AR)
 Correspondences
-\begin{itemize}
-\item nearby observations are more alike (auto-correlation)
-\item we can form moving averages
-\item coordinate reference systems are a bit like time zones and DST
-\end{itemize}
-}
+* nearby observations are more alike (auto-correlation)
+* we can form moving averages
+* coordinate reference systems are a bit like time zones and DST
 
-\frame{\frametitle{What information do we have?}
-\begin{itemize}
-\item We have measurements $Z(x)$, with $x$ two-dimensional
+### What information do we have?
+* We have measurements $Z(x)$, with $x$ two-dimensional
 (location on the map)
-\item we have $x$ and $y$ \pause
-\item we may have land use data \pause
-\item we may have soil type or geological data \pause
-\item we may have remote sensing imagery \pause
-\item we may have all kinds of relevant information, related
+* we have $x$ and $y$ \pause
+* we may have land use data \pause
+* we may have soil type or geological data \pause
+* we may have remote sensing imagery \pause
+* we may have all kinds of relevant information, related
 to processes that cause (or result from) $Z(x)$ \pause
-\item we have google maps \pause
-\end{itemize}
-\color{red}We don't want to ignore anything important\color{black}
-}
+* we have google maps 
 
-\frame{\frametitle{Regression or correlation?}}
-(Correlation between two different variables, no auto-correlation) 
+_We don't want to ignore anything important_
 
+### Regression or correlation?
+(Correlation between two different variables, no auto-correlation:) 
+```{r}
+n = 500
+x = rnorm(n)
+y = rnorm(n)
+R = matrix(c(1,0,0,1),2,2)
+R
+plot(cbind(x,y) %*% chol(R))
+title("zero correlation")
+R[2,1] = R[1,2] = 0.5
+plot(cbind(x,y) %*% chol(R))
+title("correlation 0.5")
+R[2,1] = R[1,2] = 0.9
+plot(cbind(x,y) %*% chol(R))
+title("correlation 0.9")
+R[2,1] = R[1,2] = 0.98
+plot(cbind(x,y) %*% chol(R))
+title("correlation 0.98")
+```
+
+### Correlation vs. regression:
 Correspondences:
-\begin{itemize}
-\item both are in the "classic statistics" book, and may involve hypothesis testing
-\item both deal with {\em two} continuous variables
-\item both look at (first order) {\em linear} relations
-\item when correlation is significant, the regression {\em slope} is significant
-\end{itemize}
+* both are in the "classic statistics" book, and may involve hypothesis testing
+* both deal with {\em two} continuous variables
+* both look at (first order) {\em linear} relations
+* when correlation is significant, the regression {\em slope} is significant
 Differences:
-\begin{itemize}
-\item Regression distinguishes $y$ from $x$: $y$ depends on $x$, not reverse;
-\item the line $y=ax+b$ is {\em not} equal to the line $x = cx + d$
-\item Correlation is symmetric: $Cor(x,y)=Cor(y,c)$
-\item Correlation coefficient is unitless and within $[-1,1]$, 
+* Regression distinguishes $y$ from $x$: $y$ depends on $x$, not reverse;
+* the line $y=ax+b$ is {\em not} equal to the line $x = cx + d$
+* Correlation is symmetric: $Cor(x,y)=Cor(y,c)$
+* Correlation coefficient is unitless and within $[-1,1]$, 
 regression coeficients have data units
-\item Regression is concerned with {\em prediction} of $y$ from $x$.
-\end{itemize}
+* Regression is concerned with {\em prediction} of $y$ from $x$.
 
-\frame{\frametitle{The power of regression models for spatial prediction}
+### The power of regression models for spatial prediction
 ... is hard to overestimate. Regression and correlation are the fork
 and knife of statistics.
-\begin{itemize}
-\item linear models have endless application: polynomials, interactions, nested
+* linear models have endless application: polynomials, interactions, nested
 effects, ANOVA/ANCOVA models, hypothesis testing, lack of fit testing, ...
-\item predictors can be transformed non-linearly
-\item linear models can be generalized: logistic regression, Poisson regression, ...,
+* predictors can be transformed non-linearly
+* linear models can be generalized: logistic regression, Poisson regression, ...,
 to cope with discrete data (0/1 data, counts, log-normal)
-\item many derived techniques solve one particular issue in regression, e.g.:
- \begin{itemize}
- \item ridge regression solves collinearity (extreme correlation among predictors)
- \item stepwise regression automatically selects "best" models among many candidates
- \item classification and regression trees
- \end{itemize}
-\end{itemize}
-}
+* many derived techniques solve one particular issue in regression, e.g.:
+ * ridge regression solves collinearity (extreme correlation among predictors)
+ * stepwise regression automatically selects "best" models among many candidates
+ * classification and regression trees
 
-\frame{\frametitle{Why is regression difficult in spatial problems?}
+# Why is regression difficult in spatial problems?
 Regression models assume independent observations. Spatial data are always
 to some degree spatially correlated. 
-\pause
-This does not mean we should discard regression, but rather think about
-\begin{itemize}
-\item to which extent is an outcome dependent on independence?
-\item to which extent is regression {\em robust} agains a violated assumption 
-of independent observations?
-\item to which extent {\em is} the assumption violated? (how strong is the
-correlation)
-\end{itemize}
-}
 
-\frame{\frametitle{What is spatial correlation?}
+This does not mean we should discard regression, but rather think about
+* to which extent is an outcome dependent on independence?
+* to which extent is regression {\em robust} agains a violated assumption 
+of independent observations?
+* to which extent {\em is} the assumption violated? (how strong is the
+correlation)
+
+### What is spatial correlation?
 Waldo Tobler's first law in geography:
 
 Everything is related to everything else, but near things are more
@@ -174,5 +192,4 @@ related than distant things." [Tobler, 1970, p.236]
 TOBLER, W. R. (1970). "A computer model simulation of urban growth in
 the Detroit region". Economic Geography, 46(2): 234-240.
 
-\pause \color{red}But how then is "being related" expressed?\color{black}
-}
+_But how then is "being related" expressed?_

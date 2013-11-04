@@ -277,7 +277,6 @@ $$
 J_f(\theta_k)'J_f(\theta_k) \delta^k = - J_f(\theta_k)'f(\theta^k)
 $$
 What if $\delta f_n(\theta^k)/ \delta \theta$ is unknown?
-}
 
 # Gauss-Newton and the Normal equations
 Recall that in multiple _linear_ regression, with $y=X\theta+e$ the
@@ -351,10 +350,17 @@ samples are too similar, and do not describe the full PDF)
 is close to 60\%.
 * many chains can be run, using different starting values, in parallel
 
-\frame{\includegraphics[scale=.4]{out1}}
-\frame{\includegraphics[scale=.4]{out2}}
-\frame{\includegraphics[scale=.4]{out3}}
-\frame{\includegraphics[scale=.4]{out4}}
+### Little mixing (too low acceptance rate):
+![](out1.png)
+
+### Better mixing:
+![](out2.png)
+
+### Still better mixing:
+![](out3.png)
+
+### Little mixing (too high acceptance rate: too much autocorrelation)
+![](out4.png)
 
 # Likelihood ratio -- side track
 For evaluating acceptance, the ratio $\frac{P(x')}{P(x_t)}$ is needed,

@@ -193,7 +193,7 @@ nature, A4 paper, ...
 
 # the algorithm
 Recursive zooming:
-1. find three GR points, a, b and c such that the minimum lies within a and b
+1. find three GR points, a, b and c such that the minimum lies within a and c
 2. put a point d in the largest section according to GR, with the smallest
 interval closest to the smallest value
 3.  (In case of adbc) determine whether the mininum is between a and b or d and c
@@ -271,7 +271,7 @@ J_f(\theta^k) =
 \right]
 $$ 
 In
-$$\theta^{p+1}=\theta^p + \delta^k$$
+$$\theta^{k+1}=\theta^k + \delta^k$$
 we find $\delta^k$ by solving
 $$
 J_f(\theta_k)'J_f(\theta_k) \delta^k = - J_f(\theta_k)'f(\theta^k)

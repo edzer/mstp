@@ -193,10 +193,11 @@ nature, A4 paper, ...
 
 # the algorithm
 Recursive zooming:
+
 1. find three GR points, a, b and c such that the minimum lies within a and c
 2. put a point d in the largest section according to GR, with the smallest
 interval closest to the smallest value
-3.  (In case of adbc) determine whether the mininum is between a and b or d and c
+3. (In case of adbc) determine whether the mininum is between a and b or d and c
 4. continue with either adb or dbc as if it were abc, unless we're sufficiently
 close (in terms of our goal, or of numerical resolution)
 

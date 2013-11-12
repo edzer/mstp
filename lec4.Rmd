@@ -58,10 +58,6 @@ meuse.grid$sqrtdist = sqrt(meuse.grid$dist)
 spplot(meuse.grid["sqrtdist"], col.regions = bpy.colors())
 ```
 
-### Simple ways of interpolation: idw
-\includegraphics[scale=0.5]{idw}
-}
-
 ### Inverse distance weighted interpolation
 Uses a **weighted** average:
 $$\hat{Z}(s_0) = \sum_{i=1}^n \lambda_i Z(s_i)$$

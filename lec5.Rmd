@@ -246,5 +246,7 @@ $\frac{\delta \sigma^2(s_0)}{\delta\lambda} = -2 v' + 2\lambda'V = 0$
 
 $\lambda' = v' V^{-1}$
 
-BLP/Simple kriging: $\hat{Z}(s_0) = \mu + v'V^{-1} (Z-\mu)  \ \
-\sigma^2(s_0) = \sigma^2_0 - v'V^{-1}v$
+BLP/Simple kriging: 
+
+1. $\hat{Z}(s_0) = \mu + v'V^{-1} (Z-\mu)$
+2. $\sigma^2(s_0) = \sigma^2_0 - v'V^{-1}v$

@@ -1,4 +1,8 @@
 ### Spatial modelling and spatial interpolation
+\(
+\newcommand{\Cor}{{\rm Corr}}
+\)
+
 
 * Simple ways of interpolation
 * Simple statistical models for interpolation
@@ -8,9 +12,9 @@
 
 ### Taking a step back
 Why do we need models?
-* to understand {\em relations} or {\em processes}
+* to understand _relations_ or _processes_
 * to assess (predict, forcast, map) something we do 
-or did not measure {\em and cannot see}
+or did not measure _and cannot see_
 * to assess the consequence of decisions (scenarios)
 where we cannot measure
 
@@ -110,12 +114,12 @@ Correspondences
 ### What information do we have?
 * We have measurements $Z(x)$, with $x$ two-dimensional
 (location on the map)
-* we have $x$ and $y$ \pause
-* we may have land use data \pause
-* we may have soil type or geological data \pause
-* we may have remote sensing imagery \pause
+* we have $x$ and $y$
+* we may have land use data 
+* we may have soil type or geological data 
+* we may have remote sensing imagery 
 * we may have all kinds of relevant information, related
-to processes that cause (or result from) $Z(x)$ \pause
+to processes that cause (or result from) $Z(x)$ 
 * we have google maps 
 
 _We don't want to ignore anything important_
@@ -144,16 +148,16 @@ title("correlation 0.98")
 ### Correlation vs. regression:
 Correspondences:
 * both are in the "classic statistics" book, and may involve hypothesis testing
-* both deal with {\em two} continuous variables
-* both look at (first order) {\em linear} relations
-* when correlation is significant, the regression {\em slope} is significant
+* both deal with _two_ continuous variables
+* both look at (first order) _linear_ relations
+* when correlation is significant, the regression _slope_ is significant
 Differences:
 * Regression distinguishes $y$ from $x$: $y$ depends on $x$, not reverse;
-* the line $y=ax+b$ is {\em not} equal to the line $x = cx + d$
-* Correlation is symmetric: $Cor(x,y)=Cor(y,c)$
+* the line $y=ax+b$ is _not_ equal to the line $x = cy + d$
+* Correlation is symmetric: $\Cor(x,y)=\Cor(y,x)$
 * Correlation coefficient is unitless and within $[-1,1]$, 
 regression coeficients have data units
-* Regression is concerned with {\em prediction} of $y$ from $x$.
+* Regression is concerned with _prediction_ of $y$ from $x$.
 
 ### The power of regression models for spatial prediction
 ... is hard to overestimate. Regression and correlation are the fork
@@ -174,9 +178,9 @@ to some degree spatially correlated.
 
 This does not mean we should discard regression, but rather think about
 * to which extent is an outcome dependent on independence?
-* to which extent is regression {\em robust} agains a violated assumption 
+* to which extent is regression _robust_ agains a violated assumption 
 of independent observations?
-* to which extent {\em is} the assumption violated? (how strong is the
+* to which extent _is_ the assumption violated? (how strong is the
 correlation)
 
 ### What is spatial correlation?

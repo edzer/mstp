@@ -1,5 +1,4 @@
 # Spatial correlation and prediction
-
 \(
 \newcommand{\E}{{\rm E}}       % E expectation operator
 \newcommand{\Var}{{\rm Var}}   % Var variance operator
@@ -175,7 +174,7 @@ Try to think of $E(Z)$ as $\frac{1}{n}\sum_{i=1}^{n} z_i$, with $i \rightarrow \
 Two random variables $X$ and $Y$ have covariance defined as
 $\Cov(X,Y) = E[(X-E(X))(Y-E(Y))]$
 
-###  Correlation and covariance} 
+###  Correlation and covariance
 
 Correlation is scaled covariance, scaled by the variances. For two
 variables $X$ and $Y$, it is

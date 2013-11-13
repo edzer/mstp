@@ -249,3 +249,24 @@ BLP/Simple kriging:
 
 1. $\hat{Z}(s_0) = \mu + v'V^{-1} (Z-\mu)$
 2. $\sigma^2(s_0) = \sigma^2_0 - v'V^{-1}v$
+
+```{r}
+library(sp)
+cov = function(h) exp(-h)
+
+sk = function(data, newdata, mu, cov) {
+	library(sp) # spDists
+	V = cov(spDists(data))
+	v = cov(spDists(data, newdata))
+	mu + t(v) %*% solve(V, data[[1]] - mu)
+}
+
+# prediction location
+newdata = SpatialPoints(cbind(0,0))
+
+# observation locations:
+pts = SpatialPoints(cbind(1,1))
+data = SpatialPointsDataFrame(pts, data.frame(z = 3))
+
+sk(data, newdata, 0, cov)
+```

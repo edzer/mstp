@@ -262,11 +262,13 @@ sk = function(data, newdata, mu, cov) {
 }
 
 # prediction location at (0,0):
-newdata = SpatialPoints(cbind(0,0))
+newdata = SpatialPoints(cbind(0,1))
 
 # observation location at (1,1), with attribute value (y) 3:
 pts = SpatialPoints(cbind(1,1))
 data = SpatialPointsDataFrame(pts, data.frame(z = 3))
 
+sk(data, newdata, 0, cov) # mu = 0
+newdata = SpatialPoints(cbind(.1 * 0:20, 1))
 sk(data, newdata, 0, cov) # mu = 0
 ```

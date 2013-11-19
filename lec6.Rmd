@@ -7,7 +7,7 @@
 
 ###  Unknown, constant mean
 Suppose the mean is constant, but not known. This is the most simple
-{\em realistic} scenario. We can estimate it from the data, taking into
+_realistic_ scenario. We can estimate it from the data, taking into
 account their covariance (i.e., using weighted averaging):
 
 $$\hat{m} = ({\bf 1}'V^{-1}{\bf 1})^{-1} {\bf 1}'V^{-1}Z$$
@@ -26,7 +26,7 @@ $\Cov(Z(s_0),Z(s_1))$, $\Cov(Z(s_0),Z(s_2))$, $\Cov(Z(s_1),Z(s_2))$.
 
 How to get these covariances?
 * given a single measurement $z(s_1)$, we can not infer $\Var(Z(s_1))$
-* given two measurements $z(s_1)$ and $z(s_2)$, we can {\em never}
+* given two measurements $z(s_1)$ and $z(s_2)$, we can _never_
 infer $\Cov(Z(s_1),Z(s_2))$
 * geven a time series at $s_1$ and $s_2$, we can infer 
  * $\Cov(Z(s_1),Z(s_2))$, but how to infer 
@@ -49,7 +49,7 @@ $\Cov(Z(s),Z(s+h)) = C(h)$
 which implies:
 $\Cov(Z(s),Z(s)) = \Var(Z(s))= C(0)$
 
-The function $C(h)$ is the {\color{red} covariogram} of the random
+The function $C(h)$ is the _covariogram_ of the random
 function $Z(s)$
 
 ### From covariance to semivariance
@@ -66,7 +66,7 @@ $ \E[(Z(s)-Z(s+h))^2] = \E[(Z(s))^2] + \E[(Z(s+h))^2] - 2\E[Z(s)Z(s+h)]
 
 $\gamma(h) = C(0)-C(h)$
 
-$\gamma(h)$ is the {\color{red} semivariogram} of $Z(s)$.
+$\gamma(h)$ is the _semivariogram_ of $Z(s)$.
 
 ### The _Variogram_
 
@@ -85,9 +85,9 @@ plot(v, v.fit)
 * like a mean squares (variance) in analysis of variance, like
 a $t$ to a $t$-test
 * measures spatial correlation
-* subject to debate: it involves {\em modelling}
-* synonymous to {\em semivariogram}, but
-* semivariance is {\em not} synonymous to variance
+* subject to debate: it involves _modelling_
+* synonymous to _semivariogram_, but
+* semivariance is _not_ synonymous to variance
 
 ### Variogram: how to compute
 average squared differences: 

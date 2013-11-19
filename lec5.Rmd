@@ -261,7 +261,7 @@ sk = function(data, newdata, mu, cov) {
 	mu + t(v) %*% solve(V, data[[1]] - mu)
 }
 
-# prediction location at (0,0):
+# prediction location at (0,1):
 newdata = SpatialPoints(cbind(0,1))
 
 # observation location at (1,1), with attribute value (y) 3:

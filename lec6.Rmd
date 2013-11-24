@@ -57,11 +57,11 @@ Covariance: $\Cov(Z(s),Z(s+h)) = C(h) = \E[(Z(s)-m)(Z(s+h)-m)]$
 
 Semivariance: $\gamma(h) = \frac{1}{2} \E[(Z(s)-Z(s+h))^2]$
 
-$ \E[(Z(s)-Z(s+h))^2] = \E[(Z(s))^2 + (Z(s+h))^2 -2Z(s)Z(s+h)]$
+$\E[(Z(s)-Z(s+h))^2] = \E[(Z(s))^2 + (Z(s+h))^2 -2Z(s)Z(s+h)]$
 
 [Assume $m=0$]:
 
-$ \E[(Z(s)-Z(s+h))^2] = \E[(Z(s))^2] + \E[(Z(s+h))^2] - 2\E[Z(s)Z(s+h)] 
+$\E[(Z(s)-Z(s+h))^2] = \E[(Z(s))^2] + \E[(Z(s+h))^2] - 2\E[Z(s)Z(s+h)] 
 = 2\Var(Z(s)) - 2\Cov(Z(s),Z(s+h)) = 2C(0)-2C(h)$
 
 $\gamma(h) = C(0)-C(h)$

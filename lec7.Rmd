@@ -169,8 +169,8 @@ The reason for this is usually either
  * $X$ needs to be non-singular in every neighbourhood
 * some authors claim that local trends are so
  adaptive, that one can ignore spatial correlation of the residual
-* Using local linear regression with {\em weights} that decay
- with distance is called {\em geographically weighted regression}, GWR
+* Using local linear regression with _weights_ that decay
+ with distance is called _geographically weighted regression_, GWR
 
 ### Practical arguments for local prediction
 * The number of observations, $n$ may become very large.
@@ -182,7 +182,7 @@ factoring $V$ needs only be done once, for a local neighbourhood for
 each unique neighbourhood (in practice: for each $s_0$).
 * selecting local neighbourhoods also costs time; naive selection
 $O(n \log n)$ doesn't scale well
-* \code{gstat} uses quadtrees/octtrees, inspired by
+* `gstat` uses quadtrees/octtrees, inspired by
 http://donar.umiacs.umd.edu/quadtree/index.html
 
 ### Predicting block means
@@ -191,7 +191,7 @@ interested at predicting the average of $Z(s)$ over a block, $B_0$, i.e.
 $$Z(B_0) = \frac{1}{|B_0|}\int_{B_0} Z(u)du$$
 * This can (naively) be done by predicting $Z$ over a large number of points
 $s_0$ inside $B_0$, and averaging
-* For the prediction {\em error}, of $\hat{Z}(B_0)$, we then need the
+* For the prediction _error_, of $\hat{Z}(B_0)$, we then need the
 covariances between all point predictions
 * a more efficient way is to use block kriging, which does both at once
 
@@ -226,8 +226,8 @@ Two types of applications:
 * undersampled case: secondary variables help prediction
 of a primary, because we have more samples of them (image?)
 * equally sampled case: secondary variables don't help
-prediction much, but we are interested in {\em multivariate
-prediction}, i.e. prediction error covariances.
+prediction much, but we are interested in _multivariate
+prediction_, i.e. prediction error covariances.
 
 ### Cokriging prediction
 Cokriging prediction is not substantially different from kriging
@@ -300,7 +300,7 @@ is now a prediction error covariance matrix.
 
 ### What is needed?
 The main tool for estimating semivariances between different variables
-is the {\em cross variogram}, defined for collocated data as
+is the _cross variogram_, defined for collocated data as
 $$\gamma_{ij}(h) = \mbox{E}[(Z_i(s)-Z_i(s+h))(Z_j(s)-Z_j(s+h))]$$
 and for non-collocated data as
 $$\gamma_{ij}(h) = \mbox{E}[(Z_i(s)-m_i)(Z_j(s)-m_j)]$$
@@ -323,8 +323,8 @@ $$\gamma_{jk,p}(h) = \alpha_{jk,p} \sqrt{\gamma_{jj,p}(h)\gamma_{kk,p}(h)}$$
 ### How to do this?
 As multivariable analysis may involve numerous variables, we need to
 start organising the available information. For that reason, we collect all the
-observation data specifications in a \code{gstat} object, created by
-the function \code{gstat}. This function does nothing else than ordering
+observation data specifications in a `gstat` object, created by
+the function `gstat`. This function does nothing else than ordering
 (and actually, copying) information needed later in a single object.
 Consider the following definitions of four heavy metals:
 
@@ -386,8 +386,8 @@ a measure of interpolation accuracy
 * we can use e.g. the normal distribution (on the log-scale?) to 
 assess the conditional probability $\Pr(Z(s_0) > 500 | z(s_1),...,z(s_n))$
 
-* the additional assumption underlying this is {\em multivariate
-normality}: in addition to having stationary mean and covariance, the
+* the additional assumption underlying this is _multivariate
+normality_: in addition to having stationary mean and covariance, the
 field $Z$ is now assumed to follow a stationary, multivariate normal
 distribution. This means that any single $Z(s_i)$ follows a normal
 distribution, and any pair $Z(s_i), Z(s_j)$ follows a bivariate normal

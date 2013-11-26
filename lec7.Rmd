@@ -28,6 +28,82 @@ regression kriging.
 Example in `meuse` data set: `log(zinc)` depending on
 `sqrt(meuse)`
 
+```{r}
+library(sp)
+cov = function(h) exp(-h)
+
+calc_beta = function(X, V, y) {
+	XtVinv = t(solve(V, X))
+	solve(XtVinv %*% X, XtVinv %*% y)
+}
+
+uk = function(data, newdata, X, x0, cov, beta) {
+	library(sp) # spDists
+	V = cov(spDists(data))
+	v = cov(spDists(data, newdata))
+	y = data[[1]]
+	if (missing(beta))
+		beta = calc_beta(X, V, y)
+	mu = X %*% beta
+	x0 %*% beta + t(v) %*% solve(V, y - mu)
+}
+
+# prediction location at (0,1):
+newdata = SpatialPoints(cbind(0,1))
+
+# observation location at (1,1), with attribute value (y) 3:
+pts = SpatialPoints(cbind(1,1))
+data = SpatialPointsDataFrame(pts, data.frame(z = 3))
+x0 = matrix(1, 1, 1)
+X = x0
+uk(data, newdata, X, x0, cov)
+
+# three observations location, with attribute values (y) 3,2,5:
+pts = SpatialPoints(cbind(c(1,2,3),c(1,1,1)))
+data = SpatialPointsDataFrame(pts, data.frame(z = c(3,2,5)))
+newdata = SpatialPoints(cbind(.1 * 0:20, 1))
+X = matrix(1,3,1)
+x0 = matrix(1, length(newdata), 1)
+uk(data, newdata, X, x0, cov) # mu = unknown
+```
+Plotting them:
+```{r}
+newdata = SpatialPoints(cbind(seq(-4,6,by=.1), 1))
+x0 = matrix(1, length(newdata), 1)
+y = uk(data, newdata, X, x0, cov) # mu unknown
+plot(coordinates(newdata)[,1], y, type='l', ylim = c(1,5))
+points(as(data, "data.frame")[,c(2,1)], col='red', pch=16)
+beta = calc_beta(X, cov(spDists(data)), data[[1]])
+beta
+abline(beta, 0, col = 'blue', lty = 2)
+```
+
+```{r}
+# linear trend
+X = cbind(matrix(1,3,1), 1:3)
+X
+xcoord = seq(-4,6,by=.1)
+newdata = SpatialPoints(cbind(xcoord, 1))
+x0 = cbind(matrix(1, length(newdata), 1), xcoord)
+y = uk(data, newdata, X, x0, cov) # mu unknown
+plot(coordinates(newdata)[,1], y, type='l')
+points(as(data, "data.frame")[,c(2,1)], col='red', pch=16)
+beta = calc_beta(X, cov(spDists(data)), data[[1]])
+beta
+abline(beta, col = 'blue', lty = 2)
+```
+
+With Gaussian covariance:
+```{r}
+cov = function(h) exp(-(h^2))
+y = uk(data, newdata, X, x0, cov) # mu unknown
+plot(coordinates(newdata)[,1], y, type='l')
+points(as(data, "data.frame")[,c(2,1)], col='red', pch=16)
+beta = calc_beta(X, cov(spDists(data)), data[[1]])
+beta
+abline(beta, col = 'blue', lty = 2)
+```
+
 ### Estimating spatial correlation under the UK model
 As opposed to the ordinary kriging model, the universal kriging
 model needs knowledge of the mean vector in order to estimate

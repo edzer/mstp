@@ -1,4 +1,4 @@
-FILE	= lec7
+FILE	= lec5
 
 all:
 	vi $(FILE).Rmd
@@ -11,4 +11,4 @@ view:
 	google-chrome $(FILE).html
 
 www:
-	scp $(FILE).html epebe_01@ifgifiles.uni-muenster.de:WWW/mstp
+	scp lec*html epebe_01@ifgifiles.uni-muenster.de:WWW/mstp

@@ -157,6 +157,7 @@ prediction are limited to a selection of nearest observations, based on
 * number of observations or
 * distance to prediction location $s_0$
 * possibly, in addition, directions
+
 The reason for this is usually either
 * statistical, allowing for a more flexible mean/trend structure
 * practical, if $n$ gets large

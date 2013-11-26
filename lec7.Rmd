@@ -32,20 +32,20 @@ Example in `meuse` data set: `log(zinc)` depending on
 library(sp)
 cov = function(h) exp(-h)
 
-calc_beta = function(X, V, y) {
+calc_beta = function(X, V, z) {
 	XtVinv = t(solve(V, X))
-	solve(XtVinv %*% X, XtVinv %*% y)
+	solve(XtVinv %*% X, XtVinv %*% z)
 }
 
 uk = function(data, newdata, X, x0, cov, beta) {
 	library(sp) # spDists
 	V = cov(spDists(data))
 	v = cov(spDists(data, newdata))
-	y = data[[1]]
+	z = data[[1]]
 	if (missing(beta))
-		beta = calc_beta(X, V, y)
+		beta = calc_beta(X, V, z)
 	mu = X %*% beta
-	x0 %*% beta + t(v) %*% solve(V, y - mu)
+	x0 %*% beta + t(v) %*% solve(V, z - mu)
 }
 
 # prediction location at (0,1):
@@ -70,8 +70,8 @@ Plotting them:
 ```{r}
 newdata = SpatialPoints(cbind(seq(-4,6,by=.1), 1))
 x0 = matrix(1, length(newdata), 1)
-y = uk(data, newdata, X, x0, cov) # mu unknown
-plot(coordinates(newdata)[,1], y, type='l', ylim = c(1,5))
+z_hat = uk(data, newdata, X, x0, cov) # mu unknown
+plot(coordinates(newdata)[,1], z_hat, type='l', ylim = c(1,5))
 points(as(data, "data.frame")[,c(2,1)], col='red', pch=16)
 beta = calc_beta(X, cov(spDists(data)), data[[1]])
 beta
@@ -85,8 +85,8 @@ X
 xcoord = seq(-4,6,by=.1)
 newdata = SpatialPoints(cbind(xcoord, 1))
 x0 = cbind(matrix(1, length(newdata), 1), xcoord)
-y = uk(data, newdata, X, x0, cov) # mu unknown
-plot(coordinates(newdata)[,1], y, type='l')
+z_hat = uk(data, newdata, X, x0, cov) # mu unknown
+plot(coordinates(newdata)[,1], z_hat, type='l')
 points(as(data, "data.frame")[,c(2,1)], col='red', pch=16)
 beta = calc_beta(X, cov(spDists(data)), data[[1]])
 beta
@@ -96,8 +96,8 @@ abline(beta, col = 'blue', lty = 2)
 With Gaussian covariance:
 ```{r}
 cov = function(h) exp(-(h^2))
-y = uk(data, newdata, X, x0, cov) # mu unknown
-plot(coordinates(newdata)[,1], y, type='l')
+z_hat = uk(data, newdata, X, x0, cov) # mu unknown
+plot(coordinates(newdata)[,1], z_hat, type='l')
 points(as(data, "data.frame")[,c(2,1)], col='red', pch=16)
 beta = calc_beta(X, cov(spDists(data)), data[[1]])
 beta
@@ -126,7 +126,7 @@ $\sigma^2(s_0) = \E(Z(s_0)-\lambda'Z)^2$ is minimized
 * OK: linear predictor $\lambda'Z$ with $\lambda$ such that it
  * has minimum variance $\sigma^2(s_0) = \E(Z(s_0)-\lambda'Z)^2$, and
  * is unbiased $\E(\lambda'Z) = m$
-* second constraint: $\sum_{i=1}^n \lambda_i = 1$, weights sum to one.
+ * second constraint: $\sum_{i=1}^n \lambda_i = 1$, weights sum to one.
 
 * UK:
 $$\hat{Z}(s_0) = x(s_0)\hat{\beta} + v'V^{-1} (Z-X\hat{\beta}) $$

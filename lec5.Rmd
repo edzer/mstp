@@ -275,8 +275,8 @@ sk(data, newdata, 0, cov) # mu = 0
 Plotting them:
 ```{r}
 newdata = SpatialPoints(cbind(seq(-4,6,by=.1), 1))
-y = sk(data, newdata, 0, cov) # mu = 0
-plot(coordinates(newdata)[,1], y, type='l', ylim = c(0,3))
+Z = sk(data, newdata, 0, cov) # mu = 0
+plot(coordinates(newdata)[,1], Z, type='l', ylim = c(0,3))
 points(as(data, "data.frame")[,c(2,1)], col='red', pch=16)
 abline(0,0, col='blue', lty=2)
 ```

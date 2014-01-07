@@ -1,0 +1,245 @@
+# Spatial temporal variation modelled by differential equations
+
+###  Deterministic spatial dynamic models
+Deterministic models are based on the assumption that the processes
+governing change are known. Given that knowledge, we need
+
+* the state of a system (initial conditions), and
+* the characteristics at boundaries of the system (boundary
+conditions): what are the sources and sinks, when does what escape or enter the
+modelled area.
+
+for a (perfect) prediction of the changes over time, and in space.
+
+Let us look at an example: air quality (fine particles, PM10).
+
+###  Model domain
+For a model, we need a *model domain*, which is the spatial
+area and temporal period over which we will define processes and
+conditions. This could be e.g. Western Europe, 1980-2010, or NRW,
+2000-2005, or the area not further than 100 m away from the crossing
+Weseler Strasse-Bonhoeffer Strasse, Jan 8, 2008, 0:00-24:00. It should
+be exactly quantifiable/traceable.
+
+
+### Initial conditions
+The initial conditions usually describe the variable of interest (the
+concentration field) at the highest possible level of detail. In our
+case this is the PM10 concentration field at the start of the modelling
+period.
+
+As this is a continuous field, we need some way to describe this and
+usually the spatial domain is discretized into model usually
+square, rectuangular or triangular model elements.
+
+This discretization should match the level of detail 
+* at which we know initial conditions and 
+* at which we want to model features. 
+
+As an example: if we want to quantify the effect of individual
+car fumes, spatial elements of 10 cm--1 m may work; if we want to
+describe the effect of a complete streets something of 10m--100m
+seems more appropriate. Smaller elements and time steps mean more
+memory and CPU time requirements.
+
+
+### Initial conditions-2
+If we don't know initial conditions exactly, we may put the starting
+point of the modelling domain further back in the past, and hope that
+the effect of approximation will damp out as we model. (This assumes
+we get the boundary conditions and processes right.)
+
+
+### Boundary conditions
+PM10 comes and goes. Sources are (i) emissions inside the model domain
+(cars, households, industry), and (ii) material that enters the model
+domain by movement of air bodies, but emitted elsewhere. We need these
+source terms (points, lines or fields) in space, and over time.
+
+Sinks are mostly air that moves out of the model domain, and wash out
+(rain), dry deposition (your grandmother's white sheets turning black),
+and ... inhalation. These terms are also needed, quantitatively.
+
+
+### Processes
+Particles move mostly for two or three reasons: by large-scale movement of
+air (wind), by medium/small-scale movement of air (turbulence, dispersion)
+and by themselves (diffusion; think Brownian motian of a single particle
+in a gas).
+
+As an example, take a look at the LOTOS-EUROS model
+(http://www.lotos-euros.nl/) model documentation.
+
+As you can read in the _model formulation and domain_, the model
+uses external modelling results (interpolation or mechanistic modelling)
+to get the atmospheric driving forces (height mixing layer, wind fields),
+e.g. from FUB and ECMWF (http://www.ecmwf.int/).
+
+Basically, the model _code_ 
+* reads a lot of initial and boundary data, 
+* solves the differential equations and 
+* writes out everything that is of interest, such as the space-time concentration fields.
+
+###  Solving differential equations
+The partial differential equation solved in LOTOS_EUROS is
+the [continuity equation](http://en.wikipedia.org/wiki/Continuity_equation)
+$$
+\frac{\delta C}{\delta t} +
+U\frac{\delta C}{\delta x} +
+V\frac{\delta C}{\delta y} +
+W\frac{\delta C}{\delta z} $$
+$$
+= \frac{\delta}{\delta x}(K_h \frac{\delta C}{\delta x})  +
+\frac{\delta}{\delta y}(K_h \frac{\delta C}{\delta y})  +
+\frac{\delta}{\delta z}(K_z \frac{\delta C}{\delta z})  +E+R+Q-D-W
+$$
+with (mostly quoted from the [reference guide](http://www.lotos-euros.nl/doc/LOTOS-EUROS-v18-reference-guide.pdf), page 7)
+* $t,x,y,z$ time and the three space dimensions
+* $C$ concentration of the pollutant (dynamic field)
+* $U,V,W$ the large scale wind components in respectively west-east
+direction, in south-north direction and in vertical direction
+* $K_h,K_z$ the horizontal and vertical turbulent diffusion coefficients
+* $E$ the entrainment or detrainment due to variations in layer 
+height. 
+* $R$ the amount of material produced or destroyed as a result of 
+chemistry. 
+* $Q$ is the contribution by emissions, 
+* $D$ and $W$ loss terms due to processes of dry and wet deposition respectively
+
+To solve this equation, it needs to be discretized in space and
+time. For this particular model, the spatial grid size is 0.5 degree
+longitude $\times$ 0.25 degree latitude (meaning that grid cells
+do not have constant area), and time step is 1h.
+
+###  Solving PDE's
+The simples method to solve PDE's by discretization is, _finite difference_, uses a regular mesh size, $\Delta x$. The solution is computed at
+location $j \Delta x$, with $j=1,...,N$.
+
+In one dimension the first derivative uses one of the three approximations:
+* backward: 
+$$\frac{\delta u}{\delta x}(j \Delta x) \approx \frac{u_j-u_{j-1}}{\Delta x} $$
+* forward:
+$$\frac{\delta u}{\delta x}(j \Delta x) \approx \frac{u_{j+1}-u_{j}}{\Delta x} $$
+* centered:
+$$\frac{\delta u}{\delta x}(j \Delta x) \approx \frac{u_{j+1}-u_{j-1}}{2\Delta x} $$
+and for the second order derivative (centered):
+$$\frac{\delta^2 u}{\delta x^2}(j \Delta x) \approx \frac{u_{j+1}-2u_j+u_{j-1}}{(\Delta x)^2} $$
+
+### Diffusion equations, 1-D
+Diffusion happens in space-time. Using a mesh in space-time, we can write
+$u(j \Delta x, n \Delta t) \approx u^n_j$ with $n$ a superscript, not power.
+
+We can approximate the PDE
+$$\frac{\delta u}{\delta t} = \frac{\delta^2 u}{\delta x^2}, \ \mbox{with} \ u(x,0)=\phi(x) $$
+
+by finite difference, in time:
+$$\frac{\delta u}{\delta t}(j \Delta x, n \Delta t) \approx \frac{u_{j}^{n+1}-u_{j}^n}{\Delta t}$$
+and space:
+$$\frac{\delta u}{\delta x}(j \Delta x, n \Delta t) \approx \frac{u_{j+1}^{n}-u_j^n}{\Delta x}$$
+
+Using forward difference for $t$ and centered for $x$, combining both, the
+corresponding finite difference equation that approximates the PDE it is:
+$$\frac{u_j^{n+1}-u_j^n}{\Delta t} = \frac{u^n_{j+1}-2u_j^n+u_{j-1}^n}{(\Delta x)^2}.$$
+
+
+###  Forward/backward, explicit/implicit
+Solving
+$$\frac{u_j^{n+1}-u_j^n}{\Delta t} = \frac{u^n_{j+1}-2u_j^n+u_{j-1}^n}{(\Delta x)^2}.$$
+is trivial, as $n+1$ is only in the LHS. This means that for each $x$ we can solve
+the equation explicitly, where we start is not important. They require, for stable solutions,
+that $\frac{\Delta t}{(\Delta x)^2} \le \frac{1}{2}$.  See examples.
+
+If the equation were instead
+$$\frac{u_j^{n+1}-u_j^n}{\Delta t} = \frac{u^{n+1}_{j+1}-2u_j^{n+1}+u_{j-1}^{n+1}}{(\Delta x)^2}.$$
+then we have the unknown $u^{n+1}$ both left and right of the equal sign. This requires the solution
+of a (sparse) set of coupled linear equations, and this solution is called _implicit_. It pays off: the
+solutions are stable, and larger time steps can be chosen (provided of course, that change is close
+to linear over the time step).
+
+### Calibrating deterministic models
+
+Models based on partial differential equations have parameters; think
+of diffusion parameters, source and sink terms (boundary conditions),
+and initial conditions. These need to be filled in, somehow.
+
+Given that observation data on the model outcome are available, one way
+to fill these in is to search for values such that the model predictions
+best fit the data. We have seen methods for this; there is a long list
+of further, possibly more advanced or efficient methods for finding
+optimal parameter values, both in a deterministic (_optimum_) sense,
+and in a stochastic (_distribution_) sense.
+
+Also, choosing optimality criterium (least squares? least absolute
+differences? combined criteria over multiple variables?)
+
+### Difficulties in calibration
+Problems that may occur with calibrating models are numerous. 
+
+One problem may be that the parameter we tune (optimize) is not constant
+over space or time, but varies. This means that there instead of one
+single value, there may be numerous. Their number may outnumber the
+observations, and in that case there is little hope in finding realistic
+values.
+
+Another problem is that we may tune a parameter and get a better fit, but
+that in reality we turned the wrong button, meaning we get a better
+fit _for the wrong reason_. This may have disasterous effects when
+using this *optimized* model in a prediction setting (such as future
+forecasting, or scenario evaluation).
+
+Automatic codes exist (e.g. PEST, or ''optim'' in R) that optimize
+models, irrespective what the model is or does.
+
+### More difficulties
+Deterministic models use a temporal and spatial discretization. This
+is a balance between CPU and memory costs, and the ability to fill the
+discrete elements sensibly. Processes need to be *lumped*, meaning
+that they cannot be taken into account because of the grid cell size
+(think of convection above a forest, or a thunder storm, when grid cell
+size is 50 km, and/or time step a day). Choosing a finer resolution,
+the parameters, processes, boundary and initial values need to be filled
+in with much more resolution (precision), and need disaggregation --
+e.g. a country total emission may need to be assigned to 1 km $\times$
+1 km grid cells.
+
+### Dynamic parameter updating schemes
+A probabilistic setting of a deterministic model is that of the {\em
+Kalman filter}. This algorithm assumes measurements are a combination of
+a true state  and a measurement noise. Each component has its particular
+error structure, expressed by a mean and covariance matrix.
+
+For each new time step, the model predicts a new state, the observations
+are compared to that new state, and the model errors are used to adjust
+(improve) the model before predicting the next step.
+
+Kalman filters are used a lot to optimize deterministic models, and come
+nowadays in many flavours, e.g. depending on whether the model is linear
+or not, and whether it is used forward in time, or in real-time.
+
+_Particle filters_ do this in a stochastic setting.
+
+### Simplified difference equation-type models
+Often, the differential equations are simplified very crudely to the
+state where only mass is preserved, but the solution no longer
+approximates the true differential equation. Think of simple bucket-type
+models in hydrology, where water bodies are buckets and soils are like sponges:
+a soil grid cell drains always with an exponential decrease; a soil and
+water body grid cells drain *instantly* when their maximum capacity
+is exceeded, with the amount it is exceeded.
+
+Despite the simplifications, these models can be more useful than
+attempts to solve the full differential equation, because their data
+demand can be more realistically met.
+
+### This is not a plea against the use of any model
+On the contrary, elemenents from physics (such as preservation of energy
+and mass) are better than anything else. It is rather a warning, that
+putting them blindly before anything else is dangerous.
+
+In any case one should acknowledge the limited availability of data
+available for calibration, and the limitations of our ability to
+truthfully represent real-world systems for the world around us.
+
+The risk of inapt use (*misuse*) is not larger for deterministic models
+than for stochastic models. But we do tend to rely on them in more
+risky situations (scenario's, future).

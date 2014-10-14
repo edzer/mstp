@@ -15,11 +15,11 @@
 ### 1.2 Organization
 
 Teachers:
- * Christoph Stasch (exercises)
+ * Christoph Stasch / Katherina Henneboehl (exercises, Wed 12:15)
  * Edzer Pebesma (lectures)
 
 Learnweb:
- * subscribe! it's free!
+ * subscribe! no password!
 
 Slides:
  * html on http://ifgi.uni-muenster.de/~epebe_01/mstp
@@ -30,16 +30,42 @@ Slides:
 ### 1.3 examen:
  * multiple choice, 4 possibilities, 40 questions, 20 need to be correct.
 
+### 1.4 Overview of the course
+
+Topics:
+* Time series data
+* Time series models: AR(p), MA(q), partial correlation, AIC, forecasting
+* Optimisation:
+ * Linear models, least squares: normal equations
+ * Non-linear:
+  * One-dimensional: golden search
+  * Multi-dimensional least squares: Newton
+  * Multi-dimensional stochastic search: Metropolis
+  * Multi-dimensional stochastic optimisation: Metropolis
+* Spatial models: 
+ * Simple, heuristic spatial interpolation approaches
+ * Spatial correlation
+ * Regression with spatially correlated data
+ * Kriging: best linear (unbiased) prediction 
+ * Stationarity, variogram
+ * Kriging varieties: simple, ordinary, universal kriging
+ * Kriging as a probabilistic spatial predictor
+* Spatio-temporal variation modelled by partial differential equations
+ * Initial and boundary conditions
+ * Example
+ * Calibration: Kalman filter
+* Agent-based approaches
+
 ## 2. Where we come from
 
 + introduction to geostatistics
 + mathematics, linear algebra
 + computer science
 
-### 2.1 geostatistics
+### 2.1 introduction to geostatistics
 
-+ types of variables: nominal, ordinal, interval, ratio
-+ ... discrete, continuous
++ types of variables: Stevens' measurement scales -- nominal, ordinal, interval, ratio
++ ... or: discrete, continuous
 + t-tests, ANOVA
 + regression, multiple regression (but now how we compute it)
 + assumption was: observations are independent
@@ -50,29 +76,35 @@ Slides:
  + space
  + time
  + or space-time
++ in space and/or time, Stevens' measurement scales are not enough! Examples:
+ + linear time, cyclic time
+ + space: functions, fields
 + we will study how we can represent phenomena, by
  + mathematical representations (models)
  + computer representations (models)
 + we will consider how well these models correspond to our observations
- 
+
 ## 3. Spatio-temporal phenomena are everywhere
 + if we think about it, there are no data that can be non-spatial or non-temporal.
 + in many cases, the spatial or temporal references are not essential
- + think: brain image of a person: time matters, spatial location of the MRI scanner not
- (hopefully!)
+ + think: brain image of a person: time matters, spatial location of the MRI scanner does not (hopefully!)
  + but: ID of the patient does!
  + and: time of scan matters too!
-+ we will pigeon-hole phenomena into: fields, objects, aggregations
++ we will ``pigeon-hole'' (classify) phenomena into: fields, objects, aggregations
 
 ### 3.1 fields
 + many processes can be represented by fields, meaning they could be measured everywhere
 + think: temperature in this room
 + typical problems: interpolation, patterns, trends, temporal development, forecasting?
 
-### 3.2 objects
-+ objects can be identified (within a frame of observations)
-+ between objects, there are no objects (no point of interpolation)
-+ objects can be moving (people) static (buildings)
+### 3.2 objects and events
++ objects can be identified 
++ objects are identified within a frame or (_window_) of observation
++ within this window, between objects, there are no objects (no point of interpolation)
++ objects can be moving (people), or static (buildings)
++ objects or events are sometimes obtained by thresholding fields, think heat wave, earthquake, hurricane, see e.g.
+http://ifgi.uni-muenster.de/~j_jone02/publications/GIScience2014.pdf
++ sometimes this view is rather artificial, think cars, persons, buildings
 
 ### 3.3 aggregations
 + we can aggregate fields, or objects, but do this differently:

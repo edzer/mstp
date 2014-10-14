@@ -16,7 +16,7 @@ Assuming this is a sinus function,
 $$\alpha_1 + \alpha_2 \sin(t + \alpha_3)$$,
 we need non-linear regression ($\alpha_3$)
 ```{r}
-attach(meteo)
+attach(meteo) # so we can use variable names directly:
 f = function(x) sum((T.outside - (x[1]+x[2]*sin(pi*(hours+x[3])/12)))^2)
 nlm(f,c(0,0,0))
 ```
@@ -119,4 +119,43 @@ the far-into-the-future prediction becomes
 * the standard error of prediction increases when predictions are further in the
 future.
 
-### 5.9 Next steps: how do we fit coefficients?
+### 5.9 A side note: fitting a phase with a linear model
+A phase shift model $\alpha \sin(x + \phi)$ can also be modelled by  
+$\alpha sin(x) + \beta cos(x)$; this is essentially a re-parameterization.
+Try the following code:
+```{r eval=FALSE}
+x = seq(0, 4*pi, length.out = 200) # x plotting range
+
+f = function(dir, x) { # plot the combination of a sin+cos function, based on dir
+	a = sin(dir)
+	b = cos(dir)
+	# three curves:
+	plot(a * sin(x) + b * cos(x) ~ x, type = 'l', asp=1, col = 'green')
+	lines(x, a * sin(x), col = 'red')
+	lines(x, b * cos(x), col = 'blue')
+	# legend:
+	lines(c(10, 10+a), c(2,2), col = 'red')
+	lines(c(10, 10), c(2,2+b), col = 'blue')
+	arrows(x0 = 10, x1 = 10+a, y0 = 2, y1 = 2+b, .1, col = 'green')
+	title("red: sin(x), blue: cos(x), green: sum")
+}
+
+for (d in seq(0, 2*pi, length.out = 100)) {
+	f(d, x)
+	Sys.sleep(.1) # give us some time to think this over!
+}
+```
+
+So, we can fit the same model by a different parameterization:
+```{r}
+nlm(f,c(0,0,0))$minimum
+tt = pi * hours / 12
+g = function(x) sum((T.outside - (x[1]+x[2]*sin(tt)+x[3]*cos(tt)))^2)
+nlm(g,c(0,0,0))
+```
+which is a linear model, identical to:
+```{r}
+lm(T.outside~sin(tt)+cos(tt))
+```
+
+### 5.10 Next steps: how do we fit coefficients?

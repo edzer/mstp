@@ -367,14 +367,14 @@ system.time(x &lt;- solve(m))
 </code></pre>
 
 <pre><code>##    user  system elapsed 
-##   5.292   0.020   5.309
+##   5.324   0.016   5.342
 </code></pre>
 
 <pre><code class="r">system.time(x &lt;- solve(m,rep(0,3000)))
 </code></pre>
 
 <pre><code>##    user  system elapsed 
-##   5.216   0.000   5.212
+##   5.208   0.004   5.214
 </code></pre>
 
 <pre><code class="r">X=cbind(c(1,1,1),c(1,2,3))
@@ -562,7 +562,8 @@ solution \(\delta^1=\theta\), as \((-X)&rsquo;(-X)\delta=X'y\). </p>
 
 <p>Further steps will not improve it (i.e., yield \(\delta^k=0\)).</p>
 
-<p>\frame{\includegraphics[width=.9\columnwidth]{Banana-SteepDesc}}</p>
+<p>See also the <a href="https://en.wikipedia.org/wiki/Gradient_descent">Gradient descent</a> wikipedia
+site.</p>
 
 <h1>Problems with steepest descent</h1>
 

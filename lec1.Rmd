@@ -15,14 +15,14 @@
 ### 1.2 Organization
 
 Teachers:
- * Christoph Stasch / Katherina Henneboehl (exercises, Wed 12:15)
+ * Christian Knoth (exercises, Wed 12-14)
  * Edzer Pebesma (lectures)
 
 Learnweb:
  * subscribe! no password!
 
 Slides:
- * html on http://ifgi.uni-muenster.de/~epebe_01/mstp
+ * html on http://edzer.github.io/mstp/
  * Rmd sources on on http://github.com/edzer/mstp
  * you can run the Rmd files in rstudio (http://www.rstudio.com/)
  * pull requests with improvements are appreciated (and may be rewarded)

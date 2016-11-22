@@ -34,7 +34,7 @@ $[-1,1]$ covariance. -1 or +1: perfect correlation.
 ### Normal distribution
 * _univariate_: If $Z$ follows
 a normal distribution, its probability
-distribution is {\em completely} characterized
+distribution is _completely_ characterized
 by its mean $E(Z)=\mu$ and variance $\Var(Z)=\sigma^2$
 * _multivariate_:
 If the vector $Z=(Z_1,Z_2,...,Z_p)$ follows
@@ -111,7 +111,7 @@ Given observation $z(s_1)$, how to predict $z(s_0)$?
 * Can we compute e.g.~95\% prediction intervals for the
 unknown $z(s_0)$?
 
-Obviously, given {\em only} $z(s_1)$, the best predictor for
+Obviously, given _only_ $z(s_1)$, the best predictor for
 $z(s_0)$ is $\hat{z}(s_0)=z(s_1)$.
  
 But what is the error variance, i.e. $\mbox{Var}(\hat{z}(s_0)-z(s_0))$?
@@ -162,7 +162,7 @@ to chance.
 The cumulative distribution of probability $F_x(\cdot)$ over outcomes $z$ 
 over all possible values of the RV $Z$ is the probability distribution function:
 $$P(Z \le z) = F_Z(z) = \int_{-\infty}^z f_Z(u)du$$
-where $f_Z(\cdot)$ is the probability {\em density} function of $Z$. The
+where $f_Z(\cdot)$ is the probability _density_ function of $Z$. The
 sum of all probability is 1.
 
 Random variables have an expectation (mean): $E(Z) =

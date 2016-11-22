@@ -1,11 +1,11 @@
 # 3. Optimization 
 
-# 3.1 linear systems
-Take $x_1$ the example
-
-```{r}
+```{r echo=FALSE}
 options("digits")
 ```
+
+# 3.1 linear systems
+Take $x_1$ the example
 
 $$
 	\begin{array}{ll}
@@ -295,7 +295,8 @@ Other starting points yield the same solution for $\theta$.
 
 Further steps will not improve it (i.e., yield $\delta^k=0$).
 
-\frame{\includegraphics[width=.9\columnwidth]{Banana-SteepDesc}}
+See also the [Gradient descent](https://en.wikipedia.org/wiki/Gradient_descent) wikipedia
+site.
 
 # Problems with steepest descent
 * (see previous slide:) steepest descent may be very slow

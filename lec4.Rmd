@@ -3,7 +3,6 @@
 \newcommand{\Cor}{{\rm Corr}}
 \)
 
-
 * Simple ways of interpolation
 * Simple statistical models for interpolation
 * Geostatistical interpolation

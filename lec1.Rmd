@@ -112,13 +112,11 @@ http://ifgi.uni-muenster.de/~j_jone02/publications/GIScience2014.pdf
 
 ## 3.4 Aims of modelling
 ... could be
+
 + curiousity
 + studying models is easier than measuring the world around us
-+ they mostly live in computers
-+ there are so many different models
-+ models really _use_ my CPU
 
-Scientific aims of modelling are 
+More scientific aims of modelling are 
 
 + to learn about the world around us
 + to predict the past, current or future, in case where measurement is not feasible.

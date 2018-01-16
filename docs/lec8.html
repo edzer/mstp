@@ -422,19 +422,45 @@ is exceeded, with the amount it is exceeded.</p>
 attempts to solve the full differential equation, because their data
 demand can be more realistically met.</p>
 
-<h3>This is not a plea against the use of any model</h3>
+<h3>Calibration vs. validation of models</h3>
 
-<p>On the contrary, elemenents from physics (such as preservation of energy
-and mass) are better than anything else. It is rather a warning, that
-putting them blindly before anything else is dangerous.</p>
+<p><em>Validation</em> of models involves assessing their validity, or value,
+and is a principally different activity from <em>calibration</em>. Where
+<em>calibration</em> is an optimization, <em>validation</em> is an assessment. The
+validation may be quantitative (<code>the mean square prediction error
+of the model is 0.75&#39;&#39;) or qualitative (</code>the model is fit for
+its purpose&#39;&#39;).</p>
 
-<p>In any case one should acknowledge the limited availability of data
-available for calibration, and the limitations of our ability to
-truthfully represent real-world systems for the world around us.</p>
+<p><em>Validation</em> may also involve model comparison: the comparison of
+different models having different model <em>structure</em>, and can in
+that sense be seen as an abstraction over validation:</p>
 
-<p>The risk of inapt use (<em>misuse</em>) is not larger for deterministic models
-than for stochastic models. But we do tend to rely on them in more
-risky situations (scenario&#39;s, future).</p>
+<ul>
+<li>calibration compares the models that have identical structure, but have different parameter values</li>
+<li>validation compares models that differ in structure</li>
+</ul>
+
+<p>Model comparison, in th course, would e.g. be:</p>
+
+<ul>
+<li>comparison of AR(1), AR(2), &hellip;, AR(n) to describe a particular time
+series</li>
+<li>comparison of ordinary kriging, universal kriging with predictor
+\(X_1\), and universal kriging with predictor \(X_1\) and \(X_2\) for a
+given interpolation problem.</li>
+</ul>
+
+<p>In this case, the models compared are nested (i.e., AR(1) is
+a special case of AR(2), etc), which may simplify the problem
+to testing the significance of the extension (is the additional
+parameter significantly different from zero?) If they are not nested,
+comparison becomes harder, conceptually.</p>
+
+<p>A famous model comparison on the other end of the extreme
+is that of the <em>coupled model intercomparison project</em>, CMIP,
+e.g. <a href="https://cmip.llnl.gov/">CMIP</a>; it involves large, international
+groups of climate scientists who agree, prior to the experiment,
+which models to compare.</p>
 
 </body>
 

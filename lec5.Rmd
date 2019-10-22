@@ -44,7 +44,7 @@ its _joint_ probability
 distribution is _completely_ characterized
 by the mean vector $E(Z)=\mu=(\mu_1,...\mu_p)$ and covariance 
 matrix $V$, of which element $(i,j)$ equals $\Cov(Z_i,Z_j)$
-\item covariance matrices have variances on the diagonal
+* covariance matrices have variances on the diagonal
 
 ```{r}
 library(mvtnorm)

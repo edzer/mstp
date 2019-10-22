@@ -231,15 +231,39 @@ Despite the simplifications, these models can be more useful than
 attempts to solve the full differential equation, because their data
 demand can be more realistically met.
 
-### This is not a plea against the use of any model
-On the contrary, elemenents from physics (such as preservation of energy
-and mass) are better than anything else. It is rather a warning, that
-putting them blindly before anything else is dangerous.
 
-In any case one should acknowledge the limited availability of data
-available for calibration, and the limitations of our ability to
-truthfully represent real-world systems for the world around us.
+### Calibration vs. validation of models
 
-The risk of inapt use (*misuse*) is not larger for deterministic models
-than for stochastic models. But we do tend to rely on them in more
-risky situations (scenario's, future).
+_Validation_ of models involves assessing their validity, or value,
+and is a principally different activity from _calibration_. Where
+_calibration_ is an optimization, _validation_ is an assessment. The
+validation may be quantitative ("the mean square prediction error
+of the model is 0.75") or qualitative ("the model is fit for
+its purpose").
+
+_Validation_ may also involve model comparison: the comparison of
+different models having different model _structure_, and can in
+that sense be seen as an abstraction over calibration:
+
+* calibration compares the models that have identical structure, but have different parameter values
+* validation compares models that differ in structure
+
+Model comparison, in th course, would e.g. be:
+
+* comparison of AR(1), AR(2), ..., AR(n) to describe a particular time
+series
+* comparison of ordinary kriging, universal kriging with predictor
+$X_1$, and universal kriging with predictor $X_1$ and $X_2$ for a
+given interpolation problem.
+
+In this case, the models compared are nested (i.e., AR(1) is
+a special case of AR(2), etc), which may simplify the problem
+to testing the significance of the extension (is the additional
+parameter significantly different from zero?) If they are not nested,
+comparison becomes harder, conceptually.
+
+A famous model comparison on the other end of the extreme
+is that of the _coupled model intercomparison project_, CMIP,
+e.g. [CMIP](https://cmip.llnl.gov/); it involves large, international
+groups of climate scientists who agree, prior to the experiment,
+which models to compare.

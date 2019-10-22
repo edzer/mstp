@@ -113,9 +113,11 @@ rows and $p$ columns; $a$ and $y$ column vectors having $p$ and $n$
 elements, respectively. Now, $X$ and $y$ are known, and $a$ is unknown.
 $a$
 Solutions:
+
 * if $p > n$, there is no single solution
 * if $p = n$ and $X$ is not singular, then $a = X^{-1}y$
 * if $p < n$ we have an overdetermined system, and may e.g. look for
+
 a least square (best approximating) solution.
 
 # Linear least squares solution
@@ -128,8 +130,6 @@ we need to find $b$ for which $R=\sum_{i=1}^n e_i^2$ is minimum. In matrix
 terms, $R = (y-Xb)'(y-Xb)$ with $'$ denoting transpose (row/col swap).
 $$\frac{\delta R}{\delta b} = 0$$
 $$\frac{\delta (y-Xb)'(y-Xb)}{\delta b} = 0$$
-$$\frac{\delta (y'y - (Xb)'y- y'(Xb) + (Xb)'Xb)}{\delta b} = 0$$
-
 $$\frac{\delta (y'y - (Xb)'y- y'(Xb) + (Xb)'Xb)}{\delta b} = 0$$
 now you should first note that $(Xb)'=b'X'$, and second that 
 $b'X'y=y'Xb$ because these are scalars. Then,
@@ -299,11 +299,10 @@ See also the [Gradient descent](https://en.wikipedia.org/wiki/Gradient_descent) 
 site.
 
 # Problems with steepest descent
+
 * (see previous slide:) steepest descent may be very slow
-* Main problem: a minimum may be _local_, other
-initial values may result in other, better minima
-* Cure: apply Gauss-Newton from many different starting
-points (cumbersome, costly, cpu intensive)
+* Main problem: a minimum may be _local_, other initial values may result in other, better minima
+* Cure: apply Gauss-Newton from many different starting points (cumbersome, costly, cpu intensive)
 * Global search:
   * apply a grid search -- curse of dimensionality. E.g. for three
  parameters, 50 grid nodes along each direction: $50^3= 125000$
@@ -314,8 +313,10 @@ points (cumbersome, costly, cpu intensive)
 
 # Metropolis-Hastings
 Why would one want probabilistic search?
+
 * global--unlikely areas are searched too (with small probability)
 * a probability distribution is richer than a point estimate:
+
 Gauss-Newton provides an estimate of $\hat\theta$ of $\theta$, given
 data $y$. What about the estimation error $\hat\theta - \theta$?
 Second-order derivatives give approximations to standard errors, but
@@ -328,6 +329,7 @@ Given a point in parameter space $\theta$, say $x_t =
 (\theta_{1,t},...,\theta_{p,t})$ we evaluate whether another point, $x'$
 is a reasonable alternative. If accepted, we set $x_{t+1}\leftarrow x'$; if not
 we keep $x_t$ and set $x_{t+1}\leftarrow x_t$.
+
 * if $P(x') > P(x_t)$, we accept $x'$ and set $x_{t+1}=x'$
 * if $P(x') < P(x_t)$, then
  * we draw $U$, a random uniform value from $[0,1]$, and
@@ -339,6 +341,7 @@ $$x_{t+1}=x_t + e_t$$
 with $e_t \sim N(0,\sigma^2 I)$. Looks familiar?
 
 # Burn-in, tuning $\sigma^2$
+
 * When run for a long time, the Metropolis (and its generalization Metropolis-Hastings) 
 algorithm provide a _correlated_ sample of the parameter distribution
 * M and MH algorithms provide Markov Chain Monte Carlo samples; another

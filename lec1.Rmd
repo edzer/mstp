@@ -1,5 +1,14 @@
 # Modelling spatio-temporal processes
 
+## 0. How do R markdown files work?
+
+* load them with rstudio
+* click the `knit` button
+* debug/step through:
+ * load all code up to here-button
+ * ctrl-Enter: run this line
+ * output in console, objects appear in Environment browser
+
 ## 1. Course overview, time series
 
 ### 1.1 Literature
@@ -15,24 +24,29 @@
 ### 1.2 Organization
 
 Teachers:
+
  * Christian Knoth (exercises, Wed 12-14)
  * Edzer Pebesma (lectures)
 
 Learnweb:
- * subscribe! no password!
+
+ * subscribe! no password! Only one course!
 
 Slides:
+
  * html on http://edzer.github.io/mstp/
  * Rmd sources on on http://github.com/edzer/mstp
  * you can run the Rmd files in rstudio (http://www.rstudio.com/)
  * pull requests with improvements are appreciated (and may be rewarded)
 
 ### 1.3 examen:
+
  * multiple choice, 4 possibilities, 40 questions, 20 need to be correct.
 
 ### 1.4 Overview of the course
 
 Topics:
+
 * Time series data
 * Time series models: AR(p), MA(q), partial correlation, AIC, forecasting
 * Optimisation:
@@ -67,8 +81,8 @@ Topics:
 + types of variables: Stevens' measurement scales -- nominal, ordinal, interval, ratio
 + ... or: discrete, continuous
 + t-tests, ANOVA
-+ regression, multiple regression (but now how we compute it)
-+ assumption was: observations are independent
++ regression, multiple regression (but not how we compute it)
++ assumption was: observations are _independent_
 + what does independence mean?
 
 ### 2.2 In this course
@@ -87,7 +101,7 @@ Topics:
 ## 3. Spatio-temporal phenomena are everywhere
 + if we think about it, there are no data that can be non-spatial or non-temporal.
 + in many cases, the spatial or temporal references are not essential
- + think: brain image of a person: time matters, spatial location of the MRI scanner does not (hopefully!)
+ + think: brain image of a person: time matters, but mostly referenced with respect to the age of the person, spatial location of the MRI scanner does not
  + but: ID of the patient does!
  + and: time of scan matters too!
 + we will ``pigeon-hole'' (classify) phenomena into: fields, objects, aggregations
@@ -106,11 +120,15 @@ Topics:
 http://ifgi.uni-muenster.de/~j_jone02/publications/GIScience2014.pdf
 + sometimes this view is rather artificial, think cars, persons, buildings
 
-### 3.3 aggregations
+### 3.3 fields - objects/events conversions
++ we can convert a field into an object by thresholding (wind field, storm or hurricane)
++ we can convert objects into a field e.g. by computing the density as a continuous function
+
+### 3.4 aggregations
 + we can aggregate fields, or objects, but do this differently:
 + population can be summed, temperature cannot
 
-## 3.4 Aims of modelling
+## 3.5 Aims of modelling
 ... could be
 
 + curiousity
@@ -124,9 +142,9 @@ More scientific aims of modelling are
 ### 3.5 What is a model?
 + conceptual models (the water cycle: http://en.wikipedia.org/wiki/File:Water_cycle.png)
 + object models (e.g., UML: http://en.wikipedia.org/wiki/File:UML_diagrams_overview.svg)
-+ mathematical models, such as Navier Stokes equation:
++ mathematical models, such as Navier Stokes' equation,
+![Navier Stokes equation](http://upload.wikimedia.org/math/4/f/e/4fef570fa684173cbc6e70a904dd5e66.png) 
 
-![Navier Stokes equation](http://upload.wikimedia.org/math/4/f/e/4fef570fa684173cbc6e70a904dd5e66.png)
 
 ### 3.6 What is a mathematical model?
 A mathematical model is an abstract model that uses mathematical
@@ -214,6 +232,11 @@ process, and find it is uncorrelated for any lag larger than 0:
 plot(acf(white.noise))
 ```
 
+Correlation x and y:
+$$
+r(x,y) = \frac{\sum_{i=1}^{n}(x_i-\bar{x})(y_{i}-\bar{y})}{\sqrt{\sum_{i=1}^n (x_i-\bar{x})^2\sum_{i=1}^n(y_i-\bar{y})^2}}
+$$
+
 ### 4.4 Autocorrelation
 Autocorrelation (or lagged correlation) is the correlation between $y_i$ and $y_{i+h}$, as a function of the lag $h$:
 $$
@@ -272,11 +295,20 @@ lines(filter(co2, rep(1/12, 12)), col='blue')
 
 Moving averages over a white noise process:
 ```{r fig.width=10, fig.height=5}
-e = rnorm(200)
+#set.seed(13531)
+e = rnorm(2000)
 plot(e, type='l')
-lines(filter(e, rep(1/5, 5)), col='red')
-lines(filter(e, rep(1/20, 20)), col='blue')
+e5 = filter(e, rep(1/5, 5))
+e20 = filter(e, rep(1/20, 20))
+lines(e5, col='red')
+lines(e20, col='blue')
 ```
+```{r}
+acf(e)
+acf(e5, na.action = na.pass)
+acf(e20, na.action = na.pass)
+```
+
 Wider moving average filters give new processes with
 + less variation
 + stronger correlation, over larger lags

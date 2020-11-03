@@ -378,7 +378,7 @@ hr {
 
 <ul>
 <li>objects can be identified </li>
-<li>objects are identified within a frame or (<em>window</em>) of observation</li>
+<li>objects are identified within a frame (or <em>window</em>) of observation</li>
 <li>within this window, between objects, there are no objects (no point of interpolation)</li>
 <li>objects can be moving (people), or static (buildings)</li>
 <li>objects or events are sometimes obtained by thresholding fields, think heat wave, earthquake, hurricane, see e.g.
@@ -452,9 +452,12 @@ valid at the same time.</p>
 <li>well understood</li>
 </ul>
 
-<p>time series models are roughly divided in 
-1. time domain models and, which look at correlations and memory
-2. frequency domain models, which focus on periodicities </p>
+<p>time series models are roughly divided in </p>
+
+<ol>
+<li>time domain models and, which look at correlations and memory</li>
+<li>frequency domain models, which focus on periodicities </li>
+</ol>
 
 <p>Spatial equivalents are mostly found in (a), although (b) has
 spatial equivalences as well (e.g. wavelets).</p>
@@ -463,12 +466,12 @@ spatial equivalences as well (e.g. wavelets).</p>
 
 <p>Consider the following process (\(\Delta t\)  = 1 min):</p>
 
-<pre><code class="r">rm(list = ls()) # clean up old data
-load(&quot;meteo.RData&quot;)
+<pre><code class="r">load(&quot;meteo.RData&quot;) # should be available in the current working directory
 ls()
 </code></pre>
 
-<pre><code>## [1] &quot;meteo&quot;
+<pre><code>## [1] &quot;e&quot;           &quot;e20&quot;         &quot;e5&quot;          &quot;meteo&quot;       &quot;rw1&quot;        
+## [6] &quot;rw2&quot;         &quot;rw3&quot;         &quot;white.noise&quot;
 </code></pre>
 
 <pre><code class="r">names(meteo)

@@ -280,3 +280,17 @@ plot(coordinates(newdata)[,1], Z, type='l', ylim = c(0,3))
 points(as(data, "data.frame")[,c(2,1)], col='red', pch=16)
 abline(0,0, col='blue', lty=2)
 ```
+
+
+Example with zinc data:
+
+```{r}
+data(meuse, package = "sp")
+coordinates(meuse) = ~x+y
+data(meuse.grid, package = "sp")
+coordinates(meuse.grid) = ~x+y
+gridded(meuse.grid) = TRUE
+meuse[[1]] = log(meuse$zinc)
+meuse.grid$sk = sk(meuse, meuse.grid, mean(log(meuse$zinc)), function(h) exp(-h/300))
+spplot(meuse.grid["sk"], main = "simple kriging", scales = list(draw = TRUE))
+```

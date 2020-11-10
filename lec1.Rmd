@@ -50,24 +50,24 @@ Topics:
 * Time series data
 * Time series models: AR(p), MA(q), partial correlation, AIC, forecasting
 * Optimisation:
- * Linear models, least squares: normal equations
- * Non-linear:
-  * One-dimensional: golden search
-  * Multi-dimensional least squares: Newton
-  * Multi-dimensional stochastic search: Metropolis
-  * Multi-dimensional stochastic optimisation: Metropolis
+    * Linear models, least squares: normal equations
+    * Non-linear:
+        * One-dimensional: golden search
+        * Multi-dimensional least squares: Newton
+        * Multi-dimensional stochastic search: Metropolis
+        * Multi-dimensional stochastic optimisation: Metropolis
 * Spatial models: 
- * Simple, heuristic spatial interpolation approaches
- * Spatial correlation
- * Regression with spatially correlated data
- * Kriging: best linear (unbiased) prediction 
- * Stationarity, variogram
- * Kriging varieties: simple, ordinary, universal kriging
- * Kriging as a probabilistic spatial predictor
+    * Simple, heuristic spatial interpolation approaches
+    * Spatial correlation
+    * Regression with spatially correlated data
+    * Kriging: best linear (unbiased) prediction 
+    * Stationarity, variogram
+    * Kriging varieties: simple, ordinary, universal kriging
+    * Kriging as a probabilistic spatial predictor
 * Spatio-temporal variation modelled by partial differential equations
- * Initial and boundary conditions
- * Example
- * Calibration: Kalman filter
+    * Initial and boundary conditions
+    * Example
+    * Calibration: Kalman filter
 * Agent-based approaches
 
 ## 2. Where we come from
@@ -113,7 +113,7 @@ Topics:
 
 ### 3.2 objects and events
 + objects can be identified 
-+ objects are identified within a frame or (_window_) of observation
++ objects are identified within a frame (or _window_) of observation
 + within this window, between objects, there are no objects (no point of interpolation)
 + objects can be moving (people), or static (buildings)
 + objects or events are sometimes obtained by thresholding fields, think heat wave, earthquake, hurricane, see e.g.
@@ -167,6 +167,7 @@ we will first look into time series models, because they are
 + well understood
 
 time series models are roughly divided in 
+
 1. time domain models and, which look at correlations and memory
 2. frequency domain models, which focus on periodicities 
 
@@ -178,8 +179,7 @@ spatial equivalences as well (e.g. wavelets).
 Consider the following process ($\Delta t$  = 1 min):
 
 ```{r fig.width=10, fig.height=5}
-rm(list = ls()) # clean up old data
-load("meteo.RData")
+load("meteo.RData") # should be available in the current working directory
 ls()
 names(meteo)
 plot(T.outside~date, meteo, type='l', ylab = parse(text = "Temperature ({}*degree* C)"), xlab = "date, 2007")
@@ -324,6 +324,19 @@ $$\Pr(y_t|y_{t-1},y_{t-2},...,y_{t-q}) = \Pr(y_t|y_{t-1})$$
 + AR(1) processes have correlations beyond lag 1
 + AR(1) processes have non-significant _partial autocorrelations_ beyond lag 1
 
+As an example, we create an AR(1) process with $\phi_1=0.85$ and $e$
+drawn from the standard normal distribution (mean 0, variance 1).
+
+```{r}
+y = rep(NA_real_, 1000) # initialise the variable: not needed, but good practice
+y[1] = 0
+for (i in 2:1000) y[i] = 0.85 * y[i-1] + rnorm(1)
+plot(y, type = 'l', main = "AR(1)")
+plot(acf(y))
+```
+
+Compare the shape of the `acf` with that obtained from a MA process: different!
+
 ### 4.9 AR(p)
 $$y_t = \phi_1 y_{t-1}+ \phi_2 y_{t-2} + ... + \phi_p y_{t-p} + e_t$$
 or
@@ -332,6 +345,15 @@ $$y_t = \sum_{j=1}^p \phi_j y_{t-j}+e_t$$
 observations further back contain information
 + AR(p) have autocorrelations beyond lag p
 + AR(p) have ``zero'' _partial_ autocorrelations beyond lag p
+
+```{r}
+y2 = rep(NA_real_, 1000) # initialise the variable: not needed, but good practice
+y2[1] = 0; y2[2] = rnorm(1)
+for (i in 3:1000) y2[i] = 0.5 * y2[i-1] + 0.15 * y2[i-2] + rnorm(1)
+plot(y2, type = 'l', main = "AR(2)")
+plot(acf(y2))
+```
+
 
 ### 4.10 What is partial correlation?
 + Correlation between $y_t$ and $y_{t-2}$ is simply
@@ -348,6 +370,14 @@ on _both_ intermediate values $y_{t-1}$ and $y_{t-2}$
 + etc.
 
 Partial correlation can help reveal what the order of an AR(p) series is.
+
+```{r}
+plot(pacf(e5, na.action = na.omit))
+plot(pacf(e20, na.action = na.omit))
+plot(pacf(y))
+plot(pacf(y2))
+```
+
 
 ### 4.11 relation between AR and MA processes
 Chatwin has more details about this.  Substitute the AR(1) as follows

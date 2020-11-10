@@ -93,7 +93,8 @@ $$
 \frac{\delta}{\delta y}(K_h \frac{\delta C}{\delta y})  +
 \frac{\delta}{\delta z}(K_z \frac{\delta C}{\delta z})  +E+R+Q-D-W
 $$
-with (mostly quoted from the [reference guide](http://www.lotos-euros.nl/documentation/LOTOS-EUROS_v2.0_Reference-Guide_R10898.pdf), page 6/7:
+with (mostly quoted from the [reference guide](https://lotos-euros.tno.nl/media/10360/reference_guide_v2-0_r10898.pdf), page 6/7:
+
 * $t,x,y,z$ time and the three space dimensions
 * $C$ concentration of the pollutant (dynamic field)
 * $U,V,W$ the large scale wind components in respectively west-east

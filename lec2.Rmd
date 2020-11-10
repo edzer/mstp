@@ -110,6 +110,7 @@ title("red: with trend, blue: without trend")
 
 ### 5.8 What can we learn from this?
 Prediction/forecasting:
+
 * AR(6) prediction is a compromise between the end of the series and the trend
 * the closer we are to observations, the more similar the prediction is to the
 nearest (last) observation

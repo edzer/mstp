@@ -1,6 +1,6 @@
-## 5. Fitting and choosing models
+# Fitting and choosing models
 
-### 5.1 Back to the temperature series
+## Back to the temperature series
 
 ```{r}
 load("meteo.RData")
@@ -10,43 +10,49 @@ meteo$T.per = 18.2-4.9*sin(pi*(meteo$hours+1.6)/12)
 lines(T.per~date,meteo,col='red')
 ```
 
-### 5.2 Removing the diurnal periodicity
+## Removing the diurnal periodicity
+
 Assuming this is a sinus function, 
 $$\alpha_1 + \alpha_2 \sin(t + \alpha_3)$$,
 we need non-linear regression ($\alpha_3$)
 ```{r}
 attach(meteo) # so we can use variable names directly:
-f = function(x) sum((T.outside - (x[1]+x[2]*sin(pi*(hours+x[3])/12)))^2)
-nlm(f,c(0,0,0))
+f = function(x) {
+	sum((T.outside - (x[1] + x[2] * sin(pi * (hours + x[3])/12)))^2)
+}
+nlm(f, c(0, 0, 0)) # zero initial values
 ```
 
-### 5.3 Temperature anomaly
+## Temperature anomaly
+
 ```{r}
 plot(T.outside-T.per~date, meteo, type='l')
 title("anomaly")
 ```
 
-### 5.4 What can we do with such models?
+## What can we do with such models?
+
 * try to find out which model fits best (model selection)
 * learn how they were/could have been generated
 * predict future observations (estimation/prediction/forecasting)
 * generate similar data ourselves (simulation)
 
-### 5.5 How to select a ``best'' model?
+## How to select a "best" model?
+
 A possible approach is to find the minimum for {\em Akaike's Information
 Criterion} (AIC) for ARMA($p,q$) models and series of length $n$:
 $$AIC = \log \hat{\sigma}^2 + 2(p+q+1)/n$$
 with $\hat{\sigma}^2$ the estimated residual (noise) variance.
 
 Instead of finding a single best model using this single criterion, it
-may be better is to select a small group of ``best'' models, and look
+may be better is to select a small group of "best" models, and look
 at model diagnostics for each: is the residual white noise? does it have
 stationary variance?
 
-Even better may be to keep a number of ``fit'' models and consider each as
+Even better may be to keep a number of "fit" models and consider each as
 (equally?) suitable candidates.
 
-### 5.6 AIC for AR(p), and as as a function of $p$
+## AIC for AR(p), and as as a function of $p$
 ```{r}
 n = 10
 aic = numeric(n)
@@ -56,7 +62,7 @@ aic
 plot(aic[2:10], type='l')
 ```
 
-### 5.7 Anomaly AIC as a function of $p$, for AR(p)
+## Anomaly AIC as a function of $p$, for AR(p)
 ```{r}
 an = T.outside - T.per
 aic_an = numeric(n)
@@ -107,7 +113,7 @@ lines(18+arima.sim(list(ar = x$coef[1:6]), 10080, sd=sqrt(0.002589)),
 title("red: with trend, blue: without trend")
 ```
 
-### 5.8 What can we learn from this?
+## What can we learn from this?
 Prediction/forecasting:
 
 * AR(6) prediction is a compromise between the end of the series and the trend
@@ -119,7 +125,7 @@ the far-into-the-future prediction becomes
 * the standard error of prediction increases when predictions are further in the
 future.
 
-### 5.9 A side note: fitting a phase with a linear model
+## A side note: fitting a phase with a linear model
 A phase shift model $\alpha \sin(x + \phi)$ can also be modelled by  
 $\alpha sin(x) + \beta cos(x)$; this is essentially a re-parameterization.
 Try the following code:
@@ -142,7 +148,7 @@ f = function(dir, x) { # plot the combination of a sin+cos function, based on di
 
 for (d in seq(0, 2*pi, length.out = 100)) {
 	f(d, x)
-	Sys.sleep(.1) # give us some time to think this over!
+	Sys.sleep(.1)
 }
 ```
 
@@ -158,4 +164,4 @@ which is a linear model, identical to:
 lm(T.outside~sin(tt)+cos(tt))
 ```
 
-### 5.10 Next steps: how do we fit coefficients?
+## Next: how do we fit coefficients?

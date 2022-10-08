@@ -1,10 +1,10 @@
-# Spatial correlation and prediction
-\(
+# Spatial prediction
+$$
 \newcommand{\E}{{\rm E}}       % E expectation operator
 \newcommand{\Var}{{\rm Var}}   % Var variance operator
 \newcommand{\Cov}{{\rm Cov}}   % Cov covariance operator
 \newcommand{\Cor}{{\rm Corr}}
-\)
+$$
 
 ### What is spatial correlation?
 Idea from time series: look at lagged correlations, and the $h$-scatterplot.
@@ -31,6 +31,7 @@ $[-1,1]$ covariance. -1 or +1: perfect correlation.
 
 
 ### Normal distribution
+
 * _univariate_: If $Z$ follows
 a normal distribution, its probability
 distribution is _completely_ characterized
@@ -98,11 +99,13 @@ title(paste("correlation:", round(cor(x,y),digits=3), "MSE", mse))
 ```
 
 ### How can correlation help prediction?
+
 Problem:
 
 ![](interp.png)
 
 ### Questions
+
 Given observation $z(s_1)$, how to predict $z(s_0)$?
 
 * What is the best predicted value at $s_0$, $\hat{z}(s_0)$?

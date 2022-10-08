@@ -1,14 +1,14 @@
-FILE	= lec8
+FILE	= index
 
 all:
-	vi $(FILE).Rmd
-	make knit
+	vi $(FILE).qmd
+	quarto render --to html
 
 knit:
 	echo "library(knitr); knit2html(\"$(FILE).Rmd\")" | R --save -q
 
 view:
-	google-chrome $(FILE).html
+	google-chrome _book/index.html
 
 www:
 	# scp lec*html epebe_01@ifgifiles.uni-muenster.de:WWW/mstp

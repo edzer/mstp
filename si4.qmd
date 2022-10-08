@@ -187,7 +187,7 @@ $O(n \log n)$ doesn't scale well
 http://donar.umiacs.umd.edu/quadtree/index.html
 
 ### Predicting block means
-Instead of predicting $Z(s_0)$ for a ``point'' location, one might be
+Instead of predicting $Z(s_0)$ for a "point" location, one might be
 interested at predicting the average of $Z(s)$ over a block, $B_0$, i.e.
 $$Z(B_0) = \frac{1}{|B_0|}\int_{B_0} Z(u)du$$
 * This can (naively) be done by predicting $Z$ over a large number of points

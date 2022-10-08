@@ -1,27 +1,13 @@
-# Modelling spatio-temporal processes
+# Course overview {.unnumbered}
 
-## 0. How do R markdown files work?
+## Literature
 
-* load them with rstudio
-* click the `knit` button
-* debug/step through:
- * load all code up to here-button
- * ctrl-Enter: run this line
- * output in console, objects appear in Environment browser
+* C. Chatfield, The analysis of time series: an introduction. Chapman and Hall: chapters 1, 2 and 3 [@chatfield] 
+* Spatial Data Science, with applications in R [@sdsr]:
+    * Ch 1 (intro), 7 (sf, stars)
+    * Ch 12 (interpolation)
 
-## 1. Course overview, time series
-
-### 1.1 Literature
-
-* C. Chatfield, The analysis of time series: an introduction. Chapman and Hall: chapters 1, 2 and 3 
-* Applied Spatial Data Analysis with R, by R. Bivand, E. Pebesma and V. Gomez-Rubio (Springer; 
-[first edition](http://www.springer.com/978-0-387-78170-9) or its [second edition](http://www.springer.com/statistics/life+sciences%2C+medicine+%26+health/book/978-1-4614-7617-7)): 
- * Ch 1, 2, 3
- * Ch 4, 5
- * 1st ed, Ch 6 (customizing classes for spatial data) or 2nd ed, Ch 6 (spatio-temporal data)
- * Ch 8 (geostatistics)
-
-### 1.2 Organization
+## Organization
 
 Teachers:
 
@@ -32,20 +18,22 @@ Learnweb:
 
  * subscribe
  * no password
- * Lecture+exercise is only one course.
+ * Lectures + exercises is only one course.
 
 Slides:
 
- * html on http://edzer.github.io/mstp/
- * Rmd sources on on http://github.com/edzer/mstp
- * you can run the Rmd files in rstudio (http://www.rstudio.com/)
- * pull requests with improvements are appreciated (and may be rewarded)
+* rendered: [https://edzer.github.io/mstp/](https://edzer.github.io/mstp/)
+* qmd (quarto) sources on on [http://github.com/edzer/mstp](http://github.com/edzer/mstp)
+* you can load and run the individual qmd files in [rstudio](http://www.rstudio.com/)
+* pull requests with improvements are appreciated (and may be rewarded): 
+    * fork the repository on GitHub,
+    * click "Edit this page" on the right-hand-side
 
-### 1.3 examen:
+### Examen:
 
  * multiple choice, 4 possibilities, 40 questions, 20 need to be correct.
 
-### 1.4 Overview of the course
+### Overview of the course
 
 Topics:
 
@@ -71,13 +59,13 @@ Topics:
     * Example
     * Calibration: Kalman filter
 
-## 2. Where we come from
+## Where we come from
 
 + introduction to geostatistics
 + mathematics, linear algebra
 + computer science
 
-### 2.1 introduction to geostatistics
+### Introduction to geostatistics
 
 + types of variables: Stevens' measurement scales -- nominal, ordinal, interval, ratio
 + ... or: discrete, continuous
@@ -86,78 +74,81 @@ Topics:
 + assumption was: observations are _independent_
 + what does independence mean?
 
-### 2.2 In this course
+### In this course
 + we will study dependence in observations, in 
- + space
- + time
- + or space-time
+    + space
+    + time
+    + or space-time
 + in space and/or time, Stevens' measurement scales are not enough! Examples:
- + linear time, cyclic time
- + space: functions, fields
+    + linear time, cyclic time
+    + space: functions, fields
 + we will study how we can represent phenomena, by
- + mathematical representations (models)
- + computer representations (models)
+    + mathematical representations (models)
+    + computer representations (models)
 + we will consider how well these models correspond to our observations
 
-## 3. Spatio-temporal phenomena are everywhere
+## Spatio-temporal phenomena are everywhere
 + if we think about it, there are no data that can be non-spatial or non-temporal.
 + in many cases, the spatial or temporal references are not essential
- + think: brain image of a person: time matters, but mostly referenced with respect to the age of the person, spatial location of the MRI scanner does not
- + but: ID of the patient does!
- + and: time of scan matters too!
-+ we will ``pigeon-hole'' (classify) phenomena into: fields, objects, aggregations
+    + think: brain image of a person: time matters, but mostly referenced with respect to the age of the person, spatial location of the MRI scanner does not
+    + but: ID of the patient does!
+    + and: time of scan matters too!
++ we will "pigeon-hole" (classify) phenomena into: fields, objects, aggregations
 
-### 3.1 fields
+### Fields
+
 + many processes can be represented by fields, meaning they could be measured everywhere
 + think: temperature in this room
 + typical problems: interpolation, patterns, trends, temporal development, forecasting?
 
-### 3.2 objects and events
+### Objects and events
+
 + objects can be identified 
 + objects are identified within a frame (or _window_) of observation
 + within this window, between objects, there are no objects (no point of interpolation)
 + objects can be moving (people), or static (buildings)
-+ objects or events are sometimes obtained by thresholding fields, think heat wave, earthquake, hurricane, see e.g.
-http://ifgi.uni-muenster.de/~j_jone02/publications/GIScience2014.pdf
++ objects or events are sometimes obtained by thresholding fields, think heat wave, earthquake, hurricane, [see e.g.
+  @camara2014fields]
 + sometimes this view is rather artificial, think cars, persons, buildings
 
-### 3.3 fields - objects/events conversions
+### Fields - objects/events conversions
 + we can convert a field into an object by thresholding (wind field, storm or hurricane)
 + we can convert objects into a field e.g. by computing the density as a continuous function
 
-### 3.4 aggregations
+### Aggregations
 + we can aggregate fields, or objects, but do this differently:
 + population can be summed, temperature cannot
 
-## 3.5 Aims of modelling
+## Aims of modelling
 ... could be
 
 + curiousity
-+ studying models is easier than measuring the world around us
++ fun: studying models is easier than measuring the world around us
 
 More scientific aims of modelling are 
 
 + to learn about the world around us
 + to predict the past, current or future, in case where measurement is not feasible.
 
-### 3.5 What is a model?
-+ conceptual models (the water cycle: http://en.wikipedia.org/wiki/File:Water_cycle.png)
-+ object models (e.g., UML: http://en.wikipedia.org/wiki/File:UML_diagrams_overview.svg)
-+ mathematical models, such as Navier Stokes' equation,
+### What is a model?
+
++ conceptual models, e.g. the water cycle ([wikipedia](http://en.wikipedia.org/wiki/File:Water_cycle.png):) ![the water cycle](https://upload.wikimedia.org/wikipedia/commons/9/94/Water_cycle.png)
++ object models, such as UML ([wikipedia](http://en.wikipedia.org/wiki/File:UML_diagrams_overview.svg):) ![UML](https://upload.wikimedia.org/wikipedia/commons/e/ed/UML_diagrams_overview.svg)
++ mathematical models, such as Navier Stokes' equation, ([wikipedia](https://en.wikipedia.org/wiki/Navier%E2%80%93Stokes_equations):)
 ![Navier Stokes equation](http://upload.wikimedia.org/math/4/f/e/4fef570fa684173cbc6e70a904dd5e66.png) 
 
-
-### 3.6 What is a mathematical model?
+### What is a mathematical model?
 A mathematical model is an abstract model that uses mathematical
-language to describe the behaviour of a system. 
+language to describe the behaviour of a system, quoting [@eykhoff]
+a mathematical model is:
 
 > a representation of the essential aspects of an existing system (or
 > a system to be constructed) which presents knowledge of that system in
-> usable form (P. Eykhoff, 1974, System Identification, J. Wiley, London.)
+> usable form 
 
 In the natural sciences, a model is always an approximation, a
 simplification of reality. If degree of approximation meets the required
 accuracy, the model is useful, or valid (of value). A validated model
-does not imply that the model is ``true''; more than one model can be
+does not imply that the model is "true"; more than one model can be
 valid at the same time.
 

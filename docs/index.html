@@ -1,15 +1,618 @@
-<html>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.1.189">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Edzer Pebesma, Christian Knoth">
+<meta name="dcterms.date" content="2022-10-07">
+
+<title>Modelling Spatiotemporal Processes</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./ts1.html" rel="next">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">Modelling Spatiotemporal Processes</h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Modelling Spatiotemporal Processes</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/edzer/mstp/" title="Source Code" class="sidebar-tool px-1"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link active">Course overview</a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Time Series</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ts1.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Time Series</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ts2.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Fitting and choosing models</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">Optimisation</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./op1.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Optimization: linear and non-linear</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./op2.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Optimization: stochastic methods</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">Spatial Interpolation</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./si1.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Simple approaches</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./si2.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Spatial prediction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./si3.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Unknown, constant mean</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./si4.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Unknown, varying mean</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">Other topics</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./de1.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Spatial temporal variation modelled by differential equations</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">Appendices</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#course-overview" id="toc-course-overview" class="nav-link active" data-scroll-target="#course-overview">Course overview</a>
+  <ul class="collapse">
+  <li><a href="#literature" id="toc-literature" class="nav-link" data-scroll-target="#literature">Literature</a></li>
+  <li><a href="#organization" id="toc-organization" class="nav-link" data-scroll-target="#organization">Organization</a>
+  <ul class="collapse">
+  <li><a href="#examen" id="toc-examen" class="nav-link" data-scroll-target="#examen">Examen:</a></li>
+  <li><a href="#overview-of-the-course" id="toc-overview-of-the-course" class="nav-link" data-scroll-target="#overview-of-the-course">Overview of the course</a></li>
+  </ul></li>
+  <li><a href="#where-we-come-from" id="toc-where-we-come-from" class="nav-link" data-scroll-target="#where-we-come-from">Where we come from</a>
+  <ul class="collapse">
+  <li><a href="#introduction-to-geostatistics" id="toc-introduction-to-geostatistics" class="nav-link" data-scroll-target="#introduction-to-geostatistics">Introduction to geostatistics</a></li>
+  <li><a href="#in-this-course" id="toc-in-this-course" class="nav-link" data-scroll-target="#in-this-course">In this course</a></li>
+  </ul></li>
+  <li><a href="#spatio-temporal-phenomena-are-everywhere" id="toc-spatio-temporal-phenomena-are-everywhere" class="nav-link" data-scroll-target="#spatio-temporal-phenomena-are-everywhere">Spatio-temporal phenomena are everywhere</a>
+  <ul class="collapse">
+  <li><a href="#fields" id="toc-fields" class="nav-link" data-scroll-target="#fields">Fields</a></li>
+  <li><a href="#objects-and-events" id="toc-objects-and-events" class="nav-link" data-scroll-target="#objects-and-events">Objects and events</a></li>
+  <li><a href="#fields---objectsevents-conversions" id="toc-fields---objectsevents-conversions" class="nav-link" data-scroll-target="#fields---objectsevents-conversions">Fields - objects/events conversions</a></li>
+  <li><a href="#aggregations" id="toc-aggregations" class="nav-link" data-scroll-target="#aggregations">Aggregations</a></li>
+  </ul></li>
+  <li><a href="#aims-of-modelling" id="toc-aims-of-modelling" class="nav-link" data-scroll-target="#aims-of-modelling">Aims of modelling</a>
+  <ul class="collapse">
+  <li><a href="#what-is-a-model" id="toc-what-is-a-model" class="nav-link" data-scroll-target="#what-is-a-model">What is a model?</a></li>
+  <li><a href="#what-is-a-mathematical-model" id="toc-what-is-a-mathematical-model" class="nav-link" data-scroll-target="#what-is-a-mathematical-model">What is a mathematical model?</a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/edzer/mstp/edit/main/index.qmd" class="toc-action">Edit this page</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block">Modelling Spatiotemporal Processes</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Edzer Pebesma, Christian Knoth </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">October 7, 2022</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+</header>
+
+<section id="course-overview" class="level1 unnumbered">
+<h1 class="unnumbered">Course overview</h1>
+<section id="literature" class="level2">
+<h2 class="anchored" data-anchor-id="literature">Literature</h2>
 <ul>
-<li> <a href="lec1.html">lec1.html</a> </li>
-<li> <a href="lec2.html">lec2.html</a> </li>
-<li> <a href="lec3.html">lec3.html</a> </li>
-<li> <a href="lec4.html">lec4.html</a> </li>
-<li> <a href="lec5.html">lec5.html</a> </li>
-<li> <a href="lec6.html">lec6.html</a> </li>
-<li> <a href="lec7.html">lec7.html</a> </li>
-<li> <a href="lec8.html">lec8.html</a> </li>
-<li> <a href="extensions.html">extensions.html</a> (not required for test) </li>
+<li>C. Chatfield, The analysis of time series: an introduction. Chapman and Hall: chapters 1, 2 and 3 <span class="citation" data-cites="chatfield">(<a href="references.html#ref-chatfield" role="doc-biblioref">Chatfield 2003</a>)</span></li>
+<li>Spatial Data Science, with applications in R <span class="citation" data-cites="sdsr">(<a href="references.html#ref-sdsr" role="doc-biblioref">Pebesma and Bivand 2022</a>)</span>:
+<ul>
+<li>Ch 1 (intro), 7 (sf, stars)</li>
+<li>Ch 12 (interpolation)</li>
+</ul></li>
 </ul>
-data:
-<a href="meteo.RData">meteo.RData</a>
-</html>
+</section>
+<section id="organization" class="level2">
+<h2 class="anchored" data-anchor-id="organization">Organization</h2>
+<p>Teachers:</p>
+<ul>
+<li>Christian Knoth (exercises, Wed 12-14)</li>
+<li>Edzer Pebesma (lectures)</li>
+</ul>
+<p>Learnweb:</p>
+<ul>
+<li>subscribe</li>
+<li>no password</li>
+<li>Lectures + exercises is only one course.</li>
+</ul>
+<p>Slides:</p>
+<ul>
+<li>rendered: <a href="https://edzer.github.io/mstp/">https://edzer.github.io/mstp/</a></li>
+<li>qmd (quarto) sources on on <a href="http://github.com/edzer/mstp">http://github.com/edzer/mstp</a></li>
+<li>you can load and run the individual qmd files in <a href="http://www.rstudio.com/">rstudio</a></li>
+<li>pull requests with improvements are appreciated (and may be rewarded):
+<ul>
+<li>fork the repository on GitHub,</li>
+<li>click “Edit this page” on the right-hand-side</li>
+</ul></li>
+</ul>
+<section id="examen" class="level3">
+<h3 class="anchored" data-anchor-id="examen">Examen:</h3>
+<ul>
+<li>multiple choice, 4 possibilities, 40 questions, 20 need to be correct.</li>
+</ul>
+</section>
+<section id="overview-of-the-course" class="level3">
+<h3 class="anchored" data-anchor-id="overview-of-the-course">Overview of the course</h3>
+<p>Topics:</p>
+<ul>
+<li>Time series data</li>
+<li>Time series models: AR(p), MA(q), partial correlation, AIC, forecasting</li>
+<li>Optimisation:
+<ul>
+<li>Linear models, least squares: normal equations</li>
+<li>Non-linear:
+<ul>
+<li>One-dimensional: golden search</li>
+<li>Multi-dimensional least squares: Newton</li>
+<li>Multi-dimensional stochastic search: Metropolis</li>
+<li>Multi-dimensional stochastic optimisation: Metropolis</li>
+</ul></li>
+</ul></li>
+<li>Spatial models:
+<ul>
+<li>Simple, heuristic spatial interpolation approaches</li>
+<li>Spatial correlation</li>
+<li>Regression with spatially correlated data</li>
+<li>Kriging: best linear (unbiased) prediction</li>
+<li>Stationarity, variogram</li>
+<li>Kriging varieties: simple, ordinary, universal kriging</li>
+<li>Kriging as a probabilistic spatial predictor</li>
+</ul></li>
+<li>Spatio-temporal variation modelled by partial differential equations
+<ul>
+<li>Initial and boundary conditions</li>
+<li>Example</li>
+<li>Calibration: Kalman filter</li>
+</ul></li>
+</ul>
+</section>
+</section>
+<section id="where-we-come-from" class="level2">
+<h2 class="anchored" data-anchor-id="where-we-come-from">Where we come from</h2>
+<ul>
+<li>introduction to geostatistics</li>
+<li>mathematics, linear algebra</li>
+<li>computer science</li>
+</ul>
+<section id="introduction-to-geostatistics" class="level3">
+<h3 class="anchored" data-anchor-id="introduction-to-geostatistics">Introduction to geostatistics</h3>
+<ul>
+<li>types of variables: Stevens’ measurement scales – nominal, ordinal, interval, ratio</li>
+<li>… or: discrete, continuous</li>
+<li>t-tests, ANOVA</li>
+<li>regression, multiple regression (but not how we compute it)</li>
+<li>assumption was: observations are <em>independent</em></li>
+<li>what does independence mean?</li>
+</ul>
+</section>
+<section id="in-this-course" class="level3">
+<h3 class="anchored" data-anchor-id="in-this-course">In this course</h3>
+<ul>
+<li>we will study dependence in observations, in
+<ul>
+<li>space</li>
+<li>time</li>
+<li>or space-time</li>
+</ul></li>
+<li>in space and/or time, Stevens’ measurement scales are not enough! Examples:
+<ul>
+<li>linear time, cyclic time</li>
+<li>space: functions, fields</li>
+</ul></li>
+<li>we will study how we can represent phenomena, by
+<ul>
+<li>mathematical representations (models)</li>
+<li>computer representations (models)</li>
+</ul></li>
+<li>we will consider how well these models correspond to our observations</li>
+</ul>
+</section>
+</section>
+<section id="spatio-temporal-phenomena-are-everywhere" class="level2">
+<h2 class="anchored" data-anchor-id="spatio-temporal-phenomena-are-everywhere">Spatio-temporal phenomena are everywhere</h2>
+<ul>
+<li>if we think about it, there are no data that can be non-spatial or non-temporal.</li>
+<li>in many cases, the spatial or temporal references are not essential
+<ul>
+<li>think: brain image of a person: time matters, but mostly referenced with respect to the age of the person, spatial location of the MRI scanner does not</li>
+<li>but: ID of the patient does!</li>
+<li>and: time of scan matters too!</li>
+</ul></li>
+<li>we will “pigeon-hole” (classify) phenomena into: fields, objects, aggregations</li>
+</ul>
+<section id="fields" class="level3">
+<h3 class="anchored" data-anchor-id="fields">Fields</h3>
+<ul>
+<li>many processes can be represented by fields, meaning they could be measured everywhere</li>
+<li>think: temperature in this room</li>
+<li>typical problems: interpolation, patterns, trends, temporal development, forecasting?</li>
+</ul>
+</section>
+<section id="objects-and-events" class="level3">
+<h3 class="anchored" data-anchor-id="objects-and-events">Objects and events</h3>
+<ul>
+<li>objects can be identified</li>
+<li>objects are identified within a frame (or <em>window</em>) of observation</li>
+<li>within this window, between objects, there are no objects (no point of interpolation)</li>
+<li>objects can be moving (people), or static (buildings)</li>
+<li>objects or events are sometimes obtained by thresholding fields, think heat wave, earthquake, hurricane, <span class="citation" data-cites="camara2014fields">(see e.g. <a href="references.html#ref-camara2014fields" role="doc-biblioref">Camara et al. 2014</a>)</span></li>
+<li>sometimes this view is rather artificial, think cars, persons, buildings</li>
+</ul>
+</section>
+<section id="fields---objectsevents-conversions" class="level3">
+<h3 class="anchored" data-anchor-id="fields---objectsevents-conversions">Fields - objects/events conversions</h3>
+<ul>
+<li>we can convert a field into an object by thresholding (wind field, storm or hurricane)</li>
+<li>we can convert objects into a field e.g.&nbsp;by computing the density as a continuous function</li>
+</ul>
+</section>
+<section id="aggregations" class="level3">
+<h3 class="anchored" data-anchor-id="aggregations">Aggregations</h3>
+<ul>
+<li>we can aggregate fields, or objects, but do this differently:</li>
+<li>population can be summed, temperature cannot</li>
+</ul>
+</section>
+</section>
+<section id="aims-of-modelling" class="level2">
+<h2 class="anchored" data-anchor-id="aims-of-modelling">Aims of modelling</h2>
+<p>… could be</p>
+<ul>
+<li>curiousity</li>
+<li>fun: studying models is easier than measuring the world around us</li>
+</ul>
+<p>More scientific aims of modelling are</p>
+<ul>
+<li>to learn about the world around us</li>
+<li>to predict the past, current or future, in case where measurement is not feasible.</li>
+</ul>
+<section id="what-is-a-model" class="level3">
+<h3 class="anchored" data-anchor-id="what-is-a-model">What is a model?</h3>
+<ul>
+<li>conceptual models, e.g.&nbsp;the water cycle (<a href="http://en.wikipedia.org/wiki/File:Water_cycle.png">wikipedia</a>:) <img src="https://upload.wikimedia.org/wikipedia/commons/9/94/Water_cycle.png" class="img-fluid" alt="the water cycle"></li>
+<li>object models, such as UML (<a href="http://en.wikipedia.org/wiki/File:UML_diagrams_overview.svg">wikipedia</a>:) <img src="https://upload.wikimedia.org/wikipedia/commons/e/ed/UML_diagrams_overview.svg" class="img-fluid" alt="UML"></li>
+<li>mathematical models, such as Navier Stokes’ equation, (<a href="https://en.wikipedia.org/wiki/Navier%E2%80%93Stokes_equations">wikipedia</a>:) <img src="http://upload.wikimedia.org/math/4/f/e/4fef570fa684173cbc6e70a904dd5e66.png" class="img-fluid" alt="Navier Stokes equation"></li>
+</ul>
+</section>
+<section id="what-is-a-mathematical-model" class="level3">
+<h3 class="anchored" data-anchor-id="what-is-a-mathematical-model">What is a mathematical model?</h3>
+<p>A mathematical model is an abstract model that uses mathematical language to describe the behaviour of a system, quoting <span class="citation" data-cites="eykhoff">(<a href="references.html#ref-eykhoff" role="doc-biblioref">Eykhoff 1974</a>)</span> a mathematical model is:</p>
+<blockquote class="blockquote">
+<p>a representation of the essential aspects of an existing system (or a system to be constructed) which presents knowledge of that system in usable form</p>
+</blockquote>
+<p>In the natural sciences, a model is always an approximation, a simplification of reality. If degree of approximation meets the required accuracy, the model is useful, or valid (of value). A validated model does not imply that the model is “true”; more than one model can be valid at the same time.</p>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">
+<div id="ref-camara2014fields" class="csl-entry" role="doc-biblioentry">
+Camara, Gilberto, Max J Egenhofer, Karine Ferreira, Pedro Andrade, Gilberto Queiroz, Alber Sanchez, Jim Jones, and Lubia Vinhas. 2014. <span>“Fields as a Generic Data Type for Big Spatial Data.”</span> In <em>International Conference on Geographic Information Science</em>, 159–72. Springer. <a href="https://link.springer.com/content/pdf/10.1007/978-3-319-11593-1_11.pdf">https://link.springer.com/content/pdf/10.1007/978-3-319-11593-1_11.pdf</a>.
+</div>
+<div id="ref-chatfield" class="csl-entry" role="doc-biblioentry">
+Chatfield, Chris. 2003. <em>The Analysis of Time Series: An Introduction</em>. Chapman; hall/CRC.
+</div>
+<div id="ref-eykhoff" class="csl-entry" role="doc-biblioentry">
+Eykhoff, Pieter. 1974. <em>System Identification</em>. Vol. 14. Wiley London.
+</div>
+<div id="ref-sdsr" class="csl-entry" role="doc-biblioentry">
+Pebesma, Edzer, and Roger Bivand. 2022. <em>Spatial Data Science, with Applications in <span>R</span></em>. online. <a href="https://r-spatial.org/book/">https://r-spatial.org/book/</a>.
+</div>
+</div>
+</section>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./ts1.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Time Series</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.1.189">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Modelling Spatiotemporal Processes - 6&nbsp; Spatial prediction</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./si3.html" rel="next">
+<link href="./si1.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Spatial prediction</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Modelling Spatiotemporal Processes</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/edzer/mstp/" title="Source Code" class="sidebar-tool px-1"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Course overview</a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Time Series</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ts1.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Time Series</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ts2.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Fitting and choosing models</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">Optimisation</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./op1.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Optimization: linear and non-linear</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./op2.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Optimization: stochastic methods</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">Spatial Interpolation</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./si1.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Simple approaches</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./si2.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Spatial prediction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./si3.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Unknown, constant mean</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./si4.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Unknown, varying mean</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">Other topics</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./de1.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Spatial temporal variation modelled by differential equations</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">Appendices</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#what-is-spatial-correlation" id="toc-what-is-spatial-correlation" class="nav-link active" data-scroll-target="#what-is-spatial-correlation">What is spatial correlation?</a></li>
+  <li><a href="#random-variables-expectation-variance-covariance" id="toc-random-variables-expectation-variance-covariance" class="nav-link" data-scroll-target="#random-variables-expectation-variance-covariance">Random variables: expectation, variance, covariance</a></li>
+  <li><a href="#normal-distribution" id="toc-normal-distribution" class="nav-link" data-scroll-target="#normal-distribution">Normal distribution</a></li>
+  <li><a href="#how-can-correlation-help-prediction" id="toc-how-can-correlation-help-prediction" class="nav-link" data-scroll-target="#how-can-correlation-help-prediction">How can correlation help prediction?</a></li>
+  <li><a href="#questions" id="toc-questions" class="nav-link" data-scroll-target="#questions">Questions</a></li>
+  <li><a href="#estimation-error" id="toc-estimation-error" class="nav-link" data-scroll-target="#estimation-error">Estimation error</a></li>
+  <li><a href="#suppose-we-know-the-mean" id="toc-suppose-we-know-the-mean" class="nav-link" data-scroll-target="#suppose-we-know-the-mean">Suppose we know the mean</a></li>
+  <li><a href="#next-problems" id="toc-next-problems" class="nav-link" data-scroll-target="#next-problems">Next problems…</a></li>
+  <li><a href="#what-is-geostatistical-interpolation" id="toc-what-is-geostatistical-interpolation" class="nav-link" data-scroll-target="#what-is-geostatistical-interpolation">What is Geostatistical Interpolation?</a></li>
+  <li><a href="#random-variables" id="toc-random-variables" class="nav-link" data-scroll-target="#random-variables">Random variables</a></li>
+  <li><a href="#correlation-and-covariance" id="toc-correlation-and-covariance" class="nav-link" data-scroll-target="#correlation-and-covariance">Correlation and covariance</a></li>
+  <li><a href="#the-quadratic-form" id="toc-the-quadratic-form" class="nav-link" data-scroll-target="#the-quadratic-form">The quadratic form</a></li>
+  <li><a href="#why-do-we-need-this" id="toc-why-do-we-need-this" class="nav-link" data-scroll-target="#why-do-we-need-this">Why do we need this?</a></li>
+  <li><a href="#suppose-we-know-all-that" id="toc-suppose-we-know-all-that" class="nav-link" data-scroll-target="#suppose-we-know-all-that">Suppose we know all that</a></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/edzer/mstp/edit/main/si2.qmd" class="toc-action">Edit this page</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Spatial prediction</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<p><span class="math display">\[
+\newcommand{\E}{{\rm E}}       % E expectation operator
+\newcommand{\Var}{{\rm Var}}   % Var variance operator
+\newcommand{\Cov}{{\rm Cov}}   % Cov covariance operator
+\newcommand{\Cor}{{\rm Corr}}
+\]</span></p>
+<section id="what-is-spatial-correlation" class="level3">
+<h3 class="anchored" data-anchor-id="what-is-spatial-correlation">What is spatial correlation?</h3>
+<p>Idea from time series: look at lagged correlations, and the <span class="math inline">\(h\)</span>-scatterplot.</p>
+<p>What is it? Plots of (or correlation between) <span class="math inline">\(Z(s)\)</span> and <span class="math inline">\(Z(s+h)\)</span>, where <span class="math inline">\(s+h\)</span> is <span class="math inline">\(s\)</span>, shifted by <span class="math inline">\(h\)</span> (time distance, spatial distance).</p>
+</section>
+<section id="random-variables-expectation-variance-covariance" class="level3">
+<h3 class="anchored" data-anchor-id="random-variables-expectation-variance-covariance">Random variables: expectation, variance, covariance</h3>
+<p>Random variable: <span class="math inline">\(Z\)</span> follows a probability distribution, specified by a density function <span class="math inline">\(f(z)= \Pr(Z=z)\)</span> or a distribution function <span class="math inline">\(F(z)=\Pr(Z \le z)\)</span></p>
+<p>Expectation: <span class="math inline">\(\E(Z) = \int_{-\infty}^{\infty} f(s)ds\)</span> – center of mass, mean.</p>
+<p>Variance: <span class="math inline">\(\Var(Z)=\E(Z-\E(Z))^2\)</span> – mean squared distance from mean; measure of spread; square root: standard deviation of <span class="math inline">\(Z\)</span>.</p>
+<p>Covariance: <span class="math inline">\(\Cov(X,Y)=\E((X-\E(X))(Y-\E(Y)))\)</span> – mean product; can be negative; <span class="math inline">\(\Cov(X,X)=\Var(X)\)</span>.</p>
+<p>Correlation: <span class="math inline">\(r_{XY}=\frac{\Cov(X,Y)}{\sqrt{\Var(X)\Var(Y)}}\)</span> – normalized <span class="math inline">\([-1,1]\)</span> covariance. -1 or +1: perfect correlation.</p>
+</section>
+<section id="normal-distribution" class="level3">
+<h3 class="anchored" data-anchor-id="normal-distribution">Normal distribution</h3>
+<ul>
+<li><em>univariate</em>: If <span class="math inline">\(Z\)</span> follows a normal distribution, its probability distribution is <em>completely</em> characterized by its mean <span class="math inline">\(E(Z)=\mu\)</span> and variance <span class="math inline">\(\Var(Z)=\sigma^2\)</span></li>
+<li><em>multivariate</em>: If the vector <span class="math inline">\(Z=(Z_1,Z_2,...,Z_p)\)</span> follows a <em>multivariate</em> normal distribution, its marginal distributions are univariate normal, and its <em>joint</em> probability distribution is <em>completely</em> characterized by the mean vector <span class="math inline">\(E(Z)=\mu=(\mu_1,...\mu_p)\)</span> and covariance matrix <span class="math inline">\(V\)</span>, of which element <span class="math inline">\((i,j)\)</span> equals <span class="math inline">\(\Cov(Z_i,Z_j)\)</span></li>
+<li>covariance matrices have variances on the diagonal</li>
+</ul>
+<div class="cell" data-hash="si2_cache/html/unnamed-chunk-1_8642411245b919b60afcdd83b62f0885">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mvtnorm)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>r <span class="ot">=</span> <span class="fl">0.0</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>Sigma <span class="ot">=</span> <span class="fu">cbind</span>(<span class="fu">c</span>(<span class="dv">1</span>, r), <span class="fu">c</span>(r, <span class="dv">1</span>))</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>out <span class="ot">=</span> <span class="fu">rmvnorm</span>(<span class="dv">500</span>, <span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>), Sigma)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>x <span class="ot">=</span> out[,<span class="dv">1</span>]</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>y <span class="ot">=</span> out[,<span class="dv">2</span>]</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, y)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>model <span class="ot">=</span> <span class="fu">lm</span>(y<span class="sc">~</span>x)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Call:</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co"># lm(formula = y ~ x)</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Residuals:</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co">#    Min     1Q Median     3Q    Max </span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co"># -2.833 -0.726 -0.034  0.668  4.020 </span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Coefficients:</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co">#             Estimate Std. Error t value Pr(&gt;|t|)    </span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co"># (Intercept)   5.1361     0.2373    21.6   &lt;2e-16 ***</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="co"># x            -0.0324     0.0467    -0.7     0.49    </span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="co"># ---</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Residual standard error: 1.05 on 498 degrees of freedom</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Multiple R-squared:  0.000969,    Adjusted R-squared:  -0.00104 </span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="co"># F-statistic: 0.483 on 1 and 498 DF,  p-value: 0.487</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">abline</span>(model))</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>mse <span class="ot">=</span> <span class="fu">round</span>(<span class="fu">mean</span>((x<span class="sc">-</span>y)<span class="sc">^</span><span class="dv">2</span>), <span class="at">digits=</span><span class="dv">3</span>)</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span>(<span class="fu">paste</span>(<span class="st">"correlation:"</span>, <span class="fu">round</span>(<span class="fu">cor</span>(x,y),<span class="at">digits=</span><span class="dv">3</span>), <span class="st">"MSE"</span>, mse))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="si2_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>r <span class="ot">=</span> .<span class="dv">5</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>Sigma <span class="ot">=</span> <span class="fu">cbind</span>(<span class="fu">c</span>(<span class="dv">1</span>, r), <span class="fu">c</span>(r, <span class="dv">1</span>))</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>out <span class="ot">=</span> <span class="fu">rmvnorm</span>(<span class="dv">500</span>, <span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>), Sigma)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>x <span class="ot">=</span> out[,<span class="dv">1</span>]</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>y <span class="ot">=</span> out[,<span class="dv">2</span>]</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, y)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>model <span class="ot">=</span> <span class="fu">lm</span>(y<span class="sc">~</span>x)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Call:</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co"># lm(formula = y ~ x)</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Residuals:</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co">#    Min     1Q Median     3Q    Max </span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co"># -2.923 -0.532 -0.002  0.557  3.095 </span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Coefficients:</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="co">#             Estimate Std. Error t value Pr(&gt;|t|)    </span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="co"># (Intercept)   2.3356     0.1925    12.1   &lt;2e-16 ***</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="co"># x             0.5336     0.0373    14.3   &lt;2e-16 ***</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="co"># ---</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Residual standard error: 0.865 on 498 degrees of freedom</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Multiple R-squared:  0.291,   Adjusted R-squared:  0.289 </span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="co"># F-statistic:  204 on 1 and 498 DF,  p-value: &lt;2e-16</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">abline</span>(model))</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>mse <span class="ot">=</span> <span class="fu">round</span>(<span class="fu">mean</span>((x<span class="sc">-</span>y)<span class="sc">^</span><span class="dv">2</span>), <span class="at">digits=</span><span class="dv">3</span>)</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span>(<span class="fu">paste</span>(<span class="st">"correlation:"</span>, <span class="fu">round</span>(<span class="fu">cor</span>(x,y),<span class="at">digits=</span><span class="dv">3</span>), <span class="st">"MSE"</span>, mse))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="si2_files/figure-html/unnamed-chunk-1-2.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>r <span class="ot">=</span> .<span class="dv">9</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>Sigma <span class="ot">=</span> <span class="fu">cbind</span>(<span class="fu">c</span>(<span class="dv">1</span>, r), <span class="fu">c</span>(r, <span class="dv">1</span>))</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>out <span class="ot">=</span> <span class="fu">rmvnorm</span>(<span class="dv">500</span>, <span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>), Sigma)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>x <span class="ot">=</span> out[,<span class="dv">1</span>]</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>y <span class="ot">=</span> out[,<span class="dv">2</span>]</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, y)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>model <span class="ot">=</span> <span class="fu">lm</span>(y<span class="sc">~</span>x)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Call:</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co"># lm(formula = y ~ x)</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Residuals:</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co">#     Min      1Q  Median      3Q     Max </span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="co"># -1.1637 -0.3033 -0.0114  0.2971  1.1889 </span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Coefficients:</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="co">#             Estimate Std. Error t value Pr(&gt;|t|)    </span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="co"># (Intercept)   0.5160     0.1065    4.85  1.7e-06 ***</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="co"># x             0.8955     0.0206   43.52  &lt; 2e-16 ***</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="co"># ---</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Residual standard error: 0.431 on 498 degrees of freedom</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Multiple R-squared:  0.792,   Adjusted R-squared:  0.791 </span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a><span class="co"># F-statistic: 1.89e+03 on 1 and 498 DF,  p-value: &lt;2e-16</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">abline</span>(model))</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>mse <span class="ot">=</span> <span class="fu">round</span>(<span class="fu">mean</span>((x<span class="sc">-</span>y)<span class="sc">^</span><span class="dv">2</span>), <span class="at">digits=</span><span class="dv">3</span>)</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span>(<span class="fu">paste</span>(<span class="st">"correlation:"</span>, <span class="fu">round</span>(<span class="fu">cor</span>(x,y),<span class="at">digits=</span><span class="dv">3</span>), <span class="st">"MSE"</span>, mse))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="si2_files/figure-html/unnamed-chunk-1-3.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>r <span class="ot">=</span> .<span class="dv">95</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>Sigma <span class="ot">=</span> <span class="fu">cbind</span>(<span class="fu">c</span>(<span class="dv">1</span>, r), <span class="fu">c</span>(r, <span class="dv">1</span>))</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>out <span class="ot">=</span> <span class="fu">rmvnorm</span>(<span class="dv">500</span>, <span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>), Sigma)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>x <span class="ot">=</span> out[,<span class="dv">1</span>]</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>y <span class="ot">=</span> out[,<span class="dv">2</span>]</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>y <span class="ot">=</span> x <span class="sc">+</span> <span class="fl">0.1</span> <span class="sc">*</span> <span class="fu">rnorm</span>(<span class="dv">500</span>)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, y)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>model <span class="ot">=</span> <span class="fu">lm</span>(y<span class="sc">~</span>x)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Call:</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="co"># lm(formula = y ~ x)</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Residuals:</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="co">#     Min      1Q  Median      3Q     Max </span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="co"># -0.3490 -0.0650 -0.0025  0.0714  0.3247 </span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Coefficients:</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="co">#             Estimate Std. Error t value Pr(&gt;|t|)    </span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="co"># (Intercept)  0.01121    0.02466    0.45     0.65    </span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="co"># x            0.99864    0.00483  206.93   &lt;2e-16 ***</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="co"># ---</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Residual standard error: 0.102 on 498 degrees of freedom</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Multiple R-squared:  0.989,   Adjusted R-squared:  0.988 </span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a><span class="co"># F-statistic: 4.28e+04 on 1 and 498 DF,  p-value: &lt;2e-16</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">abline</span>(model))</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>mse <span class="ot">=</span> <span class="fu">round</span>(<span class="fu">mean</span>((x<span class="sc">-</span>y)<span class="sc">^</span><span class="dv">2</span>), <span class="at">digits=</span><span class="dv">3</span>)</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span>(<span class="fu">paste</span>(<span class="st">"correlation:"</span>, <span class="fu">round</span>(<span class="fu">cor</span>(x,y),<span class="at">digits=</span><span class="dv">3</span>), <span class="st">"MSE"</span>, mse))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="si2_files/figure-html/unnamed-chunk-1-4.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="how-can-correlation-help-prediction" class="level3">
+<h3 class="anchored" data-anchor-id="how-can-correlation-help-prediction">How can correlation help prediction?</h3>
+<p>Problem:</p>
+<p><img src="interp.png" class="img-fluid"></p>
+</section>
+<section id="questions" class="level3">
+<h3 class="anchored" data-anchor-id="questions">Questions</h3>
+<p>Given observation <span class="math inline">\(z(s_1)\)</span>, how to predict <span class="math inline">\(z(s_0)\)</span>?</p>
+<ul>
+<li>What is the best predicted value at <span class="math inline">\(s_0\)</span>, <span class="math inline">\(\hat{z}(s_0)\)</span>?</li>
+<li>How can we compute a measure of error for <span class="math inline">\(\hat{z}(s_0)-z(s_0)\)</span>?</li>
+<li>Can we compute e.g.~95% prediction intervals for the unknown <span class="math inline">\(z(s_0)\)</span>?</li>
+</ul>
+<p>Obviously, given <em>only</em> <span class="math inline">\(z(s_1)\)</span>, the best predictor for <span class="math inline">\(z(s_0)\)</span> is <span class="math inline">\(\hat{z}(s_0)=z(s_1)\)</span>.</p>
+<p>But what is the error variance, i.e.&nbsp;<span class="math inline">\(\mbox{Var}(\hat{z}(s_0)-z(s_0))\)</span>?</p>
+</section>
+<section id="estimation-error" class="level3">
+<h3 class="anchored" data-anchor-id="estimation-error">Estimation error</h3>
+<p>Let both <span class="math inline">\(z(s_1)\)</span> and <span class="math inline">\(z(s_0)\)</span> come from a field that has variance 1, i.e.&nbsp;<span class="math inline">\(\mbox{Var}(z(s_0)) = \mbox{Var}(z(s_1))=1\)</span>, and that has a constant mean: <span class="math inline">\(\mbox{E}(z(s_0)) = \mbox{E}(z(s_1))=m\)</span></p>
+<p>Then, <span class="math display">\[\mbox{Var}(\hat{z}(s_0)-z(s_0)) = \mbox{Var}(z(s_1)-z(s_0))\]</span></p>
+<p>As both have the same mean, this can be written as <span class="math display">\[\mbox{E}(\hat{z}(s_0)-z(s_0))^2 = \mbox{Var}(z(s_1)) + \mbox{Var}(z(s_0)) - 2\mbox{Cov}(z(s_1),z(s_0))\]</span></p>
+<p>As both have variance 1, this equals <span class="math inline">\(2(1-r)\)</span> with <span class="math inline">\(r\)</span> the correlation between <span class="math inline">\(z(s_0)\)</span> and <span class="math inline">\(z(s_1)\)</span>. Examples follow.</p>
+</section>
+<section id="suppose-we-know-the-mean" class="level3">
+<h3 class="anchored" data-anchor-id="suppose-we-know-the-mean">Suppose we know the mean</h3>
+<p>If we know the mean <span class="math inline">\(\mu\)</span>, it may be a good idea to use a compromise between the observation and the mean, e.g. <span class="math display">\[\hat{z}(s_0) = (1-r) \mu + r z(s_1)\]</span></p>
+</section>
+<section id="next-problems" class="level3">
+<h3 class="anchored" data-anchor-id="next-problems">Next problems…</h3>
+<p><img src="interp2.png" class="img-fluid"></p>
+<p><img src="interp3.png" class="img-fluid"></p>
+</section>
+<section id="what-is-geostatistical-interpolation" class="level3">
+<h3 class="anchored" data-anchor-id="what-is-geostatistical-interpolation">What is Geostatistical Interpolation?</h3>
+<p>Geostatistical interpolation (kriging) uses linear predictors <span class="math display">\[\hat{z}(s_0) = \sum_{i=1}^n \lambda_i z(s_i)\]</span> with weights chosen such that * the interpolated values is unbiased: <span class="math inline">\(\mbox{E}(\hat{z}(s_0)-z(s_0))=0\)</span> and * has mininum variance: <span class="math inline">\(\mbox{Var}(\hat{z}(s_0)-z(s_0))\)</span> is at minimum.</p>
+<p>All that is needed is variances and correlations.</p>
+</section>
+<section id="random-variables" class="level3">
+<h3 class="anchored" data-anchor-id="random-variables">Random variables</h3>
+<p>Random variables (RVs) are numeric variables whose outcomes are subject to chance.</p>
+<p>The cumulative distribution of probability <span class="math inline">\(F_x(\cdot)\)</span> over outcomes <span class="math inline">\(z\)</span> over all possible values of the RV <span class="math inline">\(Z\)</span> is the probability distribution function: <span class="math display">\[P(Z \le z) = F_Z(z) = \int_{-\infty}^z f_Z(u)du\]</span> where <span class="math inline">\(f_Z(\cdot)\)</span> is the probability <em>density</em> function of <span class="math inline">\(Z\)</span>. The sum of all probability is 1.</p>
+<p>Random variables have an expectation (mean): <span class="math inline">\(E(Z) = \int_{-\infty}^{\infty} u f_Z(u) du\)</span> and a variance: <span class="math inline">\(\Var(Z) = E[(Z-E(Z))^2]\)</span>.</p>
+<p>Try to think of <span class="math inline">\(E(Z)\)</span> as <span class="math inline">\(\frac{1}{n}\sum_{i=1}^{n} z_i\)</span>, with <span class="math inline">\(i \rightarrow \infty\)</span>.</p>
+<p>Two random variables <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> have covariance defined as <span class="math inline">\(\Cov(X,Y) = E[(X-E(X))(Y-E(Y))]\)</span></p>
+</section>
+<section id="correlation-and-covariance" class="level3">
+<h3 class="anchored" data-anchor-id="correlation-and-covariance">Correlation and covariance</h3>
+<p>Correlation is scaled covariance, scaled by the variances. For two variables <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, it is <span class="math display">\[\Cor(X,Y) = \frac{\Cov(X,Y)}{\sqrt{\Var(X)\Var(Y)}}\]</span></p>
+<p>It is quite easy to show that <span class="math inline">\(|\Cov(X,Y)| \le \sqrt{\Var(X)\Var(Y)}\)</span>, so correlation ranges from -1 to 1. For this, note that <span class="math inline">\(\Cov(X,X)=\Var(X)\)</span>. and <span class="math inline">\(\Cov(X,-X)=-\Var(X)\)</span>.</p>
+<p>It is perhaps easier to think of covariance as unscaled correlation.</p>
+<p>Note: <em>A large covariance does not imply a strong correlation</em></p>
+</section>
+<section id="the-quadratic-form" class="level3">
+<h3 class="anchored" data-anchor-id="the-quadratic-form">The quadratic form</h3>
+<p>We will not consider single random variables, but rather large collections of them. In fact, we will consider each observation <span class="math inline">\(z(s_i)\)</span> as a realisation (outcome) of a random variable <span class="math inline">\(Z(s_i)\)</span>, and consider the <span class="math inline">\(Z\)</span> variable at all other locations also as separate random variables, say <span class="math inline">\(Z(s_0)\)</span> for any <span class="math inline">\(s_0\)</span> in the domain of interest.</p>
+<p>Let <span class="math inline">\(Z = [Z(s_1)\ Z(s_2)\ ...\ Z(s_n)]'\)</span> then <span class="math inline">\(\Var(Z)=V\)</span> is the covariance matrix of vector <span class="math inline">\(Z\)</span>, with <span class="math inline">\(i,j\)</span>-th element <span class="math inline">\(\Cov(Z(s_i),Z(s_j))\)</span>, implying it has variances on the diagonal.</p>
+<p>Then, it is easy to show that for non-random weights <span class="math inline">\(\lambda = [\lambda_1 ... \lambda_n]'\)</span> the quadratic form <span class="math inline">\(\lambda'Z = \sum_{i=1}^n \lambda_i Z(s_i)\)</span> has variance <span class="math display">\[ \Var(\lambda'Z) = \lambda' \Var(Z) \lambda =
+\sum_{i=1}^n \sum_{j=1}^n \lambda_i \lambda_j \Cov(Z(s_i),Z(s_j)) = \lambda'V\lambda\]</span></p>
+</section>
+<section id="why-do-we-need-this" class="level3">
+<h3 class="anchored" data-anchor-id="why-do-we-need-this">Why do we need this?</h3>
+<p>When we predict (interpolate), we’re forming linear combinations, <span class="math inline">\(\sum_{i=1}^n \lambda_i Z(s_i)\)</span>, and want to know the variance of <span class="math inline">\(\sum_{i=1}^n \lambda_i Z(s_i) - Z(s_0)\)</span>, the interpolation error variance. Only then can we find weights such that it is minimum.</p>
+<p>What is the scalar <span class="math inline">\(\Var(\sum_{i=1}^n \lambda_i Z(s_i)-Z(s_0))\)</span>? Write as</p>
+<p><span class="math display">\[\Var(\lambda'Z - Z(s_0)) = \Var(\lambda'Z) + \Var(Z(s_0)) - 2\Cov(\lambda'Z,Z(s_0))\]</span> <span class="math display">\[=\lambda'V\lambda + \sigma_0^2 + \sum_{i=1}^n \lambda_i \Cov(Z(s_i),Z(s_0)) \]</span> with <span class="math inline">\(\sigma_0^2 = \Var(Z(s_0))\)</span></p>
+<p>So, we need variances of all <span class="math inline">\(Z(s_i)\)</span>, including for all <span class="math inline">\(s_0\)</span>, and all covariances between pairs <span class="math inline">\(Z(s_i)\)</span> and <span class="math inline">\(Z(s_j)\)</span>, including all <span class="math inline">\(s_0\)</span>.</p>
+</section>
+<section id="suppose-we-know-all-that" class="level3">
+<h3 class="anchored" data-anchor-id="suppose-we-know-all-that">Suppose we know all that</h3>
+<p>Kriging: find weights <span class="math inline">\(\lambda\)</span> such that <span class="math inline">\(\Var(Z(s_0)-\hat{Z}(s_0))= \Var(Z(s_0)-\sum_{i=1}^n\lambda_i Z(s_i))\)</span> is minimized, and we have the best (minimum variance) linear predictor.</p>
+<p>Best linear prediction weights: Let <span class="math inline">\(V=\Var(Z)\ \ (n\times n)\)</span> and <span class="math inline">\(v=\Cov(Z(s_0),Z)\ \ (n\times 1)\)</span>, and scalar <span class="math inline">\(\Var(Z(s_0)) = \sigma^2_0\)</span>.</p>
+<p>Expected squared prediction error <span class="math inline">\(\E(Z(s_0)-\hat{Z}(s_0))^2 = \sigma^2(s_0)\)</span></p>
+<p>Replace <span class="math inline">\(Z\)</span> with <span class="math inline">\(Z-\mu\)</span> (or assume <span class="math inline">\(\mu=0\)</span>)</p>
+<p><span class="math display">\[\sigma^2(s_0) = \E(Z(s_0)-\lambda ' Z)^2 =
+\E(Z(s_0))^2 - 2 \lambda '\E(Z(s_0) Z)+\lambda'\E(Z Z')\lambda \]</span></p>
+<p><span class="math display">\[ = \Var(Z(s_0)) - 2 \lambda'\Cov(Z(s_0),Z) + \lambda'\Var(Z)\lambda
+= \sigma^2_0 - 2 \lambda'v + \lambda'V\lambda \]</span></p>
+<p>Choose <span class="math inline">\(\lambda\)</span> such that <span class="math inline">\(\frac{\delta \sigma^2(s_0)}{\delta\lambda} = -2 v' + 2\lambda'V = 0\)</span></p>
+<p><span class="math inline">\(\lambda' = v' V^{-1}\)</span></p>
+<p>BLP/Simple kriging:</p>
+<ol type="1">
+<li><span class="math inline">\(\hat{Z}(s_0) = \mu + v'V^{-1} (Z-\mu)\)</span></li>
+<li><span class="math inline">\(\sigma^2(s_0) = \sigma^2_0 - v'V^{-1}v\)</span></li>
+</ol>
+<div class="cell" data-hash="si2_cache/html/unnamed-chunk-2_9c0276518db9a8136639f4cfae94c47b">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf) <span class="co"># st_distance()</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Linking to GEOS 3.10.2, GDAL 3.4.3, PROJ 8.2.1; sf_use_s2() is TRUE</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>cov <span class="ot">=</span> <span class="cf">function</span>(h) <span class="fu">exp</span>(<span class="sc">-</span>h)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>sk <span class="ot">=</span> <span class="cf">function</span>(data, newdata, mu, cov) {</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    V <span class="ot">=</span> <span class="fu">cov</span>(<span class="fu">st_distance</span>(data))</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    v <span class="ot">=</span> <span class="fu">cov</span>(<span class="fu">st_distance</span>(data, newdata))</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    mu <span class="sc">+</span> <span class="fu">t</span>(v) <span class="sc">%*%</span> <span class="fu">solve</span>(V, data[[<span class="dv">1</span>]] <span class="sc">-</span> mu)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co"># prediction location at (0,1):</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>newdata <span class="ot">=</span> <span class="fu">st_as_sf</span>(<span class="fu">data.frame</span>(<span class="at">x =</span> <span class="dv">0</span>, <span class="at">y =</span> <span class="dv">1</span>), <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>))</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="co"># observation location at (1,1), with attribute value (y) 3:</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>data <span class="ot">=</span> <span class="fu">st_as_sf</span>(<span class="fu">data.frame</span>(<span class="at">x =</span> <span class="dv">1</span>, <span class="at">y =</span> <span class="dv">1</span>, <span class="at">z =</span> <span class="dv">3</span>), <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>))</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="fu">sk</span>(data, newdata, <span class="dv">0</span>, cov) <span class="co"># mu = 0</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="co">#      [,1]</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="co"># [1,]  1.1</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>newdata <span class="ot">=</span> <span class="fu">st_as_sf</span>(<span class="fu">data.frame</span>(<span class="at">x =</span> .<span class="dv">1</span> <span class="sc">*</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">20</span>, <span class="at">y =</span> <span class="dv">1</span>), <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>))</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="fu">sk</span>(data, newdata, <span class="dv">0</span>, cov) <span class="co"># mu = 0</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="co">#       [,1]</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="co">#  [1,] 1.10</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="co">#  [2,] 1.22</span></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a><span class="co">#  [3,] 1.35</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="co">#  [4,] 1.49</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="co">#  [5,] 1.65</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a><span class="co">#  [6,] 1.82</span></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a><span class="co">#  [7,] 2.01</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a><span class="co">#  [8,] 2.22</span></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a><span class="co">#  [9,] 2.46</span></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a><span class="co"># [10,] 2.71</span></span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a><span class="co"># [11,] 3.00</span></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a><span class="co"># [12,] 2.71</span></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a><span class="co"># [13,] 2.46</span></span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a><span class="co"># [14,] 2.22</span></span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a><span class="co"># [15,] 2.01</span></span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a><span class="co"># [16,] 1.82</span></span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a><span class="co"># [17,] 1.65</span></span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a><span class="co"># [18,] 1.49</span></span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a><span class="co"># [19,] 1.35</span></span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a><span class="co"># [20,] 1.22</span></span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a><span class="co"># [21,] 1.10</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Plotting them:</p>
+<div class="cell" data-hash="si2_cache/html/unnamed-chunk-3_32edd34def78c69849289b3535d1f32b">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>newdata <span class="ot">=</span> <span class="fu">st_as_sf</span>(<span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">6</span>, <span class="at">by =</span> .<span class="dv">1</span>), <span class="at">y =</span> <span class="dv">1</span>), <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>))</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>Z <span class="ot">=</span> <span class="fu">sk</span>(data, newdata, <span class="dv">0</span>, cov) <span class="co"># mu = 0</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">st_coordinates</span>(newdata)[,<span class="dv">1</span>], Z, <span class="at">type =</span> <span class="st">'l'</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">3</span>))</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="at">col =</span> <span class="st">'red'</span>, <span class="at">pch =</span> <span class="dv">16</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="at">col =</span> <span class="st">'blue'</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="si2_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Example with zinc data:</p>
+<div class="cell" data-hash="si2_cache/html/unnamed-chunk-4_a5d92aaeed61fef441466f1d2ada2f30">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(meuse, <span class="at">package =</span> <span class="st">"sp"</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>meuse <span class="ot">=</span> <span class="fu">st_as_sf</span>(meuse, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>))</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(meuse.grid, <span class="at">package =</span> <span class="st">"sp"</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>meuse[[<span class="dv">1</span>]] <span class="ot">=</span> <span class="fu">log</span>(meuse<span class="sc">$</span>zinc)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stars)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Loading required package: abind</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>meuse.grid <span class="ot">=</span> <span class="fu">st_as_stars</span>(meuse.grid)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>meuse.grid<span class="sc">$</span>sk <span class="ot">=</span> <span class="fu">sk</span>(meuse, </span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">st_as_sf</span>(meuse.grid, <span class="at">as_points =</span> <span class="cn">TRUE</span>, <span class="at">na.rm =</span> <span class="cn">FALSE</span>), </span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>                   <span class="at">mu =</span> <span class="fu">mean</span>(<span class="fu">log</span>(meuse<span class="sc">$</span>zinc)), </span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>                   <span class="at">cov =</span> <span class="cf">function</span>(h) <span class="fu">exp</span>(<span class="sc">-</span>h<span class="sc">/</span><span class="dv">300</span>))</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co"># mask:</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>meuse.grid<span class="sc">$</span>sk[ <span class="fu">is.na</span>(meuse.grid<span class="sc">$</span>dist) ] <span class="ot">=</span> <span class="cn">NA</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(meuse.grid[<span class="st">"sk"</span>], <span class="at">main =</span> <span class="st">"simple kriging"</span>, <span class="at">axes =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">col =</span> <span class="fu">sf.colors</span>(), <span class="at">breaks =</span> <span class="st">"equal"</span>, <span class="at">reset =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">st_geometry</span>(meuse), <span class="at">add =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="si2_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./si1.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Simple approaches</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./si3.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Unknown, constant mean</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

@@ -253,34 +253,32 @@ BLP/Simple kriging:
 2. $\sigma^2(s_0) = \sigma^2_0 - v'V^{-1}v$
 
 ```{r}
-library(sp)
+library(sf) # st_distance()
 cov = function(h) exp(-h)
 
 sk = function(data, newdata, mu, cov) {
-	library(sp) # spDists
-	V = cov(spDists(data))
-	v = cov(spDists(data, newdata))
+	V = cov(st_distance(data))
+	v = cov(st_distance(data, newdata))
 	mu + t(v) %*% solve(V, data[[1]] - mu)
 }
 
 # prediction location at (0,1):
-newdata = SpatialPoints(cbind(0,1))
+newdata = st_as_sf(data.frame(x = 0, y = 1), coords = c("x", "y"))
 
 # observation location at (1,1), with attribute value (y) 3:
-pts = SpatialPoints(cbind(1,1))
-data = SpatialPointsDataFrame(pts, data.frame(z = 3))
+data = st_as_sf(data.frame(x = 1, y = 1, z = 3), coords = c("x", "y"))
 
 sk(data, newdata, 0, cov) # mu = 0
-newdata = SpatialPoints(cbind(.1 * 0:20, 1))
+newdata = st_as_sf(data.frame(x = .1 * 0:20, y = 1), coords = c("x", "y"))
 sk(data, newdata, 0, cov) # mu = 0
 ```
 Plotting them:
 ```{r}
-newdata = SpatialPoints(cbind(seq(-4,6,by=.1), 1))
+newdata = st_as_sf(data.frame(x = seq(-4, 6, by = .1), y = 1), coords = c("x", "y"))
 Z = sk(data, newdata, 0, cov) # mu = 0
-plot(coordinates(newdata)[,1], Z, type='l', ylim = c(0,3))
-points(as(data, "data.frame")[,c(2,1)], col='red', pch=16)
-abline(0,0, col='blue', lty=2)
+plot(st_coordinates(newdata)[,1], Z, type = 'l', ylim = c(0, 3))
+points(1, 3, col = 'red', pch = 16)
+abline(0, 0, col = 'blue', lty = 2)
 ```
 
 
@@ -288,11 +286,18 @@ Example with zinc data:
 
 ```{r}
 data(meuse, package = "sp")
-coordinates(meuse) = ~x+y
+meuse = st_as_sf(meuse, coords = c("x", "y"))
 data(meuse.grid, package = "sp")
-coordinates(meuse.grid) = ~x+y
-gridded(meuse.grid) = TRUE
 meuse[[1]] = log(meuse$zinc)
-meuse.grid$sk = sk(meuse, meuse.grid, mean(log(meuse$zinc)), function(h) exp(-h/300))
-spplot(meuse.grid["sk"], main = "simple kriging", scales = list(draw = TRUE))
+library(stars)
+meuse.grid = st_as_stars(meuse.grid)
+meuse.grid$sk = sk(meuse, 
+				   st_as_sf(meuse.grid, as_points = TRUE, na.rm = FALSE), 
+				   mu = mean(log(meuse$zinc)), 
+				   cov = function(h) exp(-h/300))
+# mask:
+meuse.grid$sk[ is.na(meuse.grid$dist) ] = NA
+plot(meuse.grid["sk"], main = "simple kriging", axes = TRUE,
+	col = sf.colors(), breaks = "equal", reset = FALSE)
+plot(st_geometry(meuse), add = TRUE)
 ```

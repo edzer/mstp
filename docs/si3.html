@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.1.189">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Modelling Spatiotemporal Processes - 7&nbsp; Unknown, constant mean</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./si4.html" rel="next">
+<link href="./si2.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Unknown, constant mean</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Modelling Spatiotemporal Processes</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/edzer/mstp/" title="Source Code" class="sidebar-tool px-1"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Course overview</a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Time Series</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ts1.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Time Series</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ts2.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Fitting and choosing models</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">Optimisation</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./op1.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Optimization: linear and non-linear</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./op2.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Optimization: stochastic methods</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">Spatial Interpolation</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./si1.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Simple approaches</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./si2.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Spatial prediction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./si3.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Unknown, constant mean</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./si4.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Unknown, varying mean</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">Other topics</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./de1.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Spatial temporal variation modelled by differential equations</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">Appendices</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#stationarity-1" id="toc-stationarity-1" class="nav-link active" data-scroll-target="#stationarity-1">Stationarity 1</a></li>
+  <li><a href="#stationarity-2" id="toc-stationarity-2" class="nav-link" data-scroll-target="#stationarity-2">Stationarity 2</a></li>
+  <li><a href="#from-covariance-to-semivariance" id="toc-from-covariance-to-semivariance" class="nav-link" data-scroll-target="#from-covariance-to-semivariance">From covariance to semivariance</a></li>
+  <li><a href="#the-variogram" id="toc-the-variogram" class="nav-link" data-scroll-target="#the-variogram">The <em>Variogram</em></a></li>
+  <li><a href="#the-variogram-1" id="toc-the-variogram-1" class="nav-link" data-scroll-target="#the-variogram-1">The <em>Variogram</em></a></li>
+  <li><a href="#variogram-how-to-compute" id="toc-variogram-how-to-compute" class="nav-link" data-scroll-target="#variogram-how-to-compute">Variogram: how to compute</a></li>
+  <li><a href="#variogram-terminology" id="toc-variogram-terminology" class="nav-link" data-scroll-target="#variogram-terminology">Variogram: terminology</a></li>
+  <li><a href="#why-prefer-the-variogram-over-the-covariogram" id="toc-why-prefer-the-variogram-over-the-covariogram" class="nav-link" data-scroll-target="#why-prefer-the-variogram-over-the-covariogram">Why prefer the variogram over the covariogram</a></li>
+  <li><a href="#known-varying-mean" id="toc-known-varying-mean" class="nav-link" data-scroll-target="#known-varying-mean">Known, varying mean</a></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/edzer/mstp/edit/main/si3.qmd" class="toc-action">Edit this page</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Unknown, constant mean</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<p><span class="math display">\[
+\newcommand{\E}{{\rm E}}       % E expectation operator
+\newcommand{\Var}{{\rm Var}}   % Var variance operator
+\newcommand{\Cov}{{\rm Cov}}   % Cov covariance operator
+\newcommand{\Cor}{{\rm Corr}}
+\]</span></p>
+<p>Suppose the mean is constant, but not known. This is the most simple <em>realistic</em> scenario. We can estimate it from the data, taking into account their covariance (i.e., using weighted averaging):</p>
+<p><span class="math display">\[\hat{m} = ({\bf 1}'V^{-1}{\bf 1})^{-1} {\bf 1}'V^{-1}Z\]</span> with <span class="math inline">\({\bf 1}\)</span> a conforming vector with ones, and substitute this mean in the SK prediction equations: BLUP/Ordinary kriging: <span class="math display">\[\hat{Z}(s_0) = \hat{m} + v'V^{-1} (Z-\hat{m})\]</span> <span class="math display">\[\sigma^2(s_0) = \sigma^2_0 - v'V^{-1}v + Q\]</span> with <span class="math inline">\(Q = (1 - {\bf 1}'V^{-1}v)'({\bf 1}'V^{-1}{\bf 1})^{-1}(1 - {\bf 1}'V^{-1}v)\)</span></p>
+<section id="stationarity-1" class="level3">
+<h3 class="anchored" data-anchor-id="stationarity-1">Stationarity 1</h3>
+<p>Given prediction location <span class="math inline">\(s_0\)</span>, and data locations <span class="math inline">\(s_1\)</span> and <span class="math inline">\(s_2\)</span>, we need: <span class="math inline">\(\Var(Z(s_0))\)</span>, <span class="math inline">\(\Var(Z(s_1))\)</span>, <span class="math inline">\(\Var(Z(s_2))\)</span>, <span class="math inline">\(\Cov(Z(s_0),Z(s_1))\)</span>, <span class="math inline">\(\Cov(Z(s_0),Z(s_2))\)</span>, <span class="math inline">\(\Cov(Z(s_1),Z(s_2))\)</span>.</p>
+<p>How to get these covariances? * given a single measurement <span class="math inline">\(z(s_1)\)</span>, we can not infer <span class="math inline">\(\Var(Z(s_1))\)</span> * given two measurements <span class="math inline">\(z(s_1)\)</span> and <span class="math inline">\(z(s_2)\)</span>, we can <em>never</em> infer <span class="math inline">\(\Cov(Z(s_1),Z(s_2))\)</span> * geven a time series at <span class="math inline">\(s_1\)</span> and <span class="math inline">\(s_2\)</span>, we can infer * <span class="math inline">\(\Cov(Z(s_1),Z(s_2))\)</span>, but how to infer * <span class="math inline">\(\Cov(Z(s_0),Z(s_1))\)</span> and * <span class="math inline">\(\Cov(Z(s_0),Z(s_2))\)</span>?</p>
+<p>Solution: assume <em>stationarity</em>.</p>
+</section>
+<section id="stationarity-2" class="level3">
+<h3 class="anchored" data-anchor-id="stationarity-2">Stationarity 2</h3>
+<p>Stationarity of the * <em>mean</em> <span class="math inline">\(\E(Z(s_1)) = \E(Z(s_2)) = ... = m\)</span> * <em>variance</em> <span class="math inline">\(\Var(Z(s_1)) = \Var(Z(s_2)) = ... = \sigma^2_0\)</span> * <em>covariance</em> <span class="math inline">\(\Cov(Z(s_1),Z(s_2)) = \Cov(Z(s_3),Z(s_4))\)</span> if <span class="math inline">\(s_1-s_2=s_3-s_4\)</span>: distance/direction dependence</p>
+<p>Second order stationarity: <span class="math inline">\(\Cov(Z(s),Z(s+h)) = C(h)\)</span></p>
+<p>which implies: <span class="math inline">\(\Cov(Z(s),Z(s)) = \Var(Z(s))= C(0)\)</span></p>
+<p>The function <span class="math inline">\(C(h)\)</span> is the <em>covariogram</em> of the random function <span class="math inline">\(Z(s)\)</span></p>
+</section>
+<section id="from-covariance-to-semivariance" class="level3">
+<h3 class="anchored" data-anchor-id="from-covariance-to-semivariance">From covariance to semivariance</h3>
+<p>Covariance: <span class="math inline">\(\Cov(Z(s),Z(s+h)) = C(h) = \E[(Z(s)-m)(Z(s+h)-m)]\)</span></p>
+<p>Semivariance: <span class="math inline">\(\gamma(h) = \frac{1}{2} \E[(Z(s)-Z(s+h))^2]\)</span></p>
+<p><span class="math inline">\(\E[(Z(s)-Z(s+h))^2] = \E[(Z(s))^2 + (Z(s+h))^2 -2Z(s)Z(s+h)]\)</span></p>
+<p><span class="math inline">\(\E[(Z(s)-Z(s+h))^2] = \E[(Z(s))^2] + \E[(Z(s+h))^2] - 2\E[Z(s)Z(s+h)] = 2\Var(Z(s)) - 2\Cov(Z(s),Z(s+h)) = 2C(0)-2C(h)\)</span></p>
+<p><span class="math inline">\(\gamma(h) = C(0)-C(h)\)</span></p>
+<p><span class="math inline">\(\gamma(h)\)</span> is the <em>semivariogram</em> of <span class="math inline">\(Z(s)\)</span>.</p>
+</section>
+<section id="the-variogram" class="level3">
+<h3 class="anchored" data-anchor-id="the-variogram">The <em>Variogram</em></h3>
+<div class="cell" data-hash="si3_cache/html/unnamed-chunk-1_a5f95c549967a0a658ff67fb30bd1151">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Linking to GEOS 3.10.2, GDAL 3.4.3, PROJ 8.2.1; sf_use_s2() is TRUE</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(meuse, <span class="at">package =</span> <span class="st">"sp"</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>meuse <span class="ot">=</span> <span class="fu">st_as_sf</span>(meuse, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>))</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gstat)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>v <span class="ot">=</span> <span class="fu">variogram</span>(<span class="fu">log</span>(zinc) <span class="sc">~</span> <span class="dv">1</span>, meuse)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>v.fit <span class="ot">=</span> <span class="fu">fit.variogram</span>(v, <span class="fu">vgm</span>(<span class="dv">1</span>, <span class="st">"Sph"</span>, <span class="dv">900</span>, <span class="dv">1</span>))</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(v, v.fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="si3_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="the-variogram-1" class="level3">
+<h3 class="anchored" data-anchor-id="the-variogram-1">The <em>Variogram</em></h3>
+<ul>
+<li>the central tool to geostatistics</li>
+<li>like a mean squares (variance) in analysis of variance, like a <span class="math inline">\(t\)</span> to a <span class="math inline">\(t\)</span>-test</li>
+<li>measures spatial correlation</li>
+<li>subject to debate: it involves <em>modelling</em></li>
+<li>synonymous to <em>semivariogram</em>, but</li>
+<li>semivariance is <em>not</em> synonymous to variance</li>
+</ul>
+</section>
+<section id="variogram-how-to-compute" class="level3">
+<h3 class="anchored" data-anchor-id="variogram-how-to-compute">Variogram: how to compute</h3>
+<p>average squared differences: <span class="math display">\[\hat{\gamma}(\tilde{h})=\frac{1}{2N_h}\sum_{i=1}^{N_h}(Z(s_i)-Z(s_i+h))^2 \ \
+h \in \tilde{h}\]</span> * divide by <span class="math inline">\(2N_h\)</span>: * if finite, <span class="math inline">\(\gamma(\infty)=\sigma^2\)</span> * <em>semi</em> variance * if data are not gridded, group <span class="math inline">\(N_h\)</span> pairs <span class="math inline">\(s_i,s_i+h\)</span> for which <span class="math inline">\(h \in \tilde{h}\)</span>, <span class="math inline">\(\tilde{h}=[h_1,h_2]\)</span> * choose about 10-25 distance intervals <span class="math inline">\(\tilde{h}\)</span>, from length 0 to about on third of the area size * plot <span class="math inline">\(\gamma\)</span> against <span class="math inline">\(\tilde{h}\)</span> taken as the average value of all <span class="math inline">\(h \in \tilde{h}\)</span></p>
+</section>
+<section id="variogram-terminology" class="level3">
+<h3 class="anchored" data-anchor-id="variogram-terminology">Variogram: terminology</h3>
+<div class="cell" data-hash="si3_cache/html/unnamed-chunk-2_f8012cb1f394778cdabcbf7578f8fe34">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(v, v.fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="si3_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>v.fit</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">#   model  psill range</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 1   Nug 0.0507     0</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 2   Sph 0.5906   897</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-hash="si3_cache/html/unnamed-chunk-3_6309d460aeaf4f41ff3c65fca1b1f5b4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vgm</span>(<span class="at">psill =</span> <span class="fl">0.6</span>, <span class="at">model =</span> <span class="st">"Sph"</span>, <span class="at">range =</span> <span class="dv">900</span>, <span class="at">nugget =</span> <span class="fl">0.06</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">#   model psill range</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 1   Nug  0.06     0</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 2   Sph  0.60   900</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>or simpler, with un-named arguments:</p>
+<div class="cell" data-hash="si3_cache/html/unnamed-chunk-4_f6ace375aa31c829ad5b5e4baf1d65cf">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vgm</span>(<span class="fl">0.6</span>, <span class="st">"Sph"</span>, <span class="dv">900</span>, <span class="fl">0.06</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">#   model psill range</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 1   Nug  0.06     0</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 2   Sph  0.60   900</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="why-prefer-the-variogram-over-the-covariogram" class="level3">
+<h3 class="anchored" data-anchor-id="why-prefer-the-variogram-over-the-covariogram">Why prefer the variogram over the covariogram</h3>
+<p>Covariance: <span class="math inline">\(\Cov(Z(s),Z(s+h)) = C(h) = \E[(Z(s)-m)(Z(s+h)-m)]\)</span></p>
+<p>Semivariance: <span class="math inline">\(\gamma(h) = \frac{1}{2} \E[(Z(s)-Z(s+h))^2]\)</span></p>
+<p><span class="math inline">\(\gamma(h)=C(0)-C(h)\)</span> * tradition * <span class="math inline">\(C(h)\)</span> needs (an estimate of) <span class="math inline">\(m\)</span>, <span class="math inline">\(\gamma(h)\)</span> does not * <span class="math inline">\(C(0)\)</span> may not exist (<span class="math inline">\(\infty\)</span>!), when <span class="math inline">\(\gamma(h)\)</span> does (e.g., Brownian motion)</p>
+</section>
+<section id="known-varying-mean" class="level3">
+<h3 class="anchored" data-anchor-id="known-varying-mean">Known, varying mean</h3>
+<p>This is nothing else then simple kriging, except that the mean is no longer constant; BLP/Simple kriging: <span class="math display">\[\hat{Z}(s_0) = \mu(s_0) + v'V^{-1} (Z-\mu(s))\]</span> <span class="math display">\[\sigma^2(s_0) = \sigma^2_0 - v'V^{-1}v\]</span> with <span class="math inline">\(\mu(s) = (\mu(s_1),\mu(s_2),...,\mu(s_n))'\)</span>.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./si2.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Spatial prediction</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./si4.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Unknown, varying mean</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

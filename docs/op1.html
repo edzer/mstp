@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.1.189">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Modelling Spatiotemporal Processes - 3&nbsp; Optimization: linear and non-linear</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./op2.html" rel="next">
+<link href="./ts2.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Optimization: linear and non-linear</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Modelling Spatiotemporal Processes</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/edzer/mstp/" title="Source Code" class="sidebar-tool px-1"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Course overview</a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Time Series</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ts1.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Time Series</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ts2.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Fitting and choosing models</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">Optimisation</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./op1.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Optimization: linear and non-linear</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./op2.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Optimization: stochastic methods</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">Spatial Interpolation</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./si1.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Simple approaches</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./si2.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Spatial prediction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./si3.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Unknown, constant mean</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./si4.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Unknown, varying mean</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">Other topics</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./de1.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Spatial temporal variation modelled by differential equations</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">Appendices</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#linear-systems" id="toc-linear-systems" class="nav-link active" data-scroll-target="#linear-systems"><span class="toc-section-number">3.1</span>  linear systems</a>
+  <ul class="collapse">
+  <li><a href="#matrix-notation" id="toc-matrix-notation" class="nav-link" data-scroll-target="#matrix-notation">Matrix notation</a></li>
+  <li><a href="#matrix-transposition" id="toc-matrix-transposition" class="nav-link" data-scroll-target="#matrix-transposition">Matrix transposition</a></li>
+  <li><a href="#matrix-inverse-and-identity" id="toc-matrix-inverse-and-identity" class="nav-link" data-scroll-target="#matrix-inverse-and-identity">Matrix inverse and identity</a></li>
+  </ul></li>
+  <li><a href="#linear-least-squares-solution" id="toc-linear-least-squares-solution" class="nav-link" data-scroll-target="#linear-least-squares-solution"><span class="toc-section-number">3.2</span>  Linear least squares solution</a>
+  <ul class="collapse">
+  <li><a href="#the-practice-of-solving-systems" id="toc-the-practice-of-solving-systems" class="nav-link" data-scroll-target="#the-practice-of-solving-systems">The practice of solving systems</a></li>
+  </ul></li>
+  <li><a href="#non-linear-optimization" id="toc-non-linear-optimization" class="nav-link" data-scroll-target="#non-linear-optimization"><span class="toc-section-number">3.3</span>  Non-linear Optimization</a>
+  <ul class="collapse">
+  <li><a href="#golden-search" id="toc-golden-search" class="nav-link" data-scroll-target="#golden-search">Golden search</a></li>
+  <li><a href="#minimum-outside-current-section" id="toc-minimum-outside-current-section" class="nav-link" data-scroll-target="#minimum-outside-current-section">Minimum outside current section</a></li>
+  <li><a href="#minimum-inside-current-section" id="toc-minimum-inside-current-section" class="nav-link" data-scroll-target="#minimum-inside-current-section">Minimum inside current section</a></li>
+  <li><a href="#the-algorithm" id="toc-the-algorithm" class="nav-link" data-scroll-target="#the-algorithm">the algorithm</a></li>
+  <li><a href="#combined-linear-and-golden-search" id="toc-combined-linear-and-golden-search" class="nav-link" data-scroll-target="#combined-linear-and-golden-search">Combined linear and golden search</a></li>
+  <li><a href="#approach" id="toc-approach" class="nav-link" data-scroll-target="#approach">Approach:</a></li>
+  </ul></li>
+  <li><a href="#gauss-newton" id="toc-gauss-newton" class="nav-link" data-scroll-target="#gauss-newton"><span class="toc-section-number">3.4</span>  Gauss-Newton</a>
+  <ul class="collapse">
+  <li><a href="#the-gauss-newton-algorithm" id="toc-the-gauss-newton-algorithm" class="nav-link" data-scroll-target="#the-gauss-newton-algorithm">the Gauss-Newton algorithm</a></li>
+  <li><a href="#gauss-newton-and-the-normal-equations" id="toc-gauss-newton-and-the-normal-equations" class="nav-link" data-scroll-target="#gauss-newton-and-the-normal-equations">Gauss-Newton and the Normal equations</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/edzer/mstp/edit/main/op1.qmd" class="toc-action">Edit this page</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Optimization: linear and non-linear</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<div class="cell" data-hash="op1_cache/html/unnamed-chunk-1_224a6bb0e583e5b3a76668e7dc95d19d">
+<pre><code># $digits
+# [1] 3</code></pre>
+</div>
+<section id="linear-systems" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="linear-systems"><span class="header-section-number">3.1</span> linear systems</h2>
+<p>Take <span class="math inline">\(x_1\)</span> the example</p>
+<p><span class="math display">\[
+    \begin{array}{ll}
+    a x_{11} + b x_{12} &amp; = y_1 \\\\
+    a x_{21} + b x_{22} &amp; = y_2
+    \end{array}
+\]</span></p>
+<p>with the <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> values known, and <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> unknown. This is similar to fitting a straight line through two points: let <span class="math inline">\((x_1,y_1)\)</span> be the first point and <span class="math inline">\((x_2,y_2)\)</span> be the second, then <span class="math display">\[
+    \begin{array}{ll}
+    a + b x_1 &amp; = y_1 \\\\
+    a + b x_2 &amp; = y_2
+    \end{array}
+\]</span> The approach is substition: rewrite one equations such that isolates <span class="math inline">\(a\)</span> or <span class="math inline">\(b\)</span>, and substitute that in the second.</p>
+<section id="matrix-notation" class="level3">
+<h3 class="anchored" data-anchor-id="matrix-notation">Matrix notation</h3>
+<p>We can rewrite <span class="math display">\[
+    \begin{array}{ll}
+    a x_{11} + b x_{12} &amp; = y_1\\\\
+    a x_{21} + b x_{22} &amp; = y_2
+    \end{array}
+\]</span> as the matrix product <span class="math display">\[
+  \left[
+  \begin{array}{ll}
+  x_{11} &amp; x_{12}\\\\
+  x_{21} &amp; x_{22}
+  \end{array}
+  \right]
+  \left[
+  \begin{array}{l}
+  a \\\\ b
+  \end{array}
+  \right]
+  =
+  \left[
+  \begin{array}{l}
+  y_1 \\\\ y_2
+  \end{array}
+  \right]
+\]</span> or <span class="math display">\[Xa = y\]</span></p>
+</section>
+<section id="matrix-transposition" class="level3">
+<h3 class="anchored" data-anchor-id="matrix-transposition">Matrix transposition</h3>
+<p>The transpose of a matrix is the matrix formed when rows and columns are reversed. If <span class="math display">\[A =
+    \left[
+    \begin{array}{rr}
+    1 &amp; 4 \\\\
+    2 &amp; -1 \\\\
+    8 &amp; 9 \\\\
+    \end{array}
+    \right]
+\]</span> then it’s transpose, <span class="math display">\[
+    A' = \left[
+    \begin{array}{rrr}
+    1 &amp; 2 &amp; 8 \\\\
+    4 &amp; -1 &amp; 9 \\\\
+    \end{array}
+    \right]
+\]</span> (and may be written as <span class="math inline">\(A^T\)</span>)</p>
+</section>
+<section id="matrix-inverse-and-identity" class="level3">
+<h3 class="anchored" data-anchor-id="matrix-inverse-and-identity">Matrix inverse and identity</h3>
+<p>The identity matrix is square (nr of rows equals nr of columns), has ones on the diagona (for which the row number equals the column number) and zeroes elsewhere. E.g. the <span class="math inline">\(3 \times 3\)</span> identity <span class="math display">\[
+    I = \left[
+    \begin{array}{lll}
+    1 &amp; 0 &amp; 0 \\\\
+    0 &amp; 1 &amp; 0 \\\\
+    0 &amp; 0 &amp; 1 \\\\
+    \end{array}
+    \right]
+\]</span> The <em>inverse</em> of a square matrix <span class="math inline">\(X\)</span>, <span class="math inline">\(X^{-1}\)</span>, is <em>defined</em> by the products <span class="math display">\[X^{-1}X = I\]</span> and <span class="math display">\[X X^{-1}=I\]</span></p>
+<p>Suppose we have <span class="math inline">\(n\)</span> equations with <span class="math inline">\(p\)</span> unknowns: <span class="math display">\[
+    \begin{array}{cccccc}
+    a_1 x_{11} + a_2 x_{12} + &amp; ... &amp; + &amp; a_p x_{1p} &amp; = &amp; y_1 \\\\
+    a_1 x_{21} + a_2 x_{22} + &amp; ... &amp; + &amp; a_p x_{2p} &amp; = &amp; y_2 \\\\
+    \vdots &amp; \ddots &amp; &amp; \vdots &amp; &amp; \vdots \\\\
+    a_1 x_{n1} + a_2 x_{n2} + &amp; ... &amp; + &amp; a_p x_{np} &amp; = &amp; y_n
+    \end{array}
+\]</span> we can rewrite this in matrix notation as <span class="math inline">\(Xa=y\)</span>, with <span class="math inline">\(x_{ij}\)</span> corresponding to element <span class="math inline">\((i,j)\)</span> (row i, column j) in <span class="math inline">\(X\)</span>, having <span class="math inline">\(n\)</span> rows and <span class="math inline">\(p\)</span> columns; <span class="math inline">\(a\)</span> and <span class="math inline">\(y\)</span> column vectors having <span class="math inline">\(p\)</span> and <span class="math inline">\(n\)</span> elements, respectively. Now, <span class="math inline">\(X\)</span> and <span class="math inline">\(y\)</span> are known, and <span class="math inline">\(a\)</span> is unknown. <span class="math inline">\(a\)</span> Solutions:</p>
+<ul>
+<li>if <span class="math inline">\(p &gt; n\)</span>, there is no single solution</li>
+<li>if <span class="math inline">\(p = n\)</span> and <span class="math inline">\(X\)</span> is not singular, then <span class="math inline">\(a = X^{-1}y\)</span></li>
+<li>if <span class="math inline">\(p &lt; n\)</span> we have an overdetermined system, and may e.g.&nbsp;look for</li>
+</ul>
+<p>a least square (best approximating) solution.</p>
+</section>
+</section>
+<section id="linear-least-squares-solution" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="linear-least-squares-solution"><span class="header-section-number">3.2</span> Linear least squares solution</h2>
+<p>If <span class="math inline">\(p &lt; n\)</span>, a solution usually does not exist: try fitting a straight line through three or more arbitrary points.</p>
+<p>Now rewrite <span class="math inline">\(Xa = y\)</span> as <span class="math inline">\(y=Xb+e\)</span>, with <span class="math inline">\(e\)</span> the distance (in <span class="math inline">\(y\)</span>-direction) from the line. If we want to minimize the sum of squared distances, then we need to find <span class="math inline">\(b\)</span> for which <span class="math inline">\(R=\sum_{i=1}^n e_i^2\)</span> is minimum. In matrix terms, <span class="math inline">\(R = (y-Xb)'(y-Xb)\)</span> with <span class="math inline">\('\)</span> denoting transpose (row/col swap). <span class="math display">\[\frac{\delta R}{\delta b} = 0\]</span> <span class="math display">\[\frac{\delta (y-Xb)'(y-Xb)}{\delta b} = 0\]</span> <span class="math display">\[\frac{\delta (y'y - (Xb)'y- y'(Xb) + (Xb)'Xb)}{\delta b} = 0\]</span> now you should first note that <span class="math inline">\((Xb)'=b'X'\)</span>, and second that <span class="math inline">\(b'X'y=y'Xb\)</span> because these are scalars. Then, <span class="math display">\[-2X'y + 2X'Xb = 0\]</span> <span class="math display">\[X'Xb = X'y\]</span> <span class="math display">\[b = (X'X)^{-1}X'y\]</span> this yields the least squares solution for <span class="math inline">\(b\)</span>; the solution equations are called the <em>normal equations</em>.</p>
+<section id="the-practice-of-solving-systems" class="level3">
+<h3 class="anchored" data-anchor-id="the-practice-of-solving-systems">The practice of solving systems</h3>
+<p>when we write <span class="math display">\[A x = b\]</span> with known <span class="math inline">\(A\)</span> and <span class="math inline">\(b\)</span> and unknown <span class="math inline">\(x\)</span>, the solution is <span class="math display">\[x = A^{-1}b\]</span> In practice however, we do not need to compute <span class="math inline">\(A^{-1}\)</span>, but can directly solve for <span class="math inline">\(x\)</span>. This is much cheaper.</p>
+<div class="cell" data-hash="op1_cache/html/unnamed-chunk-2_1f0c0fb355b2e865596cc4dfd74a2c11">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>m<span class="ot">=</span><span class="fu">matrix</span>(<span class="dv">0</span>,<span class="dv">3000</span>,<span class="dv">3000</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">diag</span>(m)<span class="ot">=</span><span class="dv">1</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">system.time</span>(x <span class="ot">&lt;-</span> <span class="fu">solve</span>(m))</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">#    user  system elapsed </span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">#    6.43    0.61    1.03</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">system.time</span>(x <span class="ot">&lt;-</span> <span class="fu">solve</span>(m,<span class="fu">rep</span>(<span class="dv">0</span>,<span class="dv">3000</span>)))</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">#    user  system elapsed </span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">#   1.808   0.480   0.325</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-hash="op1_cache/html/unnamed-chunk-3_b52fda0f0af8c66d2654b6e9e7b1ed82">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>X<span class="ot">=</span><span class="fu">cbind</span>(<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>),<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>))</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>X</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#      [,1] [,2]</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># [1,]    1    1</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># [2,]    1    2</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"># [3,]    1    3</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>y <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">2</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="fu">solve</span>(<span class="fu">t</span>(X) <span class="sc">%*%</span> X, <span class="fu">t</span>(X) <span class="sc">%*%</span> y)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">#      [,1]</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co"># [1,]  0.0</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co"># [2,]  0.5</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(X[,<span class="dv">2</span>], y, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">3</span>), <span class="at">asp =</span> <span class="dv">1</span>)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="fu">lm</span>(y<span class="sc">~</span>X[,<span class="dv">2</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="op1_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(y<span class="sc">~</span>X[,<span class="dv">2</span>])</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Call:</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># lm(formula = y ~ X[, 2])</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Coefficients:</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># (Intercept)       X[, 2]  </span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co">#   -3.85e-16     5.00e-01</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="non-linear-optimization" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="non-linear-optimization"><span class="header-section-number">3.3</span> Non-linear Optimization</h2>
+<ul>
+<li>one-dimensional search on a unimodal function: golden search</li>
+<li>non-linear least squares: the Gauss Newton algorithm</li>
+<li>probabilistic methods: global search</li>
+<li>Metropolis-Hastings</li>
+<li>Simulated Annealing</li>
+</ul>
+<section id="golden-search" class="level3">
+<h3 class="anchored" data-anchor-id="golden-search">Golden search</h3>
+<p>Golden ratio: <span class="math display">\[
+    \frac{x_1}{x_2} = \frac{x_2}{x_1+x_2}
+\]</span> Solution (check): if <span class="math inline">\(x_1=1\)</span>, then <span class="math inline">\(x_2\approx1.618\)</span> or <span class="math inline">\(x_2\approx0.618\)</span></p>
+<p>Found in: art, sculpture, geometry (pentagrams), Egyptian pyramides, architecture, nature, A4 paper, …</p>
+</section>
+<section id="minimum-outside-current-section" class="level3">
+<h3 class="anchored" data-anchor-id="minimum-outside-current-section">Minimum outside current section</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><embed src="http://ifgi.uni-muenster.de/~epebe_01/golden1.pdf" class="img-fluid"></p>
+<p></p><figcaption class="figure-caption">golden1</figcaption><p></p>
+</figure>
+</div>
+</section>
+<section id="minimum-inside-current-section" class="level3">
+<h3 class="anchored" data-anchor-id="minimum-inside-current-section">Minimum inside current section</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><embed src="http://ifgi.uni-muenster.de/~epebe_01/golden2.pdf" class="img-fluid"></p>
+<p></p><figcaption class="figure-caption">golden2</figcaption><p></p>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><embed src="http://ifgi.uni-muenster.de/~epebe_01/golden3.pdf" class="img-fluid"></p>
+<p></p><figcaption class="figure-caption">golden3</figcaption><p></p>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><embed src="http://ifgi.uni-muenster.de/~epebe_01/golden4.pdf" class="img-fluid"></p>
+<p></p><figcaption class="figure-caption">golden4</figcaption><p></p>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><embed src="http://ifgi.uni-muenster.de/~epebe_01/golden5.pdf" class="img-fluid"></p>
+<p></p><figcaption class="figure-caption">golden5</figcaption><p></p>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><embed src="http://ifgi.uni-muenster.de/~epebe_01/golden6.pdf" class="img-fluid"></p>
+<p></p><figcaption class="figure-caption">golden6</figcaption><p></p>
+</figure>
+</div>
+</section>
+<section id="the-algorithm" class="level3">
+<h3 class="anchored" data-anchor-id="the-algorithm">the algorithm</h3>
+<p>Recursive zooming:</p>
+<ol type="1">
+<li>find three GR points, a, b and c such that the minimum lies within a and c</li>
+<li>put a point d in the largest section according to GR, with the smallest interval closest to the smallest value</li>
+<li>(In case of adbc) determine whether the mininum is between a and b or d and c</li>
+<li>continue with either adb or dbc as if it were abc, unless we’re sufficiently close (in terms of our goal, or of numerical resolution)</li>
+</ol>
+</section>
+<section id="combined-linear-and-golden-search" class="level3">
+<h3 class="anchored" data-anchor-id="combined-linear-and-golden-search">Combined linear and golden search</h3>
+<p>Spherical variogram with nugget has three parameters: nugget <span class="math inline">\(c_0\)</span>, (partial) sill <span class="math inline">\(c_1\)</span> and range <span class="math inline">\(a\)</span>: <span class="math display">\[
+\gamma(h) = \left\{
+\begin{array}{ll}
+          0 &amp; \mbox{if}\ \  h = 0 \\\\
+          c_0 + c_1 f(a,h) &amp; \mbox{if}\ \  h &gt; 0 \\\\
+\end{array}
+\right.
+\]</span> with <span class="math display">\[f(a, h)= \left\{
+\begin{array}{ll}
+\frac{3h}{2a}-\frac{1}{2}(\frac{h}{a})^3 &amp; \mbox{if} \ \ 0 \le h \le a \\\\
+1 &amp; \mbox{if} \ \ h &gt; a \\\\
+\end{array}
+\right.
+\]</span></p>
+</section>
+<section id="approach" class="level3">
+<h3 class="anchored" data-anchor-id="approach">Approach:</h3>
+<p>Provide an initial estimate <span class="math inline">\(a_0\)</span>; then iterate: 1. given current fit for <span class="math inline">\(a\)</span>, fit the linear coefficients <span class="math inline">\(c_0\)</span> and <span class="math inline">\(c_1\)</span> 2. given this fit, do golden search for <span class="math inline">\(a\)</span> until convergence (vector <span class="math inline">\((a,c_0,c_1)\)</span> does not move).</p>
+<div class="cell" data-hash="op1_cache/html/unnamed-chunk-4_22374ee75c5a7fb8b660107819a583da">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sp)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(meuse)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">coordinates</span>(meuse) <span class="ot">=</span> <span class="er">~</span>x<span class="sc">+</span>y</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gstat)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>v <span class="ot">=</span> <span class="fu">variogram</span>(<span class="fu">log</span>(zinc)<span class="sc">~</span><span class="dv">1</span>, meuse)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>m <span class="ot">=</span> <span class="fu">vgm</span>(<span class="fl">0.5</span>, <span class="st">"Sph"</span>, <span class="dv">700</span>, <span class="fl">0.1</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(v)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="op1_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="960"></p>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(v, <span class="fu">vgm</span>(<span class="fl">0.5</span>, <span class="st">"Sph"</span>, <span class="dv">700</span>, <span class="fl">0.1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="op1_files/figure-html/unnamed-chunk-4-2.png" class="img-fluid" width="960"></p>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(v, <span class="fu">fit.variogram</span>(v, <span class="fu">vgm</span>(<span class="fl">0.5</span>, <span class="st">"Sph"</span>, <span class="dv">700</span>, <span class="fl">0.1</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="op1_files/figure-html/unnamed-chunk-4-3.png" class="img-fluid" width="960"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="gauss-newton" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="gauss-newton"><span class="header-section-number">3.4</span> Gauss-Newton</h2>
+<p>Golden search may be used for any criterion, e.g.&nbsp;<span class="math inline">\(f(x)=\sum_{i=1}^n g_i(x)^p\)</span> for any chosen <span class="math inline">\(p\)</span>. If we limit ourselves to <em>least squares</em> (i.e., <span class="math inline">\(p=2\)</span>) and want to generalize this for higher dimensional (i.e., multiple parameter) <span class="math inline">\(x\)</span> (e.g.&nbsp;<span class="math inline">\(x=[x_1,...,x_q]'\)</span>) we may use the Gauss-Newton algorithm (non-linear least squares).</p>
+<section id="the-gauss-newton-algorithm" class="level3">
+<h3 class="anchored" data-anchor-id="the-gauss-newton-algorithm">the Gauss-Newton algorithm</h3>
+<p>Problem: given a model <span class="math inline">\(y=g(X,\theta)+e\)</span> find <span class="math display">\[\mbox{min}_\theta \sum (y - g(X,\theta))^2\]</span> Let <span class="math inline">\(f_i(\theta)=y_i - g(X_i,\theta)\)</span>, so we minimize <span class="math inline">\(R=\sum_{i=1}^n (f_i(\theta))^2\)</span></p>
+<p>This is a problem from space <span class="math inline">\((1 \times n)\)</span> to <span class="math inline">\((1 \times m)\)</span></p>
+<p>Given a starting value&nbsp;<span class="math inline">\(\theta^0\)</span> we search the direction of steepest descent in terms of <span class="math inline">\(R\)</span>, using first order derivatives of <span class="math inline">\(R\)</span> towards <span class="math inline">\(\theta\)</span>. By iteration, from <span class="math inline">\(\theta^k\)</span> we find <span class="math inline">\(\theta^{k+1}\)</span> by <span class="math display">\[\theta^{k+1}=\theta^k + \delta^k\]</span> until we have convergence.</p>
+<p>Let the Jakobian be <span class="math display">\[
+J_f(\theta^k) =
+\left[
+\begin{array}{ccccc}
+\frac{\delta f_1(\theta^k)}{\delta\theta_1} &amp; ... &amp;  \frac{\delta f_1(\theta^k)}{\delta\theta_m} \\\\
+\vdots &amp; \ddots &amp; \vdots \\\\
+\frac{\delta f_n(\theta^k)}{\delta\theta_1} &amp; ... &amp;  \frac{\delta f_n(\theta^k)}{\delta\theta_m} \\\\
+\end{array}
+\right]
+\]</span> In <span class="math display">\[\theta^{k+1}=\theta^k + \delta^k\]</span> we find <span class="math inline">\(\delta^k\)</span> by solving <span class="math display">\[
+J_f(\theta_k)'J_f(\theta_k) \delta^k = - J_f(\theta_k)'f(\theta^k)
+\]</span> What if <span class="math inline">\(\delta f_n(\theta^k)/ \delta \theta\)</span> is unknown?</p>
+</section>
+<section id="gauss-newton-and-the-normal-equations" class="level3">
+<h3 class="anchored" data-anchor-id="gauss-newton-and-the-normal-equations">Gauss-Newton and the Normal equations</h3>
+<p>Recall that in multiple <em>linear</em> regression, with <span class="math inline">\(y=X\theta+e\)</span> the solution is given by the normal equations <span class="math display">\[X'X\theta = X'y\]</span> Note that here, the Jacobian of <span class="math inline">\(y-X\theta\)</span> is <span class="math inline">\(-X\)</span>, so if we take (arbitrarily) <span class="math inline">\(\theta_0 = (0,0,...,0)'\)</span>, then <span class="math display">\[
+J_f(\theta_k)'J_f(\theta_k) \delta^k = - J_f(\theta_k) f(\theta^k)
+\]</span> yields after one step the final solution <span class="math inline">\(\delta^1=\theta\)</span>, as <span class="math inline">\((-X)'(-X)\delta=X'y\)</span>.</p>
+<p>Other starting points yield the same solution for <span class="math inline">\(\theta\)</span>.</p>
+<p>Further steps will not improve it (i.e., yield <span class="math inline">\(\delta^k=0\)</span>).</p>
+<p>See also the <a href="https://en.wikipedia.org/wiki/Gradient_descent">Gradient descent</a> wikipedia site.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./ts2.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Fitting and choosing models</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./op2.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Optimization: stochastic methods</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

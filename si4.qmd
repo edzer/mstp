@@ -1,9 +1,9 @@
-\(
+$$
 \newcommand{\E}{{\rm E}}       % E expectation operator
 \newcommand{\Var}{{\rm Var}}   % Var variance operator
 \newcommand{\Cov}{{\rm Cov}}   % Cov covariance operator
 \newcommand{\Cor}{{\rm Corr}}
-\)
+$$
 
 ### Unknown, varying mean
 For this, we need to know how the mean varies. Suppose we model this as
@@ -29,7 +29,7 @@ Example in `meuse` data set: `log(zinc)` depending on
 `sqrt(meuse)`
 
 ```{r}
-library(sp)
+library(sf) # st_distance
 cov = function(h) exp(-h)
 
 calc_beta = function(X, V, z) {
@@ -38,9 +38,8 @@ calc_beta = function(X, V, z) {
 }
 
 uk = function(data, newdata, X, x0, cov, beta) {
-	library(sp) # spDists
-	V = cov(spDists(data))
-	v = cov(spDists(data, newdata))
+	V = cov(st_distance(data))
+	v = cov(st_distance(data, newdata))
 	z = data[[1]]
 	if (missing(beta))
 		beta = calc_beta(X, V, z)
@@ -49,57 +48,59 @@ uk = function(data, newdata, X, x0, cov, beta) {
 }
 
 # prediction location at (0,1):
-newdata = SpatialPoints(cbind(0,1))
+newdata = st_as_sf(data.frame(x = 0, y = 1), coords = c("x", "y"))
 
 # observation location at (1,1), with attribute value (y) 3:
-pts = SpatialPoints(cbind(1,1))
-data = SpatialPointsDataFrame(pts, data.frame(z = 3))
+data = st_as_sf(data.frame(x = 1, y = 1, z = 3), coords = c("x", "y"))
 x0 = matrix(1, 1, 1)
 X = x0
 uk(data, newdata, X, x0, cov)
 
 # three observations location, with attribute values (y) 3,2,5:
-pts = SpatialPoints(cbind(c(1,2,3),c(1,1,1)))
-data = SpatialPointsDataFrame(pts, data.frame(z = c(3,2,5)))
-newdata = SpatialPoints(cbind(.1 * 0:20, 1))
+data = st_as_sf(data.frame(x = c(1,2,3), y = c(1,1,1), z = c(3, 2, 5)),
+			   coords = c("x", "y"))
+newdata = st_as_sf(data.frame(x = .1 * 0:20, y = 1), coords = c("x", "y"))
 X = matrix(1,3,1)
-x0 = matrix(1, length(newdata), 1)
+x0 = matrix(1, nrow(newdata), 1)
 uk(data, newdata, X, x0, cov) # mu = unknown
 ```
 Plotting them:
 ```{r}
-newdata = SpatialPoints(cbind(seq(-4,6,by=.1), 1))
-x0 = matrix(1, length(newdata), 1)
+newdata = st_as_sf(data.frame(x = seq(-4,6,by=.1), y = 1), coords = c("x", "y"))
+x0 = matrix(1, nrow(newdata), 1)
 z_hat = uk(data, newdata, X, x0, cov) # mu unknown
-plot(coordinates(newdata)[,1], z_hat, type='l', ylim = c(1,5))
-points(as(data, "data.frame")[,c(2,1)], col='red', pch=16)
-beta = calc_beta(X, cov(spDists(data)), data[[1]])
+plot(st_coordinates(newdata)[,1], z_hat, type='l', ylim = c(1,5))
+points(st_coordinates(data)[,1], data$z, col='red', pch=16)
+beta = calc_beta(X, cov(st_distance(data)), data[[1]])
 beta
 abline(beta, 0, col = 'blue', lty = 2)
 ```
 
+
+### Linear trend:
+
 ```{r}
-# linear trend
 X = cbind(matrix(1,3,1), 1:3)
 X
 xcoord = seq(-4,6,by=.1)
-newdata = SpatialPoints(cbind(xcoord, 1))
-x0 = cbind(matrix(1, length(newdata), 1), xcoord)
+newdata = st_as_sf(data.frame(x = xcoord, y = 1), coords = c("x", "y"))
+x0 = cbind(matrix(1, nrow(newdata), 1), xcoord)
 z_hat = uk(data, newdata, X, x0, cov) # mu unknown
-plot(coordinates(newdata)[,1], z_hat, type='l')
-points(as(data, "data.frame")[,c(2,1)], col='red', pch=16)
-beta = calc_beta(X, cov(spDists(data)), data[[1]])
+plot(st_coordinates(newdata)[,1], z_hat, type='l')
+points(st_coordinates(data)[,1], data$z, col='red', pch=16)
+beta = calc_beta(X, cov(st_distance(data)), data[[1]])
 beta
 abline(beta, col = 'blue', lty = 2)
 ```
 
-With Gaussian covariance:
+### With Gaussian covariance:
+
 ```{r}
 cov = function(h) exp(-(h^2))
 z_hat = uk(data, newdata, X, x0, cov) # mu unknown
-plot(coordinates(newdata)[,1], z_hat, type='l')
-points(as(data, "data.frame")[,c(2,1)], col='red', pch=16)
-beta = calc_beta(X, cov(spDists(data)), data[[1]])
+plot(st_coordinates(newdata)[,1], z_hat, type='l')
+points(st_coordinates(data)[,1], data$z, col='red', pch=16)
+beta = calc_beta(X, cov(st_distance(data)), data[[1]])
 beta
 abline(beta, col = 'blue', lty = 2)
 ```
@@ -332,7 +333,7 @@ Consider the following definitions of four heavy metals:
 ```{r}
 library(sp)
 data(meuse)
-coordinates(meuse) = ~x+y
+meuse = st_as_sf(meuse, coords = c("x", "y"))
 library(gstat)
 g <- gstat(NULL, "logCd", log(cadmium)~1, meuse)
 g <- gstat(g, "logCu", log(copper)~1, meuse)
@@ -398,11 +399,12 @@ How?
 ```{r}
 v = variogram(log(zinc)~1, meuse)
 v.fit = fit.variogram(v, vgm(1, "Sph", 900, 1))
-data(meuse.grid)
-gridded(meuse.grid) = ~x+y
+data(meuse.grid, package = "sp")
+library(stars)
+meuse.grid = st_as_stars(meuse.grid)
 out = krige(log(zinc)~1, meuse, meuse.grid, v.fit)
 out$p500 = 1 - pnorm(log(500), out$var1.pred, sqrt(out$var1.var))
-spplot(out["p500"], col.regions = bpy.colors())
+plot(out["p500"], col = sf.colors(), breaks = "equal")
 ```
 
 ### Indicator kriging
@@ -420,13 +422,13 @@ v_I.fit = fit.variogram(v, vgm(.2, "Sph", 900, .02))
 plot(v, v_I.fit)
 out$I500 = krige(I(zinc > 500)~1, meuse, meuse.grid, v_I.fit)$var1.pred
 summary(out$I500)
-spplot(out[c("p500", "I500")], col.regions = bpy.colors())
+plot(merge(out[c("p500", "I500")]), col = bpy.colors(), breaks = "equal")
 ```
 
 This second approach:
 
 * ignores the kriging variance
-* generates probabilities outside [0, 1] (to be corrected?)
+* generates probabilities outside the interval $[0, 1]$ (to be corrected?)
 * ignores information whether observations are close to the threshold, or far away from it (they are reduced to 1/0 variable before interpolating)
 * does not assume multivariate normality
 * does not distinguish between _estimated_ probabilities and (true) probabilities
@@ -440,13 +442,15 @@ This second approach:
 v = variogram(log(zinc)~1, meuse)
 v.fit = fit.variogram(v, vgm(1, "Sph", 900, 1))
 out = krige(log(zinc)~1, meuse, meuse.grid, v.fit, nmax = 20, nsim = 9)
-out$kr = krige(log(zinc)~1, meuse, meuse.grid, v.fit)$var1.pred
-spplot(out, col.regions = bpy.colors())
+out = split(out)
+out$kriging = krige(log(zinc)~1, meuse, meuse.grid, v.fit)$var1.pred
+plot(merge(out), col = sf.colors(), breaks = "equal")
 ```
 
 ```{r}
-v_kr = variogram(kr~1, out)
-v_cs = variogram(sim1~1, out)
+sf = st_as_sf(out, as_points = TRUE)
+v_kr = variogram(kriging~1, sf)
+v_cs = variogram(sim1~1, sf)
 plot(v_kr)
 plot(v_cs)
 plot(v)

@@ -1,9 +1,9 @@
-\(
+$$
 \newcommand{\E}{{\rm E}}       % E expectation operator
 \newcommand{\Var}{{\rm Var}}   % Var variance operator
 \newcommand{\Cov}{{\rm Cov}}   % Cov covariance operator
 \newcommand{\Cor}{{\rm Corr}}
-\)
+$$
 
 ###  Unknown, constant mean
 Suppose the mean is constant, but not known. This is the most simple
@@ -71,9 +71,9 @@ $\gamma(h)$ is the _semivariogram_ of $Z(s)$.
 ### The _Variogram_
 
 ```{r}
-library(sp)
-data(meuse)
-coordinates(meuse) = ~x+y
+library(sf)
+data(meuse, package = "sp")
+meuse = st_as_sf(meuse, coords = c("x", "y"))
 library(gstat)
 v = variogram(log(zinc) ~ 1, meuse)
 v.fit = fit.variogram(v, vgm(1, "Sph", 900, 1))
@@ -105,8 +105,8 @@ $h \in \tilde{h}$, $\tilde{h}=[h_1,h_2]$
 ### Variogram: terminology
 ```{r}
 plot(v, v.fit)
+v.fit
 ```
-gstat coding in R: `0.07 Nug() + 0.55 Sph(800)`
 
 ```{r}
 vgm(psill = 0.6, model = "Sph", range = 900, nugget = 0.06)

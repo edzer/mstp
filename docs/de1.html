@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Modelling Spatiotemporal Processes - 9&nbsp; Spatial temporal variation modelled by differential equations</title>
+<title>Modelling Spatiotemporal Processes - 9&nbsp; Differential equations</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -71,7 +71,7 @@ ul.task-list li input[type="checkbox"] {
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Spatial temporal variation modelled by differential equations</span></h1>
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Differential equations</span></h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -182,7 +182,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./de1.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Spatial temporal variation modelled by differential equations</span></a>
+  <a href="./de1.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Differential equations</span></a>
   </div>
 </li>
       </ul>
@@ -211,7 +211,8 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#deterministic-spatial-dynamic-models" id="toc-deterministic-spatial-dynamic-models" class="nav-link active" data-scroll-target="#deterministic-spatial-dynamic-models">Deterministic spatial dynamic models</a></li>
+  <li><a href="#deterministic-spatial-dynamic-models" id="toc-deterministic-spatial-dynamic-models" class="nav-link active" data-scroll-target="#deterministic-spatial-dynamic-models"><span class="toc-section-number">9.1</span>  Deterministic spatial dynamic models</a>
+  <ul class="collapse">
   <li><a href="#model-domain" id="toc-model-domain" class="nav-link" data-scroll-target="#model-domain">Model domain</a></li>
   <li><a href="#initial-conditions" id="toc-initial-conditions" class="nav-link" data-scroll-target="#initial-conditions">Initial conditions</a></li>
   <li><a href="#initial-conditions-2" id="toc-initial-conditions-2" class="nav-link" data-scroll-target="#initial-conditions-2">Initial conditions-2</a></li>
@@ -227,6 +228,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#dynamic-parameter-updating-schemes" id="toc-dynamic-parameter-updating-schemes" class="nav-link" data-scroll-target="#dynamic-parameter-updating-schemes">Dynamic parameter updating schemes</a></li>
   <li><a href="#simplified-difference-equation-type-models" id="toc-simplified-difference-equation-type-models" class="nav-link" data-scroll-target="#simplified-difference-equation-type-models">Simplified difference equation-type models</a></li>
   <li><a href="#calibration-vs.-validation-of-models" id="toc-calibration-vs.-validation-of-models" class="nav-link" data-scroll-target="#calibration-vs.-validation-of-models">Calibration vs.&nbsp;validation of models</a></li>
+  </ul></li>
   </ul>
 <div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/edzer/mstp/edit/main/de1.qmd" class="toc-action">Edit this page</a></p></div></div></nav>
     </div>
@@ -235,7 +237,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Spatial temporal variation modelled by differential equations</span></h1>
+<h1 class="title d-none d-lg-block"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Differential equations</span></h1>
 </div>
 
 
@@ -249,8 +251,8 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<section id="deterministic-spatial-dynamic-models" class="level3">
-<h3 class="anchored" data-anchor-id="deterministic-spatial-dynamic-models">Deterministic spatial dynamic models</h3>
+<section id="deterministic-spatial-dynamic-models" class="level2" data-number="9.1">
+<h2 data-number="9.1" class="anchored" data-anchor-id="deterministic-spatial-dynamic-models"><span class="header-section-number">9.1</span> Deterministic spatial dynamic models</h2>
 <p>Deterministic models are based on the assumption that the processes governing change are known. Given that knowledge, we need</p>
 <ul>
 <li>the state of a system (initial conditions), and</li>
@@ -258,7 +260,6 @@ ul.task-list li input[type="checkbox"] {
 </ul>
 <p>for a (perfect) prediction of the changes over time, and in space.</p>
 <p>Let us look at an example: air quality (fine particles, PM10).</p>
-</section>
 <section id="model-domain" class="level3">
 <h3 class="anchored" data-anchor-id="model-domain">Model domain</h3>
 <p>For a model, we need a <em>model domain</em>, which is the spatial area and temporal period over which we will define processes and conditions. This could be e.g.&nbsp;Western Europe, 1980-2010, or NRW, 2000-2005, or the area not further than 100 m away from the crossing Weseler Strasse-Bonhoeffer Strasse, Jan 8, 2008, 0:00-24:00. It should be exactly quantifiable/traceable.</p>
@@ -372,6 +373,7 @@ W\frac{\delta C}{\delta z} \]</span> <span class="math display">\[
 <p>A famous model comparison on the other end of the extreme is that of the <em>coupled model intercomparison project</em>, CMIP, e.g.&nbsp;<a href="https://cmip.llnl.gov/">CMIP</a>; it involves large, international groups of climate scientists who agree, prior to the experiment, which models to compare.</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->

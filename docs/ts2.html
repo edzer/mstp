@@ -245,7 +245,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./de1.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Spatial temporal variation modelled by differential equations</span></a>
+  <a href="./de1.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Differential equations</span></a>
   </div>
 </li>
       </ul>
@@ -321,9 +321,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 <section id="removing-the-diurnal-periodicity" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="removing-the-diurnal-periodicity"><span class="header-section-number">2.2</span> Removing the diurnal periodicity</h2>
-<p>Assuming this is a sinus function, <span class="math display">\[\alpha_1 + \alpha_2 \sin(t + \alpha_3)\]</span>, we need non-linear regression (<span class="math inline">\(\alpha_3\)</span>)</p>
-<div class="cell" data-hash="ts2_cache/html/unnamed-chunk-2_d8218c0182b0b15cfe240bf2c46475e7">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(meteo) <span class="co"># so we can use variable names directly:</span></span>
+<p>Assuming this is a sinus function, <span class="math display">\[\alpha_1 + \alpha_2 \sin(t + \alpha_3),\]</span> we need non-linear regression (<span class="math inline">\(\alpha_3\)</span>)</p>
+<div class="cell" data-hash="ts2_cache/html/unnamed-chunk-2_e113c5f2104f85070cf2daa029243298">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(meteo) </span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># The following object is masked from package:datasets:</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">#     pressure</span></span>
@@ -346,6 +346,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="co"># $iterations</span></span>
 <span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="co"># [1] 9</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>We attached <code>meteo</code> so we can use variable names directly: <code>f</code> has acces to <code>T.outside</code> and <code>hours</code>, without needing them to be passed as arguments (<a href="https://bookdown.org/rdpeng/rprogdatascience/scoping-rules-of-r.html">lexical scoping</a>). Without attaching, that would not work.</p>
+<p>In the next part on optimization we will see what <code>nlm</code> does.</p>
 </section>
 <section id="temperature-anomaly" class="level2" data-number="2.3">
 <h2 data-number="2.3" class="anchored" data-anchor-id="temperature-anomaly"><span class="header-section-number">2.3</span> Temperature anomaly</h2>

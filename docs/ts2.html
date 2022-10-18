@@ -370,7 +370,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 <section id="how-to-select-a-best-model" class="level2" data-number="2.5">
 <h2 data-number="2.5" class="anchored" data-anchor-id="how-to-select-a-best-model"><span class="header-section-number">2.5</span> How to select a “best” model?</h2>
-<p>A possible approach is to find the minimum for {} (AIC) for ARMA(<span class="math inline">\(p,q\)</span>) models and series of length <span class="math inline">\(n\)</span>: <span class="math display">\[AIC = \log \hat{\sigma}^2 + 2(p+q+1)/n\]</span> with <span class="math inline">\(\hat{\sigma}^2\)</span> the estimated residual (noise) variance.</p>
+<p>A possible approach is to find the minimum for <em>Akaike’s Information Criterion</em> (AIC) for ARMA(<span class="math inline">\(p,q\)</span>) models and series of length <span class="math inline">\(n\)</span>: <span class="math display">\[AIC = \log \hat{\sigma}^2 + 2(p+q+1)/n\]</span> with <span class="math inline">\(\hat{\sigma}^2\)</span> the estimated residual (noise) variance.</p>
 <p>Instead of finding a single best model using this single criterion, it may be better is to select a small group of “best” models, and look at model diagnostics for each: is the residual white noise? does it have stationary variance?</p>
 <p>Even better may be to keep a number of “fit” models and consider each as (equally?) suitable candidates.</p>
 </section>

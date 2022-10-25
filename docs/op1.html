@@ -329,13 +329,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Take <span class="math inline">\(x_1\)</span> the example</p>
 <p><span class="math display">\[
     \begin{array}{ll}
-    a x_{11} + b x_{12} &amp; = y_1 \\\\
+    a x_{11} + b x_{12} &amp; = y_1 \\
     a x_{21} + b x_{22} &amp; = y_2
     \end{array}
 \]</span></p>
 <p>with the <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> values known, and <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> unknown. This is similar to fitting a straight line through two points: let <span class="math inline">\((x_1,y_1)\)</span> be the first point and <span class="math inline">\((x_2,y_2)\)</span> be the second, then <span class="math display">\[
     \begin{array}{ll}
-    a + b x_1 &amp; = y_1 \\\\
+    a + b x_1 &amp; = y_1 \\
     a + b x_2 &amp; = y_2
     \end{array}
 \]</span> The approach is substition: rewrite one equations such that isolates <span class="math inline">\(a\)</span> or <span class="math inline">\(b\)</span>, and substitute that in the second.</p>
@@ -343,25 +343,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3 class="anchored" data-anchor-id="matrix-notation">Matrix notation</h3>
 <p>We can rewrite <span class="math display">\[
     \begin{array}{ll}
-    a x_{11} + b x_{12} &amp; = y_1\\\\
+    a x_{11} + b x_{12} &amp; = y_1\\
     a x_{21} + b x_{22} &amp; = y_2
     \end{array}
 \]</span> as the matrix product <span class="math display">\[
   \left[
   \begin{array}{ll}
-  x_{11} &amp; x_{12}\\\\
+  x_{11} &amp; x_{12}\\
   x_{21} &amp; x_{22}
   \end{array}
   \right]
   \left[
   \begin{array}{l}
-  a \\\\ b
+  a \\ b
   \end{array}
   \right]
   =
   \left[
   \begin{array}{l}
-  y_1 \\\\ y_2
+  y_1 \\ y_2
   \end{array}
   \right]
 \]</span> or <span class="math display">\[Xa = y\]</span></p>
@@ -371,16 +371,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The transpose of a matrix is the matrix formed when rows and columns are reversed. If <span class="math display">\[A =
     \left[
     \begin{array}{rr}
-    1 &amp; 4 \\\\
-    2 &amp; -1 \\\\
-    8 &amp; 9 \\\\
+    1 &amp; 4 \\
+    2 &amp; -1 \\
+    8 &amp; 9 \\
     \end{array}
     \right]
 \]</span> then it’s transpose, <span class="math display">\[
     A' = \left[
     \begin{array}{rrr}
-    1 &amp; 2 &amp; 8 \\\\
-    4 &amp; -1 &amp; 9 \\\\
+    1 &amp; 2 &amp; 8 \\
+    4 &amp; -1 &amp; 9 \\
     \end{array}
     \right]
 \]</span> (and may be written as <span class="math inline">\(A^T\)</span>)</p>
@@ -390,17 +390,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The identity matrix is square (nr of rows equals nr of columns), has ones on the diagona (for which the row number equals the column number) and zeroes elsewhere. E.g. the <span class="math inline">\(3 \times 3\)</span> identity <span class="math display">\[
     I = \left[
     \begin{array}{lll}
-    1 &amp; 0 &amp; 0 \\\\
-    0 &amp; 1 &amp; 0 \\\\
-    0 &amp; 0 &amp; 1 \\\\
+    1 &amp; 0 &amp; 0 \\
+    0 &amp; 1 &amp; 0 \\
+    0 &amp; 0 &amp; 1 \\
     \end{array}
     \right]
 \]</span> The <em>inverse</em> of a square matrix <span class="math inline">\(X\)</span>, <span class="math inline">\(X^{-1}\)</span>, is <em>defined</em> by the products <span class="math display">\[X^{-1}X = I\]</span> and <span class="math display">\[X X^{-1}=I\]</span></p>
 <p>Suppose we have <span class="math inline">\(n\)</span> equations with <span class="math inline">\(p\)</span> unknowns: <span class="math display">\[
     \begin{array}{cccccc}
-    a_1 x_{11} + a_2 x_{12} + &amp; ... &amp; + &amp; a_p x_{1p} &amp; = &amp; y_1 \\\\
-    a_1 x_{21} + a_2 x_{22} + &amp; ... &amp; + &amp; a_p x_{2p} &amp; = &amp; y_2 \\\\
-    \vdots &amp; \ddots &amp; &amp; \vdots &amp; &amp; \vdots \\\\
+    a_1 x_{11} + a_2 x_{12} + &amp; ... &amp; + &amp; a_p x_{1p} &amp; = &amp; y_1 \\
+    a_1 x_{21} + a_2 x_{22} + &amp; ... &amp; + &amp; a_p x_{2p} &amp; = &amp; y_2 \\
+    \vdots &amp; \ddots &amp; &amp; \vdots &amp; &amp; \vdots \\
     a_1 x_{n1} + a_2 x_{n2} + &amp; ... &amp; + &amp; a_p x_{np} &amp; = &amp; y_n
     \end{array}
 \]</span> we can rewrite this in matrix notation as <span class="math inline">\(Xa=y\)</span>, with <span class="math inline">\(x_{ij}\)</span> corresponding to element <span class="math inline">\((i,j)\)</span> (row i, column j) in <span class="math inline">\(X\)</span>, having <span class="math inline">\(n\)</span> rows and <span class="math inline">\(p\)</span> columns; <span class="math inline">\(a\)</span> and <span class="math inline">\(y\)</span> column vectors having <span class="math inline">\(p\)</span> and <span class="math inline">\(n\)</span> elements, respectively. Now, <span class="math inline">\(X\)</span> and <span class="math inline">\(y\)</span> are known, and <span class="math inline">\(a\)</span> is unknown. <span class="math inline">\(a\)</span> Solutions:</p>
@@ -477,7 +477,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3 class="anchored" data-anchor-id="minimum-outside-current-section">Minimum outside current section</h3>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><embed src="http://ifgi.uni-muenster.de/~epebe_01/golden1.pdf" class="img-fluid"></p>
+<p><embed src="images/golden1.pdf" class="img-fluid"></p>
 <p></p><figcaption class="figure-caption">golden1</figcaption><p></p>
 </figure>
 </div>
@@ -486,31 +486,31 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3 class="anchored" data-anchor-id="minimum-inside-current-section">Minimum inside current section</h3>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><embed src="http://ifgi.uni-muenster.de/~epebe_01/golden2.pdf" class="img-fluid"></p>
+<p><embed src="images/golden2.pdf" class="img-fluid"></p>
 <p></p><figcaption class="figure-caption">golden2</figcaption><p></p>
 </figure>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><embed src="http://ifgi.uni-muenster.de/~epebe_01/golden3.pdf" class="img-fluid"></p>
+<p><embed src="images/golden3.pdf" class="img-fluid"></p>
 <p></p><figcaption class="figure-caption">golden3</figcaption><p></p>
 </figure>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><embed src="http://ifgi.uni-muenster.de/~epebe_01/golden4.pdf" class="img-fluid"></p>
+<p><embed src="images/golden4.pdf" class="img-fluid"></p>
 <p></p><figcaption class="figure-caption">golden4</figcaption><p></p>
 </figure>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><embed src="http://ifgi.uni-muenster.de/~epebe_01/golden5.pdf" class="img-fluid"></p>
+<p><embed src="images/golden5.pdf" class="img-fluid"></p>
 <p></p><figcaption class="figure-caption">golden5</figcaption><p></p>
 </figure>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><embed src="http://ifgi.uni-muenster.de/~epebe_01/golden6.pdf" class="img-fluid"></p>
+<p><embed src="images/golden6.pdf" class="img-fluid"></p>
 <p></p><figcaption class="figure-caption">golden6</figcaption><p></p>
 </figure>
 </div>
@@ -530,14 +530,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Spherical variogram with nugget has three parameters: nugget <span class="math inline">\(c_0\)</span>, (partial) sill <span class="math inline">\(c_1\)</span> and range <span class="math inline">\(a\)</span>: <span class="math display">\[
 \gamma(h) = \left\{
 \begin{array}{ll}
-          0 &amp; \mbox{if}\ \  h = 0 \\\\
-          c_0 + c_1 f(a,h) &amp; \mbox{if}\ \  h &gt; 0 \\\\
+          0 &amp; \mbox{if}\ \  h = 0 \\
+          c_0 + c_1 f(a,h) &amp; \mbox{if}\ \  h &gt; 0 \\
 \end{array}
 \right.
 \]</span> with <span class="math display">\[f(a, h)= \left\{
 \begin{array}{ll}
-\frac{3h}{2a}-\frac{1}{2}(\frac{h}{a})^3 &amp; \mbox{if} \ \ 0 \le h \le a \\\\
-1 &amp; \mbox{if} \ \ h &gt; a \\\\
+\frac{3h}{2a}-\frac{1}{2}(\frac{h}{a})^3 &amp; \mbox{if} \ \ 0 \le h \le a \\
+1 &amp; \mbox{if} \ \ h &gt; a \\
 \end{array}
 \right.
 \]</span></p>
@@ -579,9 +579,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 J_f(\theta^k) =
 \left[
 \begin{array}{ccccc}
-\frac{\delta f_1(\theta^k)}{\delta\theta_1} &amp; ... &amp;  \frac{\delta f_1(\theta^k)}{\delta\theta_m} \\\\
-\vdots &amp; \ddots &amp; \vdots \\\\
-\frac{\delta f_n(\theta^k)}{\delta\theta_1} &amp; ... &amp;  \frac{\delta f_n(\theta^k)}{\delta\theta_m} \\\\
+\frac{\delta f_1(\theta^k)}{\delta\theta_1} &amp; ... &amp;  \frac{\delta f_1(\theta^k)}{\delta\theta_m} \\
+\vdots &amp; \ddots &amp; \vdots \\
+\frac{\delta f_n(\theta^k)}{\delta\theta_1} &amp; ... &amp;  \frac{\delta f_n(\theta^k)}{\delta\theta_m} \\
 \end{array}
 \right]
 \]</span> In <span class="math display">\[\theta^{k+1}=\theta^k + \delta^k\]</span> we find <span class="math inline">\(\delta^k\)</span> by solving <span class="math display">\[

@@ -461,17 +461,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <section id="kriging-varieties" class="level3">
 <h3 class="anchored" data-anchor-id="kriging-varieties">Kriging varieties</h3>
 <ul>
-<li><p>Simple kriging: <span class="math inline">\(Z(s)=\mu+e(s)\)</span>, <span class="math inline">\(\mu\)</span> known</p></li>
-<li><p>Ordinary kriging: <span class="math inline">\(Z(s)=m+e(s)\)</span>, <span class="math inline">\(m\)</span> unknown</p></li>
-<li><p>Universal kriging: <span class="math inline">\(Z(s)=X\beta+e(s)\)</span>, <span class="math inline">\(\beta\)</span> unknown</p></li>
-<li><p>SK: linear predictor <span class="math inline">\(\lambda'Z\)</span> with <span class="math inline">\(\lambda\)</span> such that <span class="math inline">\(\sigma^2(s_0) = \E(Z(s_0)-\lambda'Z)^2\)</span> is minimized</p></li>
-<li><p>OK: linear predictor <span class="math inline">\(\lambda'Z\)</span> with <span class="math inline">\(\lambda\)</span> such that it</p></li>
-<li><p>has minimum variance <span class="math inline">\(\sigma^2(s_0) = \E(Z(s_0)-\lambda'Z)^2\)</span>, and</p></li>
-<li><p>is unbiased <span class="math inline">\(\E(\lambda'Z) = m\)</span></p></li>
-<li><p>second constraint: <span class="math inline">\(\sum_{i=1}^n \lambda_i = 1\)</span>, weights sum to one.</p></li>
-<li><p>UK: <span class="math display">\[\hat{Z}(s_0) = x(s_0)\hat{\beta} + v'V^{-1} (Z-X\hat{\beta}) \]</span> with <span class="math inline">\(x(s_0) = (X_0(s_0),...,X_p(s_0))\)</span> and <span class="math inline">\(\hat{\beta} = (X'V^{-1}X)^{-1} X'V^{-1}Z\)</span> <span class="math display">\[\sigma^2(s_0) = \sigma^2_0 - v'V^{-1}v + Q\]</span> with <span class="math inline">\(Q = (x(s_0) - X'V^{-1}v)'(X'V^{-1}X)^{-1}(x(s_0) - X'V^{-1}v)\)</span></p></li>
-<li><p>OK: fill in a column vector with ones for <span class="math inline">\(X\)</span>: <span class="math inline">\(X=(1,1,...,1)'\)</span> and <span class="math inline">\(X_0=1\)</span></p></li>
-<li><p>SK: take out the trend/unknown mean</p></li>
+<li>Simple kriging: <span class="math inline">\(Z(s)=\mu+e(s)\)</span>, <span class="math inline">\(\mu\)</span> known</li>
+<li>Ordinary kriging: <span class="math inline">\(Z(s)=m+e(s)\)</span>, <span class="math inline">\(m\)</span> unknown</li>
+<li>Universal kriging: <span class="math inline">\(Z(s)=X\beta+e(s)\)</span>, <span class="math inline">\(\beta\)</span> unknown</li>
+<li>SK: linear predictor <span class="math inline">\(\lambda'Z\)</span> with <span class="math inline">\(\lambda\)</span> such that <span class="math inline">\(\sigma^2(s_0) = \E(Z(s_0)-\lambda'Z)^2\)</span> is minimized</li>
+<li>OK: linear predictor <span class="math inline">\(\lambda'Z\)</span> with <span class="math inline">\(\lambda\)</span> such that it
+<ul>
+<li>has minimum variance <span class="math inline">\(\sigma^2(s_0) = \E(Z(s_0)-\lambda'Z)^2\)</span>, and</li>
+<li>is unbiased <span class="math inline">\(\E(\lambda'Z) = m\)</span></li>
+<li>second constraint: <span class="math inline">\(\sum_{i=1}^n \lambda_i = 1\)</span>, weights sum to one.</li>
+</ul></li>
+<li>UK: <span class="math display">\[\hat{Z}(s_0) = x(s_0)\hat{\beta} + v'V^{-1} (Z-X\hat{\beta}) \]</span> with <span class="math inline">\(x(s_0) = (X_0(s_0),...,X_p(s_0))\)</span> and <span class="math inline">\(\hat{\beta} = (X'V^{-1}X)^{-1} X'V^{-1}Z\)</span> <span class="math display">\[\sigma^2(s_0) = \sigma^2_0 - v'V^{-1}v + Q\]</span> with <span class="math inline">\(Q = (x(s_0) - X'V^{-1}v)'(X'V^{-1}X)^{-1}(x(s_0) - X'V^{-1}v)\)</span></li>
+<li>OK: fill in a column vector with ones for <span class="math inline">\(X\)</span>: <span class="math inline">\(X=(1,1,...,1)'\)</span> and <span class="math inline">\(X_0=1\)</span></li>
+<li>SK: take out the trend/unknown mean</li>
 </ul>
 </section>
 <section id="uk-and-linear-regression" class="level3">
@@ -488,10 +490,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <section id="statistical-arguments-for-local-prediction" class="level3">
 <h3 class="anchored" data-anchor-id="statistical-arguments-for-local-prediction">Statistical arguments for local prediction</h3>
 <ul>
-<li>estimating <span class="math inline">\(\beta\)</span> locally instead of globally means that</li>
+<li>estimating <span class="math inline">\(\beta\)</span> locally instead of globally means that
+<ul>
 <li><span class="math inline">\(\beta\)</span> will adjust to local situations (less bias)</li>
 <li>it will be harder to estimate <span class="math inline">\(\beta\)</span> from less information, so (slightly?) larger prediction errors will result (larger variance)</li>
 <li><span class="math inline">\(X\)</span> needs to be non-singular in every neighbourhood</li>
+</ul></li>
 <li>some authors claim that local trends are so adaptive, that one can ignore spatial correlation of the residual</li>
 <li>Using local linear regression with <em>weights</em> that decay with distance is called <em>geographically weighted regression</em>, GWR</li>
 </ul>
@@ -499,8 +503,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <section id="practical-arguments-for-local-prediction" class="level3">
 <h3 class="anchored" data-anchor-id="practical-arguments-for-local-prediction">Practical arguments for local prediction</h3>
 <ul>
-<li>The number of observations, <span class="math inline">\(n\)</span> may become very large.</li>
+<li>The number of observations, <span class="math inline">\(n\)</span> may become very large.
+<ul>
 <li>lidar data, 3D chemical, satellite sensors, geotechnical, seismic, …</li>
+</ul></li>
 <li>Computing <span class="math inline">\(V^{-1}v\)</span> is the expensive part; it is <span class="math inline">\(O(N^2)\)</span> or <span class="math inline">\(O(N^3)\)</span> as <span class="math inline">\(V\)</span> is usually not of simple structure</li>
 <li>there is a trade-off; for a global neighbourhood, the expensive part, factoring <span class="math inline">\(V\)</span> needs only be done once, for a local neighbourhood for each unique neighbourhood (in practice: for each <span class="math inline">\(s_0\)</span>).</li>
 <li>selecting local neighbourhoods also costs time; naive selection <span class="math inline">\(O(n \log n)\)</span> doesn’t scale well</li>
@@ -620,11 +626,13 @@ V_{m,1} &amp; V_{m,2} &amp; ... &amp; V_{m,m} \\\\
 <h3 class="anchored" data-anchor-id="kriging-errors-what-do-they-mean">Kriging errors – what do they mean?</h3>
 <p>Suppose legislation prescribes remediation in case zinc exceeds 500 ppm. Where does the zinc level exceed 500 ppm?</p>
 <ul>
-<li>we can compare the map of the predictions with 500. However:</li>
+<li>we can compare the map of the predictions with 500. However:
+<ul>
 <li><span class="math inline">\(\hat{z}(s_0)\)</span> does not equal <span class="math inline">\(z(s_0)\)</span>:</li>
 <li><span class="math inline">\(\hat{z}(s_0)\)</span> is more smooth than <span class="math inline">\(z(s_0)\)</span></li>
 <li><span class="math inline">\(\hat{z}(s_0)\)</span> is closer to the mean than <span class="math inline">\(z(s_0)\)</span></li>
 <li>smoothing effect is stronger if spatial correlation is small or nugget effect is relatively large</li>
+</ul></li>
 <li>alternatively we can assume that the true (unknown) value follows a probability distribution, with mean <span class="math inline">\(\hat{z}(s_0)\)</span> and standard error <span class="math inline">\(\sigma(s_0)\)</span>.</li>
 <li>this latter approach acknowledges that <span class="math inline">\(\sigma(s_0)\)</span> is useful as a measure of interpolation accuracy</li>
 </ul>

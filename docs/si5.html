@@ -277,12 +277,17 @@ ul.task-list li input[type="checkbox"] {
 <li>Computing <span class="math inline">\(V^{-1}v\)</span> is the expensive part; it is <span class="math inline">\(O(N^2)\)</span> or <span class="math inline">\(O(N^3)\)</span> as <span class="math inline">\(V\)</span> is usually not of simple structure</li>
 <li>there is a trade-off; for a global neighbourhood, the expensive part, factoring <span class="math inline">\(V\)</span> needs only be done once, for a local neighbourhood for each unique neighbourhood (in practice: for each <span class="math inline">\(s_0\)</span>).</li>
 <li>selecting local neighbourhoods also costs time; naive selection <span class="math inline">\(O(n \log n)\)</span> doesn’t scale well</li>
-<li><code>gstat</code> uses quadtrees/octtrees, inspired by http://donar.umiacs.umd.edu/quadtree/index.html</li>
+<li><code>gstat</code> uses quadtrees/octtrees, inspired by http://donar.umiacs.umd.edu/quadtree/index.html (defunct)</li>
 </ul>
 </section>
 <section id="predicting-block-means" class="level3">
 <h3 class="anchored" data-anchor-id="predicting-block-means">Predicting block means</h3>
-<p>Instead of predicting <span class="math inline">\(Z(s_0)\)</span> for a “point” location, one might be interested at predicting the average of <span class="math inline">\(Z(s)\)</span> over a block, <span class="math inline">\(B_0\)</span>, i.e. <span class="math display">\[Z(B_0) = \frac{1}{|B_0|}\int_{B_0} Z(u)du\]</span> * This can (naively) be done by predicting <span class="math inline">\(Z\)</span> over a large number of points <span class="math inline">\(s_0\)</span> inside <span class="math inline">\(B_0\)</span>, and averaging * For the prediction <em>error</em>, of <span class="math inline">\(\hat{Z}(B_0)\)</span>, we then need the covariances between all point predictions * a more efficient way is to use block kriging, which does both at once</p>
+<p>Instead of predicting <span class="math inline">\(Z(s_0)\)</span> for a “point” location, one might be interested at predicting the average of <span class="math inline">\(Z(s)\)</span> over a block, <span class="math inline">\(B_0\)</span>, i.e. <span class="math display">\[Z(B_0) = \frac{1}{|B_0|}\int_{B_0} Z(u)du\]</span></p>
+<ul>
+<li>This can (naively) be done by predicting <span class="math inline">\(Z\)</span> over a large number of points <span class="math inline">\(s_0\)</span> inside <span class="math inline">\(B_0\)</span>, and averaging</li>
+<li>For the prediction <em>error</em>, of <span class="math inline">\(\hat{Z}(B_0)\)</span>, we then need the covariances between all point predictions</li>
+<li>a more efficient way is to use block kriging, which does both at once</li>
+</ul>
 </section>
 <section id="reason-why-one-wants-block-means" class="level3">
 <h3 class="anchored" data-anchor-id="reason-why-one-wants-block-means">Reason why one wants block means</h3>

@@ -1,0 +1,56 @@
+# Local predictors, block kriging
+
+### Global vs. local predictors
+In many cases, instead of using all data, the number of observations used for
+prediction are limited to a selection of nearest observations, based on
+* number of observations or
+* distance to prediction location $s_0$
+* possibly, in addition, directions
+
+The reason for this is usually either
+* statistical, allowing for a more flexible mean/trend structure
+* practical, if $n$ gets large
+
+### Statistical arguments for local prediction
+* estimating $\beta$ locally instead of globally means that
+    * $\beta$ will adjust to local situations (less bias)
+    * it will be harder to estimate $\beta$ from less information, so
+   (slightly?) larger prediction errors will result (larger variance)
+    * $X$ needs to be non-singular in every neighbourhood
+* some authors claim that local trends are so
+ adaptive, that one can ignore spatial correlation of the residual
+* Using local linear regression with _weights_ that decay
+ with distance is called _geographically weighted regression_, GWR
+
+### Practical arguments for local prediction
+* The number of observations, $n$ may become very large.
+    * lidar data, 3D chemical, satellite sensors, geotechnical, seismic, ...
+* Computing $V^{-1}v$ is the expensive part; it is $O(N^2)$  or $O(N^3)$ as $V$
+is usually not of simple structure
+* there is a trade-off; for a global neighbourhood, the expensive part, 
+factoring $V$ needs only be done once, for a local neighbourhood for 
+each unique neighbourhood (in practice: for each $s_0$).
+* selecting local neighbourhoods also costs time; naive selection
+$O(n \log n)$ doesn't scale well
+* `gstat` uses quadtrees/octtrees, inspired by
+http://donar.umiacs.umd.edu/quadtree/index.html
+
+### Predicting block means
+Instead of predicting $Z(s_0)$ for a "point" location, one might be
+interested at predicting the average of $Z(s)$ over a block, $B_0$, i.e.
+$$Z(B_0) = \frac{1}{|B_0|}\int_{B_0} Z(u)du$$
+* This can (naively) be done by predicting $Z$ over a large number of points
+$s_0$ inside $B_0$, and averaging
+* For the prediction _error_, of $\hat{Z}(B_0)$, we then need the
+covariances between all point predictions
+* a more efficient way is to use block kriging, which does both at once
+
+### Reason why one wants block means
+Examples
+
+* mining: we cannot mine point values
+* soil remediation: we cannot remediate points
+* RS: we can match satellite image pixels
+* disaster management: we cannot evacuate points
+* environment: legislation may be related to blocks
+* accuracy: block means can be estimated with smaller errors than points

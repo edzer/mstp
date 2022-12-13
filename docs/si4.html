@@ -93,7 +93,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./de1.html" rel="next">
+<link href="./si5.html" rel="next">
 <link href="./si3.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -233,6 +233,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <a href="./si4.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Unknown, varying mean</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./si5.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Local predictors, block kriging</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./si6.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Cokriging, cross validation, conditional simulation</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -245,7 +255,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./de1.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Differential equations</span></a>
+  <a href="./de1.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Differential equations</span></a>
   </div>
 </li>
       </ul>
@@ -280,22 +290,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#spatial-prediction" id="toc-spatial-prediction" class="nav-link" data-scroll-target="#spatial-prediction">Spatial Prediction</a></li>
   <li><a href="#kriging-varieties" id="toc-kriging-varieties" class="nav-link" data-scroll-target="#kriging-varieties">Kriging varieties</a></li>
   <li><a href="#uk-and-linear-regression" id="toc-uk-and-linear-regression" class="nav-link" data-scroll-target="#uk-and-linear-regression">UK and linear regression</a></li>
-  <li><a href="#global-vs.-local-predictors" id="toc-global-vs.-local-predictors" class="nav-link" data-scroll-target="#global-vs.-local-predictors">Global vs.&nbsp;local predictors</a></li>
-  <li><a href="#statistical-arguments-for-local-prediction" id="toc-statistical-arguments-for-local-prediction" class="nav-link" data-scroll-target="#statistical-arguments-for-local-prediction">Statistical arguments for local prediction</a></li>
-  <li><a href="#practical-arguments-for-local-prediction" id="toc-practical-arguments-for-local-prediction" class="nav-link" data-scroll-target="#practical-arguments-for-local-prediction">Practical arguments for local prediction</a></li>
-  <li><a href="#predicting-block-means" id="toc-predicting-block-means" class="nav-link" data-scroll-target="#predicting-block-means">Predicting block means</a></li>
-  <li><a href="#reason-why-one-wants-block-means" id="toc-reason-why-one-wants-block-means" class="nav-link" data-scroll-target="#reason-why-one-wants-block-means">Reason why one wants block means</a></li>
-  <li><a href="#cokriging" id="toc-cokriging" class="nav-link" data-scroll-target="#cokriging">cokriging</a></li>
-  <li><a href="#cokriging-prediction" id="toc-cokriging-prediction" class="nav-link" data-scroll-target="#cokriging-prediction">Cokriging prediction</a></li>
-  <li><a href="#what-is-needed" id="toc-what-is-needed" class="nav-link" data-scroll-target="#what-is-needed">What is needed?</a></li>
-  <li><a href="#permissible-cross-covariance-functions" id="toc-permissible-cross-covariance-functions" class="nav-link" data-scroll-target="#permissible-cross-covariance-functions">Permissible cross covariance functions</a></li>
-  <li><a href="#how-to-do-this" id="toc-how-to-do-this" class="nav-link" data-scroll-target="#how-to-do-this">How to do this?</a></li>
-  <li><a href="#kriging-predictions-and-errors-how-good-are-they" id="toc-kriging-predictions-and-errors-how-good-are-they" class="nav-link" data-scroll-target="#kriging-predictions-and-errors-how-good-are-they">Kriging predictions and errors – how good are they?</a></li>
-  <li><a href="#cross-validation-what-does-it-yield" id="toc-cross-validation-what-does-it-yield" class="nav-link" data-scroll-target="#cross-validation-what-does-it-yield">Cross validation: what does it yield?</a></li>
-  <li><a href="#kriging-errors-what-do-they-mean" id="toc-kriging-errors-what-do-they-mean" class="nav-link" data-scroll-target="#kriging-errors-what-do-they-mean">Kriging errors – what do they mean?</a></li>
-  <li><a href="#conditional-probability" id="toc-conditional-probability" class="nav-link" data-scroll-target="#conditional-probability">Conditional probability</a></li>
-  <li><a href="#indicator-kriging" id="toc-indicator-kriging" class="nav-link" data-scroll-target="#indicator-kriging">Indicator kriging</a></li>
-  <li><a href="#conditional-simulation" id="toc-conditional-simulation" class="nav-link" data-scroll-target="#conditional-simulation">Conditional simulation</a></li>
   </ul>
 <div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/edzer/mstp/edit/master/si4.qmd" class="toc-action">Edit this page</a></p></div></div></nav>
     </div>
@@ -480,495 +474,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3 class="anchored" data-anchor-id="uk-and-linear-regression">UK and linear regression</h3>
 <p>If <span class="math inline">\(Z\)</span> has no spatial correlation, all covariances are zero and <span class="math inline">\(v=0\)</span> and <span class="math inline">\(V=\mbox{diag}(\sigma^2)\)</span>. This implies that <span class="math display">\[\hat{Z}(s_0) = x(s_0)\hat{\beta} + v'V^{-1} (Z-X\hat{\beta}) \]</span> with <span class="math inline">\(\hat{\beta} = (X'V^{-1}X)^{-1} X'V^{-1}Z\)</span> reduces to</p>
 <p><span class="math display">\[\hat{Z}(s_0) = x(s_0)\hat{\beta}\]</span> with <span class="math inline">\(\hat{\beta} = (X'X)^{-1} X'Z\)</span>, i.e., ordinary least squares regression.</p>
-<p>Note that * under this model the residual does not carry information, as it is white noise * in spatial prediction, UK can not be worse than linear regression, as linear regression is a limiting case of a more general model.</p>
-</section>
-<section id="global-vs.-local-predictors" class="level3">
-<h3 class="anchored" data-anchor-id="global-vs.-local-predictors">Global vs.&nbsp;local predictors</h3>
-<p>In many cases, instead of using all data, the number of observations used for prediction are limited to a selection of nearest observations, based on * number of observations or * distance to prediction location <span class="math inline">\(s_0\)</span> * possibly, in addition, directions</p>
-<p>The reason for this is usually either * statistical, allowing for a more flexible mean/trend structure * practical, if <span class="math inline">\(n\)</span> gets large</p>
-</section>
-<section id="statistical-arguments-for-local-prediction" class="level3">
-<h3 class="anchored" data-anchor-id="statistical-arguments-for-local-prediction">Statistical arguments for local prediction</h3>
+<p>Note that</p>
 <ul>
-<li>estimating <span class="math inline">\(\beta\)</span> locally instead of globally means that
-<ul>
-<li><span class="math inline">\(\beta\)</span> will adjust to local situations (less bias)</li>
-<li>it will be harder to estimate <span class="math inline">\(\beta\)</span> from less information, so (slightly?) larger prediction errors will result (larger variance)</li>
-<li><span class="math inline">\(X\)</span> needs to be non-singular in every neighbourhood</li>
-</ul></li>
-<li>some authors claim that local trends are so adaptive, that one can ignore spatial correlation of the residual</li>
-<li>Using local linear regression with <em>weights</em> that decay with distance is called <em>geographically weighted regression</em>, GWR</li>
-</ul>
-</section>
-<section id="practical-arguments-for-local-prediction" class="level3">
-<h3 class="anchored" data-anchor-id="practical-arguments-for-local-prediction">Practical arguments for local prediction</h3>
-<ul>
-<li>The number of observations, <span class="math inline">\(n\)</span> may become very large.
-<ul>
-<li>lidar data, 3D chemical, satellite sensors, geotechnical, seismic, …</li>
-</ul></li>
-<li>Computing <span class="math inline">\(V^{-1}v\)</span> is the expensive part; it is <span class="math inline">\(O(N^2)\)</span> or <span class="math inline">\(O(N^3)\)</span> as <span class="math inline">\(V\)</span> is usually not of simple structure</li>
-<li>there is a trade-off; for a global neighbourhood, the expensive part, factoring <span class="math inline">\(V\)</span> needs only be done once, for a local neighbourhood for each unique neighbourhood (in practice: for each <span class="math inline">\(s_0\)</span>).</li>
-<li>selecting local neighbourhoods also costs time; naive selection <span class="math inline">\(O(n \log n)\)</span> doesn’t scale well</li>
-<li><code>gstat</code> uses quadtrees/octtrees, inspired by http://donar.umiacs.umd.edu/quadtree/index.html</li>
-</ul>
-</section>
-<section id="predicting-block-means" class="level3">
-<h3 class="anchored" data-anchor-id="predicting-block-means">Predicting block means</h3>
-<p>Instead of predicting <span class="math inline">\(Z(s_0)\)</span> for a “point” location, one might be interested at predicting the average of <span class="math inline">\(Z(s)\)</span> over a block, <span class="math inline">\(B_0\)</span>, i.e. <span class="math display">\[Z(B_0) = \frac{1}{|B_0|}\int_{B_0} Z(u)du\]</span> * This can (naively) be done by predicting <span class="math inline">\(Z\)</span> over a large number of points <span class="math inline">\(s_0\)</span> inside <span class="math inline">\(B_0\)</span>, and averaging * For the prediction <em>error</em>, of <span class="math inline">\(\hat{Z}(B_0)\)</span>, we then need the covariances between all point predictions * a more efficient way is to use block kriging, which does both at once</p>
-</section>
-<section id="reason-why-one-wants-block-means" class="level3">
-<h3 class="anchored" data-anchor-id="reason-why-one-wants-block-means">Reason why one wants block means</h3>
-<p>Examples</p>
-<ul>
-<li>mining: we cannot mine point values</li>
-<li>soil remediation: we cannot remediate points</li>
-<li>RS: we can match satellite image pixels</li>
-<li>disaster management: we cannot evacuate points</li>
-<li>environment: legislation may be related to blocks</li>
-<li>accuracy: block means can be estimated with smaller errors than points</li>
-</ul>
-</section>
-<section id="cokriging" class="level3">
-<h3 class="anchored" data-anchor-id="cokriging">cokriging</h3>
-<p>Cokriging sets the multivariate equivalent of kriging, which is, in terms of number of dependent variables, univariate. Kriging: <span class="math display">\[Z(s) = X(s)\beta + e(s)\]</span> Cokriging: <span class="math display">\[Z_1(s) = X_1(s)\beta_1 + e_1(s)\]</span> <span class="math display">\[Z_2(s) = X_2(s)\beta_2 + e_2(s)\]</span> <span class="math display">\[Z_k(s) = X_k(s)\beta_k + e_k(s)\]</span> with <span class="math inline">\(V = \Cov(e_1,e_2,...,e_k)\)</span></p>
-<p>Cases where this is useful: multiple spatial correlated variables such as</p>
-<ul>
-<li>chemical properties (auto-analyzers!)</li>
-<li>sediment composition</li>
-<li>electromagnetic spectra (imagery/remote sensing)</li>
-<li>ecological data (abiotic factors; species abundances)</li>
-<li>(space-time data, with discrete time)</li>
-</ul>
-<p>Two types of applications:</p>
-<ul>
-<li>undersampled case: secondary variables help prediction of a primary, because we have more samples of them (image?)</li>
-<li>equally sampled case: secondary variables don’t help prediction much, but we are interested in <em>multivariate prediction</em>, i.e.&nbsp;prediction error covariances.</li>
-</ul>
-</section>
-<section id="cokriging-prediction" class="level3">
-<h3 class="anchored" data-anchor-id="cokriging-prediction">Cokriging prediction</h3>
-<p>Cokriging prediction is not substantially different from kriging prediction, it is just a lot of book-keeping.</p>
-<p>How to set up Z(s), X, beta, e(s), x(s_0), v, V?</p>
-<p>Multivariable prediction involves the joint prediction of multiple, both spatially and cross-variable correlated variables. Consider <span class="math inline">\(m\)</span> distinct variables, and let <span class="math inline">\(\{Z_i(s), X_i, \beta^i, e_i(s), x_i(s_0), v_i, V_i\}\)</span> correspond to <span class="math inline">\(\{Z(s), X, \beta, e(s), x(s_0), v, V\}\)</span> of the <span class="math inline">\(i\)</span>-th variable. Next, let <span class="math inline">\({\bf Z}(s) = (Z_1(s)',...,Z_m(s)')'\)</span>, <span class="math inline">\({\bf B}=({\beta^1} ',...,{\beta^m} ')'\)</span>, <span class="math inline">\({\bf e}(s)=(e_1(s)',...,e_m(s)')'\)</span>,</p>
-<p><span class="math display">\[
-{\bf X} =
-\left[
-\begin{array}{cccc}
-X_1 &amp; 0 &amp; ... &amp; 0 \\\\
-0 &amp; X_2 &amp; ... &amp; 0 \\\\
-\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\\\
-0 &amp; 0 &amp; ... &amp; X_m \\\\
-\end{array}
-\right], \
-{\bf x}(s_0) =
-\left[
-\begin{array}{cccc}
-x_1(s_0) &amp; 0 &amp; ... &amp; 0 \\\\
-0 &amp; x_2(s_0) &amp; ... &amp; 0 \\\\
-\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\\\
-0 &amp; 0 &amp; ... &amp; x_m(s_0) \\\\
-\end{array}
-\right]
-\]</span></p>
-<p>with <span class="math inline">\(0\)</span> conforming zero matrices, and</p>
-<p><span class="math display">\[{\bf v} =
-\left[
-\begin{array}{cccc}
-v_{1,1} &amp; v_{1,2} &amp; ... &amp; v_{1,m} \\\\
-v_{2,1} &amp; v_{2,2} &amp; ... &amp; v_{2,m} \\\\
-\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\\\
-v_{m,1} &amp; v_{m,2} &amp; ... &amp; v_{m,m} \\\\
-\end{array}
-\right], \ \
-{\bf V} =
-\left[
-\begin{array}{cccc}
-V_{1,1} &amp; V_{1,2} &amp; ... &amp; V_{1,m} \\\\
-V_{2,1} &amp; V_{2,2} &amp; ... &amp; V_{2,m} \\\\
-\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\\\
-V_{m,1} &amp; V_{m,2} &amp; ... &amp; V_{m,m} \\\\
-\end{array}
-\right]
-\]</span></p>
-<p>where element <span class="math inline">\(i\)</span> of <span class="math inline">\(v_{k,l}\)</span> is <span class="math inline">\(\Cov(Z_k(s_i), Z_l(s_0))\)</span>, and where element <span class="math inline">\((i,j)\)</span> of <span class="math inline">\(V_{k,l}\)</span> is <span class="math inline">\(\Cov(Z_k(s_i),Z_l(s_j))\)</span>.</p>
-<p>The multivariable prediction equations equal the previous UK equations and when all matrices are substituted by their multivariable forms (see also Ver Hoef and Cressie, Math.Geol., 1993), and when for <span class="math inline">\(\sigma^2_0\)</span>, <span class="math inline">\(\Sigma\)</span> is substituted with <span class="math inline">\(\Cov(Z_i(s_0),Z_j(s_0))\)</span> in its <span class="math inline">\((i,j)\)</span>-th element. Note that the prediction variance is now a prediction error covariance matrix.</p>
-</section>
-<section id="what-is-needed" class="level3">
-<h3 class="anchored" data-anchor-id="what-is-needed">What is needed?</h3>
-<p>The main tool for estimating semivariances between different variables is the <em>cross variogram</em>, defined for collocated data as <span class="math display">\[\gamma_{ij}(h) = \mbox{E}[(Z_i(s)-Z_i(s+h))(Z_j(s)-Z_j(s+h))]\]</span> and for non-collocated data as <span class="math display">\[\gamma_{ij}(h) = \mbox{E}[(Z_i(s)-m_i)(Z_j(s)-m_j)]\]</span> with <span class="math inline">\(m_i\)</span> and <span class="math inline">\(m_j\)</span> the means of the respective variables. Sample cross variograms are the obvious sums over the available pairs or cross pairs, as in one of <span class="math display">\[\hat{\gamma}_{jk}(\tilde{h})=\frac{1}{N_h}\sum_{i=1}^{N_h}(Z_j(s_i)-Z_j(s_i+h))(Z_k(s_i)-Z_k(s_i+h))\]</span> <span class="math display">\[\hat{\gamma}_{jk}(\tilde{h})=\frac{1}{N_h}\sum_{i=1}^{N_h}(Z_j(s_i)-m_j)(Z_k(s_i+h)-m_k)\]</span></p>
-</section>
-<section id="permissible-cross-covariance-functions" class="level3">
-<h3 class="anchored" data-anchor-id="permissible-cross-covariance-functions">Permissible cross covariance functions</h3>
-<p>Two classes of permissible cross covariance (semivariance) functions are often used:</p>
-<ul>
-<li>intrinsic correlation (IC): <span class="math display">\[\gamma_{jk}(h) = \alpha_{jk} \sqrt{\gamma_{jj}(h)\gamma_{kk}(h)}\]</span> parameters <span class="math inline">\(\alpha_{jk}\)</span> are correlation cofficients; very strict</li>
-<li>linear model of coregionalization (LMC): <span class="math display">\[\gamma_{jk}(h) = \sum_{l=1}^p \gamma_{jk,p}(h)\]</span> (e.g., nugget + spherical model), and <span class="math display">\[\gamma_{jk,p}(h) = \alpha_{jk,p} \sqrt{\gamma_{jj,p}(h)\gamma_{kk,p}(h)}\]</span></li>
-</ul>
-</section>
-<section id="how-to-do-this" class="level3">
-<h3 class="anchored" data-anchor-id="how-to-do-this">How to do this?</h3>
-<p>As multivariable analysis may involve numerous variables, we need to start organising the available information. For that reason, we collect all the observation data specifications in a <code>gstat</code> object, created by the function <code>gstat</code>. This function does nothing else than ordering (and actually, copying) information needed later in a single object. Consider the following definitions of four heavy metals:</p>
-<div class="cell" data-hash="si4_cache/html/unnamed-chunk-5_33f54da38b6a33f379c21a6571628b60">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sp)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(meuse)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>meuse <span class="ot">=</span> <span class="fu">st_as_sf</span>(meuse, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>))</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gstat)</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> <span class="fu">gstat</span>(<span class="cn">NULL</span>, <span class="st">"logCd"</span>, <span class="fu">log</span>(cadmium)<span class="sc">~</span><span class="dv">1</span>, meuse)</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> <span class="fu">gstat</span>(g, <span class="st">"logCu"</span>, <span class="fu">log</span>(copper)<span class="sc">~</span><span class="dv">1</span>, meuse)</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> <span class="fu">gstat</span>(g, <span class="st">"logPb"</span>, <span class="fu">log</span>(lead)<span class="sc">~</span><span class="dv">1</span>, meuse)</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> <span class="fu">gstat</span>(g, <span class="st">"logZn"</span>, <span class="fu">log</span>(zinc)<span class="sc">~</span><span class="dv">1</span>, meuse)</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>g </span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co"># data:</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co"># logCd : formula = log(cadmium)`~`1 ; data dim = 155 x 12</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co"># logCu : formula = log(copper)`~`1 ; data dim = 155 x 12</span></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co"># logPb : formula = log(lead)`~`1 ; data dim = 155 x 12</span></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="co"># logZn : formula = log(zinc)`~`1 ; data dim = 155 x 12</span></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>vm <span class="ot">&lt;-</span> <span class="fu">variogram</span>(g)</span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>vm.fit <span class="ot">&lt;-</span> <span class="fu">fit.lmc</span>(vm, g, <span class="fu">vgm</span>(<span class="dv">1</span>, <span class="st">"Sph"</span>, <span class="dv">800</span>, <span class="dv">1</span>))</span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(vm, vm.fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<p><img src="si4_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-</section>
-<section id="kriging-predictions-and-errors-how-good-are-they" class="level3">
-<h3 class="anchored" data-anchor-id="kriging-predictions-and-errors-how-good-are-they">Kriging predictions and errors – how good are they?</h3>
-<p>Cross validation can be used to assess the quality of any interpolation, including kriging. We split the data set in <span class="math inline">\(n\)</span> parts (folds). For each part, we * leave out the observations of this fold * use the observations of all other folds to predict the values at the locations of this fold * compare the predictions with the observations This is called <span class="math inline">\(n\)</span>-fold cross validation. If <span class="math inline">\(n\)</span> equals the number of observation, it is called leave-one-out cross validation (LOOCV).</p>
-</section>
-<section id="cross-validation-what-does-it-yield" class="level3">
-<h3 class="anchored" data-anchor-id="cross-validation-what-does-it-yield">Cross validation: what does it yield?</h3>
-<ul>
-<li>residuals <span class="math inline">\(r(s_i) = z(s_i) -\hat{z}(s_i)\)</span> – histograms, maps, summary statistics</li>
-<li>mean residual should be near zero</li>
-<li>mean square residual <span class="math inline">\(\sum r(s_i)^2\)</span> should be as small as possible</li>
-</ul>
-<p>In case the interpolation method yields a prediction error we can compute z-scores: <span class="math inline">\(r(s_i)/\sigma(s_i)\)</span></p>
-<p>The z-score allows the validation of the kriging error, as the z-score should have mean close to zero and variance close to 1. If the variance of the z-score is larger (smaller) than 1, the kriging standard error is underestimating (overestimating) the true interpolation error, on average.</p>
-</section>
-<section id="kriging-errors-what-do-they-mean" class="level3">
-<h3 class="anchored" data-anchor-id="kriging-errors-what-do-they-mean">Kriging errors – what do they mean?</h3>
-<p>Suppose legislation prescribes remediation in case zinc exceeds 500 ppm. Where does the zinc level exceed 500 ppm?</p>
-<ul>
-<li>we can compare the map of the predictions with 500. However:
-<ul>
-<li><span class="math inline">\(\hat{z}(s_0)\)</span> does not equal <span class="math inline">\(z(s_0)\)</span>:</li>
-<li><span class="math inline">\(\hat{z}(s_0)\)</span> is more smooth than <span class="math inline">\(z(s_0)\)</span></li>
-<li><span class="math inline">\(\hat{z}(s_0)\)</span> is closer to the mean than <span class="math inline">\(z(s_0)\)</span></li>
-<li>smoothing effect is stronger if spatial correlation is small or nugget effect is relatively large</li>
-</ul></li>
-<li>alternatively we can assume that the true (unknown) value follows a probability distribution, with mean <span class="math inline">\(\hat{z}(s_0)\)</span> and standard error <span class="math inline">\(\sigma(s_0)\)</span>.</li>
-<li>this latter approach acknowledges that <span class="math inline">\(\sigma(s_0)\)</span> is useful as a measure of interpolation accuracy</li>
-</ul>
-</section>
-<section id="conditional-probability" class="level3">
-<h3 class="anchored" data-anchor-id="conditional-probability">Conditional probability</h3>
-<ul>
-<li><p>we can use e.g.&nbsp;the normal distribution (on the log-scale?) to assess the conditional probability <span class="math inline">\(\Pr(Z(s_0) &gt; 500 | z(s_1),...,z(s_n))\)</span></p></li>
-<li><p>the additional assumption underlying this is <em>multivariate normality</em>: in addition to having stationary mean and covariance, the field <span class="math inline">\(Z\)</span> is now assumed to follow a stationary, multivariate normal distribution. This means that any single <span class="math inline">\(Z(s_i)\)</span> follows a normal distribution, and any pair <span class="math inline">\(Z(s_i), Z(s_j)\)</span> follows a bivariate normal distribution, with known variances and covariance.</p></li>
-</ul>
-<p>How?</p>
-<div class="cell" data-hash="si4_cache/html/unnamed-chunk-6_6e8c4054ab7a66d3a317f1e788e3cb16">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>v <span class="ot">=</span> <span class="fu">variogram</span>(<span class="fu">log</span>(zinc)<span class="sc">~</span><span class="dv">1</span>, meuse)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>v.fit <span class="ot">=</span> <span class="fu">fit.variogram</span>(v, <span class="fu">vgm</span>(<span class="dv">1</span>, <span class="st">"Sph"</span>, <span class="dv">900</span>, <span class="dv">1</span>))</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(meuse.grid, <span class="at">package =</span> <span class="st">"sp"</span>)</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stars)</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Loading required package: abind</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>meuse.grid <span class="ot">=</span> <span class="fu">st_as_stars</span>(meuse.grid)</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>out <span class="ot">=</span> <span class="fu">krige</span>(<span class="fu">log</span>(zinc)<span class="sc">~</span><span class="dv">1</span>, meuse, meuse.grid, v.fit)</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co"># [using ordinary kriging]</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>out<span class="sc">$</span>p500 <span class="ot">=</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">pnorm</span>(<span class="fu">log</span>(<span class="dv">500</span>), out<span class="sc">$</span>var1.pred, <span class="fu">sqrt</span>(out<span class="sc">$</span>var1.var))</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(out[<span class="st">"p500"</span>], <span class="at">col =</span> <span class="fu">sf.colors</span>(), <span class="at">breaks =</span> <span class="st">"equal"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<p><img src="si4_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-</section>
-<section id="indicator-kriging" class="level3">
-<h3 class="anchored" data-anchor-id="indicator-kriging">Indicator kriging</h3>
-<p>Another approach to estimating probabilities of exceedance is to consider the indicator function, which is 1 if a value exceeds the threshold and 0 otherwise:</p>
-<div class="cell" data-hash="si4_cache/html/unnamed-chunk-7_218d39edeb0d32c4fdebffc25c0983b1">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(meuse<span class="sc">$</span>zinc)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># [1] 470</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(meuse<span class="sc">$</span>zinc <span class="sc">&lt;</span> <span class="dv">500</span>)</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># [1] 0.632</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell" data-hash="si4_cache/html/unnamed-chunk-8_97641e9dc1bb90ceffcc769eda535b99">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>v <span class="ot">=</span> <span class="fu">variogram</span>(<span class="fu">I</span>(zinc <span class="sc">&gt;</span> <span class="dv">500</span>)<span class="sc">~</span><span class="dv">1</span>, meuse)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>v_I.fit <span class="ot">=</span> <span class="fu">fit.variogram</span>(v, <span class="fu">vgm</span>(.<span class="dv">2</span>, <span class="st">"Sph"</span>, <span class="dv">900</span>, .<span class="dv">02</span>))</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(v, v_I.fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<p><img src="si4_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
-</div>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>out<span class="sc">$</span>I500 <span class="ot">=</span> <span class="fu">krige</span>(<span class="fu">I</span>(zinc <span class="sc">&gt;</span> <span class="dv">500</span>)<span class="sc">~</span><span class="dv">1</span>, meuse, meuse.grid, v_I.fit)<span class="sc">$</span>var1.pred</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># [using ordinary kriging]</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(out<span class="sc">$</span>I500)</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">#        V1            V2            V3            V4     </span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :0.7   Min.   :0.6   Min.   :0.6   Min.   :0.5  </span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co">#  1st Qu.:0.7   1st Qu.:0.7   1st Qu.:0.7   1st Qu.:0.6  </span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co">#  Median :0.7   Median :0.7   Median :0.7   Median :0.7  </span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   :0.7   Mean   :0.7   Mean   :0.7   Mean   :0.7  </span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.:0.7   3rd Qu.:0.7   3rd Qu.:0.8   3rd Qu.:0.8  </span></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   :0.7   Max.   :0.7   Max.   :0.8   Max.   :0.8  </span></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's   :77    NA's   :75    NA's   :74    NA's   :72   </span></span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co">#        V5            V6            V7            V8     </span></span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :0.4   Min.   :0.4   Min.   :0.3   Min.   :0.2  </span></span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="co">#  1st Qu.:0.5   1st Qu.:0.5   1st Qu.:0.4   1st Qu.:0.3  </span></span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="co">#  Median :0.7   Median :0.7   Median :0.6   Median :0.5  </span></span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   :0.7   Mean   :0.6   Mean   :0.5   Mean   :0.5  </span></span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.:0.8   3rd Qu.:0.8   3rd Qu.:0.7   3rd Qu.:0.6  </span></span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   :0.8   Max.   :0.8   Max.   :0.8   Max.   :0.8  </span></span>
-<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's   :70    NA's   :69    NA's   :67    NA's   :67   </span></span>
-<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a><span class="co">#        V9           V10           V11           V12     </span></span>
-<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :0.2   Min.   :0.1   Min.   :0.1   Min.   :0.0  </span></span>
-<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a><span class="co">#  1st Qu.:0.2   1st Qu.:0.1   1st Qu.:0.1   1st Qu.:0.1  </span></span>
-<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a><span class="co">#  Median :0.4   Median :0.3   Median :0.2   Median :0.1  </span></span>
-<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   :0.4   Mean   :0.4   Mean   :0.3   Mean   :0.3  </span></span>
-<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.:0.6   3rd Qu.:0.5   3rd Qu.:0.5   3rd Qu.:0.5  </span></span>
-<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   :0.8   Max.   :0.8   Max.   :0.8   Max.   :0.8  </span></span>
-<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's   :65    NA's   :63    NA's   :63    NA's   :61   </span></span>
-<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a><span class="co">#       V13           V14           V15           V16     </span></span>
-<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :0.0   Min.   :0.0   Min.   :0.0   Min.   :0.0  </span></span>
-<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a><span class="co">#  1st Qu.:0.0   1st Qu.:0.0   1st Qu.:0.0   1st Qu.:0.0  </span></span>
-<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a><span class="co">#  Median :0.1   Median :0.1   Median :0.1   Median :0.1  </span></span>
-<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   :0.3   Mean   :0.2   Mean   :0.2   Mean   :0.2  </span></span>
-<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.:0.5   3rd Qu.:0.4   3rd Qu.:0.3   3rd Qu.:0.2  </span></span>
-<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   :0.8   Max.   :0.8   Max.   :0.7   Max.   :0.7  </span></span>
-<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's   :61    NA's   :59    NA's   :58    NA's   :58   </span></span>
-<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a><span class="co">#       V17           V18           V19           V20     </span></span>
-<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :0.0   Min.   :0.0   Min.   :0.0   Min.   :0.0  </span></span>
-<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a><span class="co">#  1st Qu.:0.0   1st Qu.:0.0   1st Qu.:0.0   1st Qu.:0.0  </span></span>
-<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a><span class="co">#  Median :0.1   Median :0.1   Median :0.1   Median :0.1  </span></span>
-<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   :0.2   Mean   :0.2   Mean   :0.2   Mean   :0.2  </span></span>
-<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.:0.3   3rd Qu.:0.3   3rd Qu.:0.3   3rd Qu.:0.3  </span></span>
-<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   :0.7   Max.   :0.8   Max.   :0.7   Max.   :0.7  </span></span>
-<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's   :58    NA's   :57    NA's   :58    NA's   :57   </span></span>
-<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a><span class="co">#       V21           V22           V23           V24     </span></span>
-<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :0.0   Min.   :0.0   Min.   :0.0   Min.   :0.0  </span></span>
-<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a><span class="co">#  1st Qu.:0.0   1st Qu.:0.0   1st Qu.:0.0   1st Qu.:0.0  </span></span>
-<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a><span class="co">#  Median :0.1   Median :0.1   Median :0.0   Median :0.0  </span></span>
-<span id="cb9-48"><a href="#cb9-48" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   :0.2   Mean   :0.2   Mean   :0.2   Mean   :0.1  </span></span>
-<span id="cb9-49"><a href="#cb9-49" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.:0.3   3rd Qu.:0.3   3rd Qu.:0.3   3rd Qu.:0.2  </span></span>
-<span id="cb9-50"><a href="#cb9-50" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   :0.7   Max.   :0.7   Max.   :0.7   Max.   :0.7  </span></span>
-<span id="cb9-51"><a href="#cb9-51" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's   :58    NA's   :57    NA's   :58    NA's   :58   </span></span>
-<span id="cb9-52"><a href="#cb9-52" aria-hidden="true" tabindex="-1"></a><span class="co">#       V25           V26           V27           V28     </span></span>
-<span id="cb9-53"><a href="#cb9-53" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :0.0   Min.   :0.0   Min.   :0.0   Min.   :0.0  </span></span>
-<span id="cb9-54"><a href="#cb9-54" aria-hidden="true" tabindex="-1"></a><span class="co">#  1st Qu.:0.0   1st Qu.:0.0   1st Qu.:0.0   1st Qu.:0.0  </span></span>
-<span id="cb9-55"><a href="#cb9-55" aria-hidden="true" tabindex="-1"></a><span class="co">#  Median :0.1   Median :0.1   Median :0.1   Median :0.1  </span></span>
-<span id="cb9-56"><a href="#cb9-56" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   :0.2   Mean   :0.2   Mean   :0.2   Mean   :0.2  </span></span>
-<span id="cb9-57"><a href="#cb9-57" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.:0.3   3rd Qu.:0.2   3rd Qu.:0.3   3rd Qu.:0.3  </span></span>
-<span id="cb9-58"><a href="#cb9-58" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   :0.8   Max.   :0.8   Max.   :0.9   Max.   :0.9  </span></span>
-<span id="cb9-59"><a href="#cb9-59" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's   :58    NA's   :58    NA's   :58    NA's   :58   </span></span>
-<span id="cb9-60"><a href="#cb9-60" aria-hidden="true" tabindex="-1"></a><span class="co">#       V29           V30           V31           V32     </span></span>
-<span id="cb9-61"><a href="#cb9-61" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :0.0   Min.   :0.0   Min.   :0.0   Min.   :0.0  </span></span>
-<span id="cb9-62"><a href="#cb9-62" aria-hidden="true" tabindex="-1"></a><span class="co">#  1st Qu.:0.0   1st Qu.:0.0   1st Qu.:0.0   1st Qu.:0.0  </span></span>
-<span id="cb9-63"><a href="#cb9-63" aria-hidden="true" tabindex="-1"></a><span class="co">#  Median :0.1   Median :0.1   Median :0.1   Median :0.2  </span></span>
-<span id="cb9-64"><a href="#cb9-64" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   :0.3   Mean   :0.3   Mean   :0.3   Mean   :0.3  </span></span>
-<span id="cb9-65"><a href="#cb9-65" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.:0.4   3rd Qu.:0.5   3rd Qu.:0.6   3rd Qu.:0.7  </span></span>
-<span id="cb9-66"><a href="#cb9-66" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   :0.9   Max.   :0.9   Max.   :1.0   Max.   :1.0  </span></span>
-<span id="cb9-67"><a href="#cb9-67" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's   :58    NA's   :57    NA's   :57    NA's   :56   </span></span>
-<span id="cb9-68"><a href="#cb9-68" aria-hidden="true" tabindex="-1"></a><span class="co">#       V33           V34           V35           V36     </span></span>
-<span id="cb9-69"><a href="#cb9-69" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :0.0   Min.   :0.0   Min.   :0.0   Min.   :0.0  </span></span>
-<span id="cb9-70"><a href="#cb9-70" aria-hidden="true" tabindex="-1"></a><span class="co">#  1st Qu.:0.0   1st Qu.:0.1   1st Qu.:0.1   1st Qu.:0.1  </span></span>
-<span id="cb9-71"><a href="#cb9-71" aria-hidden="true" tabindex="-1"></a><span class="co">#  Median :0.2   Median :0.2   Median :0.3   Median :0.3  </span></span>
-<span id="cb9-72"><a href="#cb9-72" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   :0.4   Mean   :0.4   Mean   :0.4   Mean   :0.4  </span></span>
-<span id="cb9-73"><a href="#cb9-73" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.:0.7   3rd Qu.:0.6   3rd Qu.:0.6   3rd Qu.:0.7  </span></span>
-<span id="cb9-74"><a href="#cb9-74" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   :1.0   Max.   :1.0   Max.   :1.0   Max.   :1.0  </span></span>
-<span id="cb9-75"><a href="#cb9-75" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's   :56    NA's   :55    NA's   :55    NA's   :52   </span></span>
-<span id="cb9-76"><a href="#cb9-76" aria-hidden="true" tabindex="-1"></a><span class="co">#       V37           V38           V39           V40     </span></span>
-<span id="cb9-77"><a href="#cb9-77" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :0.0   Min.   :0.1   Min.   :0.1   Min.   :0.0  </span></span>
-<span id="cb9-78"><a href="#cb9-78" aria-hidden="true" tabindex="-1"></a><span class="co">#  1st Qu.:0.1   1st Qu.:0.1   1st Qu.:0.1   1st Qu.:0.1  </span></span>
-<span id="cb9-79"><a href="#cb9-79" aria-hidden="true" tabindex="-1"></a><span class="co">#  Median :0.3   Median :0.3   Median :0.5   Median :0.5  </span></span>
-<span id="cb9-80"><a href="#cb9-80" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   :0.4   Mean   :0.5   Mean   :0.5   Mean   :0.4  </span></span>
-<span id="cb9-81"><a href="#cb9-81" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.:0.9   3rd Qu.:0.9   3rd Qu.:0.8   3rd Qu.:0.8  </span></span>
-<span id="cb9-82"><a href="#cb9-82" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   :1.0   Max.   :0.9   Max.   :0.9   Max.   :0.9  </span></span>
-<span id="cb9-83"><a href="#cb9-83" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's   :50    NA's   :46    NA's   :43    NA's   :42   </span></span>
-<span id="cb9-84"><a href="#cb9-84" aria-hidden="true" tabindex="-1"></a><span class="co">#       V41           V42           V43           V44     </span></span>
-<span id="cb9-85"><a href="#cb9-85" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :0.0   Min.   :0.0   Min.   :0.0   Min.   :0.0  </span></span>
-<span id="cb9-86"><a href="#cb9-86" aria-hidden="true" tabindex="-1"></a><span class="co">#  1st Qu.:0.1   1st Qu.:0.1   1st Qu.:0.1   1st Qu.:0.1  </span></span>
-<span id="cb9-87"><a href="#cb9-87" aria-hidden="true" tabindex="-1"></a><span class="co">#  Median :0.5   Median :0.4   Median :0.3   Median :0.2  </span></span>
-<span id="cb9-88"><a href="#cb9-88" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   :0.4   Mean   :0.4   Mean   :0.3   Mean   :0.3  </span></span>
-<span id="cb9-89"><a href="#cb9-89" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.:0.7   3rd Qu.:0.6   3rd Qu.:0.5   3rd Qu.:0.4  </span></span>
-<span id="cb9-90"><a href="#cb9-90" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   :0.8   Max.   :0.8   Max.   :0.8   Max.   :0.8  </span></span>
-<span id="cb9-91"><a href="#cb9-91" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's   :42    NA's   :41    NA's   :42    NA's   :41   </span></span>
-<span id="cb9-92"><a href="#cb9-92" aria-hidden="true" tabindex="-1"></a><span class="co">#       V45           V46           V47           V48     </span></span>
-<span id="cb9-93"><a href="#cb9-93" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :0.0   Min.   :0.0   Min.   :0.0   Min.   :0.0  </span></span>
-<span id="cb9-94"><a href="#cb9-94" aria-hidden="true" tabindex="-1"></a><span class="co">#  1st Qu.:0.1   1st Qu.:0.0   1st Qu.:0.0   1st Qu.:0.0  </span></span>
-<span id="cb9-95"><a href="#cb9-95" aria-hidden="true" tabindex="-1"></a><span class="co">#  Median :0.1   Median :0.1   Median :0.1   Median :0.1  </span></span>
-<span id="cb9-96"><a href="#cb9-96" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   :0.2   Mean   :0.2   Mean   :0.2   Mean   :0.1  </span></span>
-<span id="cb9-97"><a href="#cb9-97" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.:0.3   3rd Qu.:0.2   3rd Qu.:0.2   3rd Qu.:0.2  </span></span>
-<span id="cb9-98"><a href="#cb9-98" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   :0.7   Max.   :0.7   Max.   :0.7   Max.   :0.7  </span></span>
-<span id="cb9-99"><a href="#cb9-99" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's   :42    NA's   :42    NA's   :42    NA's   :42   </span></span>
-<span id="cb9-100"><a href="#cb9-100" aria-hidden="true" tabindex="-1"></a><span class="co">#       V49           V50           V51           V52     </span></span>
-<span id="cb9-101"><a href="#cb9-101" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :0.0   Min.   :0.0   Min.   :0.0   Min.   :0.0  </span></span>
-<span id="cb9-102"><a href="#cb9-102" aria-hidden="true" tabindex="-1"></a><span class="co">#  1st Qu.:0.0   1st Qu.:0.0   1st Qu.:0.0   1st Qu.:0.0  </span></span>
-<span id="cb9-103"><a href="#cb9-103" aria-hidden="true" tabindex="-1"></a><span class="co">#  Median :0.1   Median :0.0   Median :0.0   Median :0.0  </span></span>
-<span id="cb9-104"><a href="#cb9-104" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   :0.1   Mean   :0.1   Mean   :0.1   Mean   :0.1  </span></span>
-<span id="cb9-105"><a href="#cb9-105" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.:0.1   3rd Qu.:0.1   3rd Qu.:0.1   3rd Qu.:0.1  </span></span>
-<span id="cb9-106"><a href="#cb9-106" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   :0.7   Max.   :0.7   Max.   :0.7   Max.   :0.7  </span></span>
-<span id="cb9-107"><a href="#cb9-107" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's   :43    NA's   :44    NA's   :43    NA's   :44   </span></span>
-<span id="cb9-108"><a href="#cb9-108" aria-hidden="true" tabindex="-1"></a><span class="co">#       V53           V54            V55            V56      </span></span>
-<span id="cb9-109"><a href="#cb9-109" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :0.0   Min.   :-0.1   Min.   :-0.1   Min.   :-0.1  </span></span>
-<span id="cb9-110"><a href="#cb9-110" aria-hidden="true" tabindex="-1"></a><span class="co">#  1st Qu.:0.0   1st Qu.: 0.0   1st Qu.: 0.0   1st Qu.: 0.0  </span></span>
-<span id="cb9-111"><a href="#cb9-111" aria-hidden="true" tabindex="-1"></a><span class="co">#  Median :0.0   Median : 0.0   Median : 0.1   Median : 0.1  </span></span>
-<span id="cb9-112"><a href="#cb9-112" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   :0.1   Mean   : 0.1   Mean   : 0.1   Mean   : 0.1  </span></span>
-<span id="cb9-113"><a href="#cb9-113" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.:0.1   3rd Qu.: 0.1   3rd Qu.: 0.2   3rd Qu.: 0.2  </span></span>
-<span id="cb9-114"><a href="#cb9-114" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   :0.7   Max.   : 0.6   Max.   : 0.7   Max.   : 0.6  </span></span>
-<span id="cb9-115"><a href="#cb9-115" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's   :44    NA's   :45     NA's   :44     NA's   :45    </span></span>
-<span id="cb9-116"><a href="#cb9-116" aria-hidden="true" tabindex="-1"></a><span class="co">#       V57            V58            V59            V60      </span></span>
-<span id="cb9-117"><a href="#cb9-117" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :-0.1   Min.   :-0.1   Min.   :-0.1   Min.   :-0.1  </span></span>
-<span id="cb9-118"><a href="#cb9-118" aria-hidden="true" tabindex="-1"></a><span class="co">#  1st Qu.: 0.0   1st Qu.: 0.0   1st Qu.: 0.0   1st Qu.: 0.0  </span></span>
-<span id="cb9-119"><a href="#cb9-119" aria-hidden="true" tabindex="-1"></a><span class="co">#  Median : 0.1   Median : 0.1   Median : 0.1   Median : 0.1  </span></span>
-<span id="cb9-120"><a href="#cb9-120" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   : 0.1   Mean   : 0.1   Mean   : 0.1   Mean   : 0.1  </span></span>
-<span id="cb9-121"><a href="#cb9-121" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.: 0.2   3rd Qu.: 0.2   3rd Qu.: 0.2   3rd Qu.: 0.2  </span></span>
-<span id="cb9-122"><a href="#cb9-122" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   : 0.7   Max.   : 0.6   Max.   : 0.7   Max.   : 0.8  </span></span>
-<span id="cb9-123"><a href="#cb9-123" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's   :44     NA's   :45     NA's   :44     NA's   :44    </span></span>
-<span id="cb9-124"><a href="#cb9-124" aria-hidden="true" tabindex="-1"></a><span class="co">#       V61           V62           V63           V64     </span></span>
-<span id="cb9-125"><a href="#cb9-125" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :0.0   Min.   :0.0   Min.   :0.0   Min.   :0.0  </span></span>
-<span id="cb9-126"><a href="#cb9-126" aria-hidden="true" tabindex="-1"></a><span class="co">#  1st Qu.:0.0   1st Qu.:0.0   1st Qu.:0.0   1st Qu.:0.0  </span></span>
-<span id="cb9-127"><a href="#cb9-127" aria-hidden="true" tabindex="-1"></a><span class="co">#  Median :0.1   Median :0.1   Median :0.1   Median :0.1  </span></span>
-<span id="cb9-128"><a href="#cb9-128" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   :0.2   Mean   :0.2   Mean   :0.2   Mean   :0.3  </span></span>
-<span id="cb9-129"><a href="#cb9-129" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.:0.2   3rd Qu.:0.2   3rd Qu.:0.3   3rd Qu.:0.4  </span></span>
-<span id="cb9-130"><a href="#cb9-130" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   :0.9   Max.   :0.9   Max.   :0.9   Max.   :1.0  </span></span>
-<span id="cb9-131"><a href="#cb9-131" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's   :43    NA's   :43    NA's   :42    NA's   :42   </span></span>
-<span id="cb9-132"><a href="#cb9-132" aria-hidden="true" tabindex="-1"></a><span class="co">#       V65           V66           V67           V68     </span></span>
-<span id="cb9-133"><a href="#cb9-133" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :0.0   Min.   :0.0   Min.   :0.0   Min.   :0.0  </span></span>
-<span id="cb9-134"><a href="#cb9-134" aria-hidden="true" tabindex="-1"></a><span class="co">#  1st Qu.:0.0   1st Qu.:0.0   1st Qu.:0.0   1st Qu.:0.0  </span></span>
-<span id="cb9-135"><a href="#cb9-135" aria-hidden="true" tabindex="-1"></a><span class="co">#  Median :0.1   Median :0.1   Median :0.1   Median :0.1  </span></span>
-<span id="cb9-136"><a href="#cb9-136" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   :0.3   Mean   :0.3   Mean   :0.3   Mean   :0.3  </span></span>
-<span id="cb9-137"><a href="#cb9-137" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.:0.5   3rd Qu.:0.6   3rd Qu.:0.6   3rd Qu.:0.6  </span></span>
-<span id="cb9-138"><a href="#cb9-138" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   :1.0   Max.   :1.0   Max.   :1.0   Max.   :1.0  </span></span>
-<span id="cb9-139"><a href="#cb9-139" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's   :42    NA's   :42    NA's   :42    NA's   :43   </span></span>
-<span id="cb9-140"><a href="#cb9-140" aria-hidden="true" tabindex="-1"></a><span class="co">#       V69           V70           V71           V72     </span></span>
-<span id="cb9-141"><a href="#cb9-141" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :0.0   Min.   :0.0   Min.   :0.1   Min.   :0.1  </span></span>
-<span id="cb9-142"><a href="#cb9-142" aria-hidden="true" tabindex="-1"></a><span class="co">#  1st Qu.:0.1   1st Qu.:0.1   1st Qu.:0.1   1st Qu.:0.1  </span></span>
-<span id="cb9-143"><a href="#cb9-143" aria-hidden="true" tabindex="-1"></a><span class="co">#  Median :0.1   Median :0.1   Median :0.2   Median :0.2  </span></span>
-<span id="cb9-144"><a href="#cb9-144" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   :0.3   Mean   :0.3   Mean   :0.4   Mean   :0.4  </span></span>
-<span id="cb9-145"><a href="#cb9-145" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.:0.5   3rd Qu.:0.6   3rd Qu.:0.6   3rd Qu.:0.6  </span></span>
-<span id="cb9-146"><a href="#cb9-146" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   :1.0   Max.   :1.0   Max.   :1.0   Max.   :1.0  </span></span>
-<span id="cb9-147"><a href="#cb9-147" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's   :42    NA's   :41    NA's   :39    NA's   :38   </span></span>
-<span id="cb9-148"><a href="#cb9-148" aria-hidden="true" tabindex="-1"></a><span class="co">#       V73           V74           V75           V76     </span></span>
-<span id="cb9-149"><a href="#cb9-149" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :0.1   Min.   :0.2   Min.   :0.1   Min.   :0.1  </span></span>
-<span id="cb9-150"><a href="#cb9-150" aria-hidden="true" tabindex="-1"></a><span class="co">#  1st Qu.:0.2   1st Qu.:0.2   1st Qu.:0.2   1st Qu.:0.2  </span></span>
-<span id="cb9-151"><a href="#cb9-151" aria-hidden="true" tabindex="-1"></a><span class="co">#  Median :0.2   Median :0.2   Median :0.3   Median :0.3  </span></span>
-<span id="cb9-152"><a href="#cb9-152" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   :0.4   Mean   :0.4   Mean   :0.4   Mean   :0.4  </span></span>
-<span id="cb9-153"><a href="#cb9-153" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.:0.6   3rd Qu.:0.6   3rd Qu.:0.6   3rd Qu.:0.6  </span></span>
-<span id="cb9-154"><a href="#cb9-154" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   :1.0   Max.   :1.0   Max.   :1.0   Max.   :0.9  </span></span>
-<span id="cb9-155"><a href="#cb9-155" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's   :37    NA's   :38    NA's   :37    NA's   :36   </span></span>
-<span id="cb9-156"><a href="#cb9-156" aria-hidden="true" tabindex="-1"></a><span class="co">#       V77           V78           V79           V80     </span></span>
-<span id="cb9-157"><a href="#cb9-157" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :0.1   Min.   :0.1   Min.   :0.1   Min.   :0.1  </span></span>
-<span id="cb9-158"><a href="#cb9-158" aria-hidden="true" tabindex="-1"></a><span class="co">#  1st Qu.:0.2   1st Qu.:0.2   1st Qu.:0.2   1st Qu.:0.2  </span></span>
-<span id="cb9-159"><a href="#cb9-159" aria-hidden="true" tabindex="-1"></a><span class="co">#  Median :0.3   Median :0.4   Median :0.4   Median :0.4  </span></span>
-<span id="cb9-160"><a href="#cb9-160" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   :0.4   Mean   :0.4   Mean   :0.4   Mean   :0.4  </span></span>
-<span id="cb9-161"><a href="#cb9-161" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.:0.6   3rd Qu.:0.5   3rd Qu.:0.5   3rd Qu.:0.5  </span></span>
-<span id="cb9-162"><a href="#cb9-162" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   :0.9   Max.   :0.9   Max.   :0.8   Max.   :0.8  </span></span>
-<span id="cb9-163"><a href="#cb9-163" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's   :34    NA's   :34    NA's   :33    NA's   :32   </span></span>
-<span id="cb9-164"><a href="#cb9-164" aria-hidden="true" tabindex="-1"></a><span class="co">#       V81            V82            V83             V84       </span></span>
-<span id="cb9-165"><a href="#cb9-165" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :0.02   Min.   :0.00   Min.   :-0.03   Min.   :-0.05  </span></span>
-<span id="cb9-166"><a href="#cb9-166" aria-hidden="true" tabindex="-1"></a><span class="co">#  1st Qu.:0.15   1st Qu.:0.14   1st Qu.: 0.11   1st Qu.: 0.08  </span></span>
-<span id="cb9-167"><a href="#cb9-167" aria-hidden="true" tabindex="-1"></a><span class="co">#  Median :0.42   Median :0.35   Median : 0.34   Median : 0.35  </span></span>
-<span id="cb9-168"><a href="#cb9-168" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   :0.38   Mean   :0.37   Mean   : 0.36   Mean   : 0.36  </span></span>
-<span id="cb9-169"><a href="#cb9-169" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.:0.56   3rd Qu.:0.60   3rd Qu.: 0.62   3rd Qu.: 0.65  </span></span>
-<span id="cb9-170"><a href="#cb9-170" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   :0.80   Max.   :0.78   Max.   : 0.76   Max.   : 0.74  </span></span>
-<span id="cb9-171"><a href="#cb9-171" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's   :30     NA's   :29     NA's   :28      NA's   :26     </span></span>
-<span id="cb9-172"><a href="#cb9-172" aria-hidden="true" tabindex="-1"></a><span class="co">#       V85             V86             V87             V88       </span></span>
-<span id="cb9-173"><a href="#cb9-173" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :-0.07   Min.   :-0.08   Min.   :-0.09   Min.   :-0.09  </span></span>
-<span id="cb9-174"><a href="#cb9-174" aria-hidden="true" tabindex="-1"></a><span class="co">#  1st Qu.: 0.07   1st Qu.: 0.04   1st Qu.: 0.04   1st Qu.: 0.03  </span></span>
-<span id="cb9-175"><a href="#cb9-175" aria-hidden="true" tabindex="-1"></a><span class="co">#  Median : 0.34   Median : 0.37   Median : 0.37   Median : 0.31  </span></span>
-<span id="cb9-176"><a href="#cb9-176" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   : 0.35   Mean   : 0.34   Mean   : 0.33   Mean   : 0.29  </span></span>
-<span id="cb9-177"><a href="#cb9-177" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.: 0.64   3rd Qu.: 0.61   3rd Qu.: 0.60   3rd Qu.: 0.53  </span></span>
-<span id="cb9-178"><a href="#cb9-178" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   : 0.77   Max.   : 0.79   Max.   : 0.77   Max.   : 0.72  </span></span>
-<span id="cb9-179"><a href="#cb9-179" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's   :25      NA's   :24      NA's   :23      NA's   :27     </span></span>
-<span id="cb9-180"><a href="#cb9-180" aria-hidden="true" tabindex="-1"></a><span class="co">#       V89            V90            V91            V92     </span></span>
-<span id="cb9-181"><a href="#cb9-181" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :-0.1   Min.   :-0.1   Min.   :-0.1   Min.   :0.0  </span></span>
-<span id="cb9-182"><a href="#cb9-182" aria-hidden="true" tabindex="-1"></a><span class="co">#  1st Qu.: 0.0   1st Qu.: 0.0   1st Qu.: 0.0   1st Qu.:0.0  </span></span>
-<span id="cb9-183"><a href="#cb9-183" aria-hidden="true" tabindex="-1"></a><span class="co">#  Median : 0.3   Median : 0.2   Median : 0.2   Median :0.2  </span></span>
-<span id="cb9-184"><a href="#cb9-184" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   : 0.2   Mean   : 0.2   Mean   : 0.2   Mean   :0.2  </span></span>
-<span id="cb9-185"><a href="#cb9-185" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.: 0.4   3rd Qu.: 0.4   3rd Qu.: 0.4   3rd Qu.:0.4  </span></span>
-<span id="cb9-186"><a href="#cb9-186" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   : 0.6   Max.   : 0.6   Max.   : 0.6   Max.   :0.6  </span></span>
-<span id="cb9-187"><a href="#cb9-187" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's   :33     NA's   :35     NA's   :38     NA's   :41   </span></span>
-<span id="cb9-188"><a href="#cb9-188" aria-hidden="true" tabindex="-1"></a><span class="co">#       V93           V94           V95           V96     </span></span>
-<span id="cb9-189"><a href="#cb9-189" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :0.0   Min.   :0.0   Min.   :0.0   Min.   :0.1  </span></span>
-<span id="cb9-190"><a href="#cb9-190" aria-hidden="true" tabindex="-1"></a><span class="co">#  1st Qu.:0.0   1st Qu.:0.1   1st Qu.:0.1   1st Qu.:0.1  </span></span>
-<span id="cb9-191"><a href="#cb9-191" aria-hidden="true" tabindex="-1"></a><span class="co">#  Median :0.2   Median :0.2   Median :0.2   Median :0.2  </span></span>
-<span id="cb9-192"><a href="#cb9-192" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   :0.2   Mean   :0.2   Mean   :0.3   Mean   :0.3  </span></span>
-<span id="cb9-193"><a href="#cb9-193" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.:0.4   3rd Qu.:0.4   3rd Qu.:0.5   3rd Qu.:0.5  </span></span>
-<span id="cb9-194"><a href="#cb9-194" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   :0.6   Max.   :0.6   Max.   :0.6   Max.   :0.6  </span></span>
-<span id="cb9-195"><a href="#cb9-195" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's   :44    NA's   :45    NA's   :46    NA's   :47   </span></span>
-<span id="cb9-196"><a href="#cb9-196" aria-hidden="true" tabindex="-1"></a><span class="co">#       V97           V98           V99           V100    </span></span>
-<span id="cb9-197"><a href="#cb9-197" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :0.1   Min.   :0.1   Min.   :0.2   Min.   :0.2  </span></span>
-<span id="cb9-198"><a href="#cb9-198" aria-hidden="true" tabindex="-1"></a><span class="co">#  1st Qu.:0.2   1st Qu.:0.2   1st Qu.:0.2   1st Qu.:0.3  </span></span>
-<span id="cb9-199"><a href="#cb9-199" aria-hidden="true" tabindex="-1"></a><span class="co">#  Median :0.3   Median :0.4   Median :0.5   Median :0.6  </span></span>
-<span id="cb9-200"><a href="#cb9-200" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   :0.4   Mean   :0.4   Mean   :0.5   Mean   :0.5  </span></span>
-<span id="cb9-201"><a href="#cb9-201" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.:0.6   3rd Qu.:0.7   3rd Qu.:0.7   3rd Qu.:0.7  </span></span>
-<span id="cb9-202"><a href="#cb9-202" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   :0.6   Max.   :0.7   Max.   :0.8   Max.   :0.8  </span></span>
-<span id="cb9-203"><a href="#cb9-203" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's   :48    NA's   :49    NA's   :51    NA's   :53   </span></span>
-<span id="cb9-204"><a href="#cb9-204" aria-hidden="true" tabindex="-1"></a><span class="co">#       V101          V102          V103          V104    </span></span>
-<span id="cb9-205"><a href="#cb9-205" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :0.2   Min.   :0.3   Min.   :0.5   Min.   :0.7  </span></span>
-<span id="cb9-206"><a href="#cb9-206" aria-hidden="true" tabindex="-1"></a><span class="co">#  1st Qu.:0.4   1st Qu.:0.6   1st Qu.:0.7   1st Qu.:0.7  </span></span>
-<span id="cb9-207"><a href="#cb9-207" aria-hidden="true" tabindex="-1"></a><span class="co">#  Median :0.7   Median :0.7   Median :0.8   Median :0.8  </span></span>
-<span id="cb9-208"><a href="#cb9-208" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   :0.6   Mean   :0.7   Mean   :0.7   Mean   :0.8  </span></span>
-<span id="cb9-209"><a href="#cb9-209" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.:0.8   3rd Qu.:0.8   3rd Qu.:0.8   3rd Qu.:0.8  </span></span>
-<span id="cb9-210"><a href="#cb9-210" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   :0.8   Max.   :0.8   Max.   :0.8   Max.   :0.8  </span></span>
-<span id="cb9-211"><a href="#cb9-211" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's   :55    NA's   :59    NA's   :62    NA's   :69</span></span>
-<span id="cb9-212"><a href="#cb9-212" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">merge</span>(out[<span class="fu">c</span>(<span class="st">"p500"</span>, <span class="st">"I500"</span>)]), <span class="at">col =</span> <span class="fu">bpy.colors</span>(), <span class="at">breaks =</span> <span class="st">"equal"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<p><img src="si4_files/figure-html/unnamed-chunk-8-2.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-<p>This second approach:</p>
-<ul>
-<li>ignores the kriging variance</li>
-<li>generates probabilities outside the interval <span class="math inline">\([0, 1]\)</span> (to be corrected?)</li>
-<li>ignores information whether observations are close to the threshold, or far away from it (they are reduced to 1/0 variable before interpolating)</li>
-<li>does not assume multivariate normality</li>
-<li>does not distinguish between <em>estimated</em> probabilities and (true) probabilities</li>
-<li>lends itself to the interpolation of <em>categorical</em> (nominal, ordinal) variables</li>
-<li>cokriging is sometimes used for interpolating several indicator variables (multiple categories, or multiple thresholds)</li>
-</ul>
-</section>
-<section id="conditional-simulation" class="level3">
-<h3 class="anchored" data-anchor-id="conditional-simulation">Conditional simulation</h3>
-<div class="cell" data-hash="si4_cache/html/unnamed-chunk-9_1482aeadcb24391d542999b95e303c1f">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>v <span class="ot">=</span> <span class="fu">variogram</span>(<span class="fu">log</span>(zinc)<span class="sc">~</span><span class="dv">1</span>, meuse)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>v.fit <span class="ot">=</span> <span class="fu">fit.variogram</span>(v, <span class="fu">vgm</span>(<span class="dv">1</span>, <span class="st">"Sph"</span>, <span class="dv">900</span>, <span class="dv">1</span>))</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>out <span class="ot">=</span> <span class="fu">krige</span>(<span class="fu">log</span>(zinc)<span class="sc">~</span><span class="dv">1</span>, meuse, meuse.grid, v.fit, <span class="at">nmax =</span> <span class="dv">20</span>, <span class="at">nsim =</span> <span class="dv">9</span>)</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># drawing 9 GLS realisations of beta...</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co"># [using conditional Gaussian simulation]</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>out <span class="ot">=</span> <span class="fu">split</span>(out)</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>out<span class="sc">$</span>kriging <span class="ot">=</span> <span class="fu">krige</span>(<span class="fu">log</span>(zinc)<span class="sc">~</span><span class="dv">1</span>, meuse, meuse.grid, v.fit)<span class="sc">$</span>var1.pred</span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co"># [using ordinary kriging]</span></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">merge</span>(out), <span class="at">col =</span> <span class="fu">sf.colors</span>(), <span class="at">breaks =</span> <span class="st">"equal"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<p><img src="si4_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-<div class="cell" data-hash="si4_cache/html/unnamed-chunk-10_aa120c23ce3dc4108c49dffc8c582466">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>sf <span class="ot">=</span> <span class="fu">st_as_sf</span>(out, <span class="at">as_points =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>v_kr <span class="ot">=</span> <span class="fu">variogram</span>(kriging<span class="sc">~</span><span class="dv">1</span>, sf)</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>v_cs <span class="ot">=</span> <span class="fu">variogram</span>(sim1<span class="sc">~</span><span class="dv">1</span>, sf)</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(v_kr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<p><img src="si4_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
-</div>
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(v_cs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<p><img src="si4_files/figure-html/unnamed-chunk-10-2.png" class="img-fluid" width="672"></p>
-</div>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(v)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<p><img src="si4_files/figure-html/unnamed-chunk-10-3.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-<ul>
-<li>conditional simulation creates multiple <em>realisations</em> of the field <span class="math inline">\(Z(s)\)</span> that
-<ul>
-<li>follow the data points (pattern, reproduce observations like kriging)</li>
-<li>have a variability equal to Z(s)</li>
-<li>have a spatial correlation (variogram) equal to that of Z(s)</li>
-</ul></li>
-<li>as opposed to kriging, the resulting images are not smooth</li>
-<li>this is useful e.g.&nbsp;if images are needed as input to subsequent processing / modelling, where the statistical properties of Z(s) need to be retained (e.g.&nbsp;simulating rainfall fields as input to rainfall-runoff models, to predict the likelihood of flooding / extreme water levels)</li>
+<li>under this model the residual does not carry information, as it is white noise</li>
+<li>in spatial prediction, UK can not be worse than linear regression, as linear regression is a limiting case of a more general model.</li>
 </ul>
 
 
@@ -1115,8 +624,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./de1.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Differential equations</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./si5.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Local predictors, block kriging</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

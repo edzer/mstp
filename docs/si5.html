@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Modelling Spatiotemporal Processes - References</title>
+<title>Modelling Spatiotemporal Processes - 9&nbsp; Local predictors, block kriging</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,25 +20,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1.6em;
   vertical-align: middle;
 }
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-}
-.hanging div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}
 </style>
 
 
@@ -49,7 +30,8 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./de1.html" rel="prev">
+<link href="./si6.html" rel="next">
+<link href="./si4.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -79,6 +61,7 @@ div.csl-indent {
   }
 }</script>
 
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 </head>
 
@@ -88,7 +71,7 @@ div.csl-indent {
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title">References</h1>
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Local predictors, block kriging</span></h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -189,7 +172,7 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./si5.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Local predictors, block kriging</span></a>
+  <a href="./si5.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Local predictors, block kriging</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -224,7 +207,7 @@ div.csl-indent {
       <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./references.html" class="sidebar-item-text sidebar-link active">References</a>
+  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
   </div>
 </li>
       </ul>
@@ -234,14 +217,24 @@ div.csl-indent {
 </nav>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#global-vs.-local-predictors" id="toc-global-vs.-local-predictors" class="nav-link active" data-scroll-target="#global-vs.-local-predictors">Global vs.&nbsp;local predictors</a></li>
+  <li><a href="#statistical-arguments-for-local-prediction" id="toc-statistical-arguments-for-local-prediction" class="nav-link" data-scroll-target="#statistical-arguments-for-local-prediction">Statistical arguments for local prediction</a></li>
+  <li><a href="#practical-arguments-for-local-prediction" id="toc-practical-arguments-for-local-prediction" class="nav-link" data-scroll-target="#practical-arguments-for-local-prediction">Practical arguments for local prediction</a></li>
+  <li><a href="#predicting-block-means" id="toc-predicting-block-means" class="nav-link" data-scroll-target="#predicting-block-means">Predicting block means</a></li>
+  <li><a href="#reason-why-one-wants-block-means" id="toc-reason-why-one-wants-block-means" class="nav-link" data-scroll-target="#reason-why-one-wants-block-means">Reason why one wants block means</a></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/edzer/mstp/edit/master/si5.qmd" class="toc-action">Edit this page</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">References</h1>
+<h1 class="title d-none d-lg-block"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Local predictors, block kriging</span></h1>
 </div>
 
 
@@ -256,33 +249,55 @@ div.csl-indent {
 
 </header>
 
-<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
-<div id="ref-camara2014fields" class="csl-entry" role="doc-biblioentry">
-Camara, Gilberto, Max J Egenhofer, Karine Ferreira, Pedro Andrade,
-Gilberto Queiroz, Alber Sanchez, Jim Jones, and Lubia Vinhas. 2014.
-<span>“Fields as a Generic Data Type for Big Spatial Data.”</span> In
-<em>International Conference on Geographic Information Science</em>,
-159–72. Springer. <a href="https://link.springer.com/content/pdf/10.1007/978-3-319-11593-1_11.pdf">https://link.springer.com/content/pdf/10.1007/978-3-319-11593-1_11.pdf</a>.
-</div>
-<div id="ref-chatfield" class="csl-entry" role="doc-biblioentry">
-Chatfield, Chris. 2003. <em>The Analysis of Time Series: An
-Introduction</em>. Chapman; hall/CRC.
-</div>
-<div id="ref-eykhoff" class="csl-entry" role="doc-biblioentry">
-Eykhoff, Pieter. 1974. <em>System Identification</em>. Vol. 14. Wiley
-London.
-</div>
-<div id="ref-sdsr" class="csl-entry" role="doc-biblioentry">
-Pebesma, Edzer, and Roger Bivand. 2022. <em>Spatial Data Science, with
-Applications in <span>R</span></em>. online. <a href="https://r-spatial.org/book/">https://r-spatial.org/book/</a>.
-</div>
-<div id="ref-tobler" class="csl-entry" role="doc-biblioentry">
-Tobler, W. R. 1970. <span>“A Computer Movie Simulating Urban Growth in
-the Detroit Region.”</span> <em>Economic Geography</em> 46: 234–40. <a href="https://doi.org/10.2307/143141">https://doi.org/10.2307/143141</a>.
-</div>
-</div>
+<section id="global-vs.-local-predictors" class="level3">
+<h3 class="anchored" data-anchor-id="global-vs.-local-predictors">Global vs.&nbsp;local predictors</h3>
+<p>In many cases, instead of using all data, the number of observations used for prediction are limited to a selection of nearest observations, based on * number of observations or * distance to prediction location <span class="math inline">\(s_0\)</span> * possibly, in addition, directions</p>
+<p>The reason for this is usually either * statistical, allowing for a more flexible mean/trend structure * practical, if <span class="math inline">\(n\)</span> gets large</p>
+</section>
+<section id="statistical-arguments-for-local-prediction" class="level3">
+<h3 class="anchored" data-anchor-id="statistical-arguments-for-local-prediction">Statistical arguments for local prediction</h3>
+<ul>
+<li>estimating <span class="math inline">\(\beta\)</span> locally instead of globally means that
+<ul>
+<li><span class="math inline">\(\beta\)</span> will adjust to local situations (less bias)</li>
+<li>it will be harder to estimate <span class="math inline">\(\beta\)</span> from less information, so (slightly?) larger prediction errors will result (larger variance)</li>
+<li><span class="math inline">\(X\)</span> needs to be non-singular in every neighbourhood</li>
+</ul></li>
+<li>some authors claim that local trends are so adaptive, that one can ignore spatial correlation of the residual</li>
+<li>Using local linear regression with <em>weights</em> that decay with distance is called <em>geographically weighted regression</em>, GWR</li>
+</ul>
+</section>
+<section id="practical-arguments-for-local-prediction" class="level3">
+<h3 class="anchored" data-anchor-id="practical-arguments-for-local-prediction">Practical arguments for local prediction</h3>
+<ul>
+<li>The number of observations, <span class="math inline">\(n\)</span> may become very large.
+<ul>
+<li>lidar data, 3D chemical, satellite sensors, geotechnical, seismic, …</li>
+</ul></li>
+<li>Computing <span class="math inline">\(V^{-1}v\)</span> is the expensive part; it is <span class="math inline">\(O(N^2)\)</span> or <span class="math inline">\(O(N^3)\)</span> as <span class="math inline">\(V\)</span> is usually not of simple structure</li>
+<li>there is a trade-off; for a global neighbourhood, the expensive part, factoring <span class="math inline">\(V\)</span> needs only be done once, for a local neighbourhood for each unique neighbourhood (in practice: for each <span class="math inline">\(s_0\)</span>).</li>
+<li>selecting local neighbourhoods also costs time; naive selection <span class="math inline">\(O(n \log n)\)</span> doesn’t scale well</li>
+<li><code>gstat</code> uses quadtrees/octtrees, inspired by http://donar.umiacs.umd.edu/quadtree/index.html</li>
+</ul>
+</section>
+<section id="predicting-block-means" class="level3">
+<h3 class="anchored" data-anchor-id="predicting-block-means">Predicting block means</h3>
+<p>Instead of predicting <span class="math inline">\(Z(s_0)\)</span> for a “point” location, one might be interested at predicting the average of <span class="math inline">\(Z(s)\)</span> over a block, <span class="math inline">\(B_0\)</span>, i.e. <span class="math display">\[Z(B_0) = \frac{1}{|B_0|}\int_{B_0} Z(u)du\]</span> * This can (naively) be done by predicting <span class="math inline">\(Z\)</span> over a large number of points <span class="math inline">\(s_0\)</span> inside <span class="math inline">\(B_0\)</span>, and averaging * For the prediction <em>error</em>, of <span class="math inline">\(\hat{Z}(B_0)\)</span>, we then need the covariances between all point predictions * a more efficient way is to use block kriging, which does both at once</p>
+</section>
+<section id="reason-why-one-wants-block-means" class="level3">
+<h3 class="anchored" data-anchor-id="reason-why-one-wants-block-means">Reason why one wants block means</h3>
+<p>Examples</p>
+<ul>
+<li>mining: we cannot mine point values</li>
+<li>soil remediation: we cannot remediate points</li>
+<li>RS: we can match satellite image pixels</li>
+<li>disaster management: we cannot evacuate points</li>
+<li>environment: legislation may be related to blocks</li>
+<li>accuracy: block means can be estimated with smaller errors than points</li>
+</ul>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -420,11 +435,14 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./de1.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Differential equations</span></span>
+      <a href="./si4.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Unknown, varying mean</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="./si6.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Cokriging, cross validation, conditional simulation</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->

@@ -519,12 +519,32 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 <section id="reason-why-one-wants-block-means" class="level3">
 <h3 class="anchored" data-anchor-id="reason-why-one-wants-block-means">Reason why one wants block means</h3>
-<p>Examples * mining: we cannot mine point values * soil remediation: we cannot remediate points * RS: we can match satellite image pixels * disaster management: we cannot evacuate points * environment: legislation may be related to blocks * accuracy: block means can be estimated with smaller errors than points</p>
+<p>Examples</p>
+<ul>
+<li>mining: we cannot mine point values</li>
+<li>soil remediation: we cannot remediate points</li>
+<li>RS: we can match satellite image pixels</li>
+<li>disaster management: we cannot evacuate points</li>
+<li>environment: legislation may be related to blocks</li>
+<li>accuracy: block means can be estimated with smaller errors than points</li>
+</ul>
 </section>
 <section id="cokriging" class="level3">
 <h3 class="anchored" data-anchor-id="cokriging">cokriging</h3>
 <p>Cokriging sets the multivariate equivalent of kriging, which is, in terms of number of dependent variables, univariate. Kriging: <span class="math display">\[Z(s) = X(s)\beta + e(s)\]</span> Cokriging: <span class="math display">\[Z_1(s) = X_1(s)\beta_1 + e_1(s)\]</span> <span class="math display">\[Z_2(s) = X_2(s)\beta_2 + e_2(s)\]</span> <span class="math display">\[Z_k(s) = X_k(s)\beta_k + e_k(s)\]</span> with <span class="math inline">\(V = \Cov(e_1,e_2,...,e_k)\)</span></p>
-<p>Cases where this is useful: multiple spatial correlated variables such as * chemical properties (auto-analyzers!) * sediment composition * electromagnetic spectra (imagery/remote sensing) * ecological data (abiotic factors; species abundances) * (space-time data, with discrete time) Two types of applications: * undersampled case: secondary variables help prediction of a primary, because we have more samples of them (image?) * equally sampled case: secondary variables don’t help prediction much, but we are interested in <em>multivariate prediction</em>, i.e.&nbsp;prediction error covariances.</p>
+<p>Cases where this is useful: multiple spatial correlated variables such as</p>
+<ul>
+<li>chemical properties (auto-analyzers!)</li>
+<li>sediment composition</li>
+<li>electromagnetic spectra (imagery/remote sensing)</li>
+<li>ecological data (abiotic factors; species abundances)</li>
+<li>(space-time data, with discrete time)</li>
+</ul>
+<p>Two types of applications:</p>
+<ul>
+<li>undersampled case: secondary variables help prediction of a primary, because we have more samples of them (image?)</li>
+<li>equally sampled case: secondary variables don’t help prediction much, but we are interested in <em>multivariate prediction</em>, i.e.&nbsp;prediction error covariances.</li>
+</ul>
 </section>
 <section id="cokriging-prediction" class="level3">
 <h3 class="anchored" data-anchor-id="cokriging-prediction">Cokriging prediction</h3>
@@ -580,7 +600,11 @@ V_{m,1} &amp; V_{m,2} &amp; ... &amp; V_{m,m} \\\\
 </section>
 <section id="permissible-cross-covariance-functions" class="level3">
 <h3 class="anchored" data-anchor-id="permissible-cross-covariance-functions">Permissible cross covariance functions</h3>
-<p>Two classes of permissible cross covariance (semivariance) functions are often used: * intrinsic correlation (IC): <span class="math display">\[\gamma_{jk}(h) = \alpha_{jk} \sqrt{\gamma_{jj}(h)\gamma_{kk}(h)}\]</span> parameters <span class="math inline">\(\alpha_{jk}\)</span> are correlation cofficients; very strict * linear model of coregionalization (LMC): <span class="math display">\[\gamma_{jk}(h) = \sum_{l=1}^p \gamma_{jk,p}(h)\]</span> (e.g., nugget + spherical model), and <span class="math display">\[\gamma_{jk,p}(h) = \alpha_{jk,p} \sqrt{\gamma_{jj,p}(h)\gamma_{kk,p}(h)}\]</span></p>
+<p>Two classes of permissible cross covariance (semivariance) functions are often used:</p>
+<ul>
+<li>intrinsic correlation (IC): <span class="math display">\[\gamma_{jk}(h) = \alpha_{jk} \sqrt{\gamma_{jj}(h)\gamma_{kk}(h)}\]</span> parameters <span class="math inline">\(\alpha_{jk}\)</span> are correlation cofficients; very strict</li>
+<li>linear model of coregionalization (LMC): <span class="math display">\[\gamma_{jk}(h) = \sum_{l=1}^p \gamma_{jk,p}(h)\]</span> (e.g., nugget + spherical model), and <span class="math display">\[\gamma_{jk,p}(h) = \alpha_{jk,p} \sqrt{\gamma_{jj,p}(h)\gamma_{kk,p}(h)}\]</span></li>
+</ul>
 </section>
 <section id="how-to-do-this" class="level3">
 <h3 class="anchored" data-anchor-id="how-to-do-this">How to do this?</h3>

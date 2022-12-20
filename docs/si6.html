@@ -392,7 +392,7 @@ V_{m,1} &amp; V_{m,2} &amp; ... &amp; V_{m,m} \\\\
 </section>
 <section id="what-is-needed" class="level3">
 <h3 class="anchored" data-anchor-id="what-is-needed">What is needed?</h3>
-<p>The main tool for estimating semivariances between different variables is the <em>cross variogram</em>, defined for collocated data as <span class="math display">\[\gamma_{ij}(h) = \mbox{E}[(Z_i(s)-Z_i(s+h))(Z_j(s)-Z_j(s+h))]\]</span> and for non-collocated data as <span class="math display">\[\gamma_{ij}(h) = \mbox{E}[(Z_i(s)-m_i)(Z_j(s)-m_j)]\]</span> with <span class="math inline">\(m_i\)</span> and <span class="math inline">\(m_j\)</span> the means of the respective variables. Sample cross variograms are the obvious sums over the available pairs or cross pairs, as in one of <span class="math display">\[\hat{\gamma}_{jk}(\tilde{h})=\frac{1}{N_h}\sum_{i=1}^{N_h}(Z_j(s_i)-Z_j(s_i+h))(Z_k(s_i)-Z_k(s_i+h))\]</span> <span class="math display">\[\hat{\gamma}_{jk}(\tilde{h})=\frac{1}{N_h}\sum_{i=1}^{N_h}(Z_j(s_i)-m_j)(Z_k(s_i+h)-m_k)\]</span></p>
+<p>The main tool for estimating semivariances between different variables is the <em>cross variogram</em>, defined for collocated data as <span class="math display">\[\gamma_{ij}(h) = \mbox{E}[(Z_i(s)-Z_i(s+h))(Z_j(s)-Z_j(s+h))]\]</span> and for non-collocated data as <span class="math display">\[\gamma_{ij}(h) = \mbox{E}[(Z_i(s)-m_i)(Z_j(s+h)-m_j)]\]</span> with <span class="math inline">\(m_i\)</span> and <span class="math inline">\(m_j\)</span> the means of the respective variables. Sample cross variograms are the obvious sums over the available pairs or cross pairs, as in one of <span class="math display">\[\hat{\gamma}_{jk}(\tilde{h})=\frac{1}{N_h}\sum_{i=1}^{N_h}(Z_j(s_i)-Z_j(s_i+h))(Z_k(s_i)-Z_k(s_i+h))\]</span> <span class="math display">\[\hat{\gamma}_{jk}(\tilde{h})=\frac{1}{N_h}\sum_{i=1}^{N_h}(Z_j(s_i)-m_j)(Z_k(s_i+h)-m_k)\]</span></p>
 </section>
 <section id="permissible-cross-covariance-functions" class="level3">
 <h3 class="anchored" data-anchor-id="permissible-cross-covariance-functions">Permissible cross covariance functions</h3>
@@ -432,7 +432,12 @@ V_{m,1} &amp; V_{m,2} &amp; ... &amp; V_{m,m} \\\\
 </section>
 <section id="kriging-predictions-and-errors-how-good-are-they" class="level3">
 <h3 class="anchored" data-anchor-id="kriging-predictions-and-errors-how-good-are-they">Kriging predictions and errors – how good are they?</h3>
-<p>Cross validation can be used to assess the quality of any interpolation, including kriging. We split the data set in <span class="math inline">\(n\)</span> parts (folds). For each part, we * leave out the observations of this fold * use the observations of all other folds to predict the values at the locations of this fold * compare the predictions with the observations This is called <span class="math inline">\(n\)</span>-fold cross validation. If <span class="math inline">\(n\)</span> equals the number of observation, it is called leave-one-out cross validation (LOOCV).</p>
+<p>Cross validation can be used to assess the quality of any interpolation, including kriging. We split the data set in <span class="math inline">\(n\)</span> parts (folds). For each part, we</p>
+<ul>
+<li>leave out the observations of this fold</li>
+<li>use the observations of all other folds to predict the values at the locations of this fold</li>
+<li>compare the predictions with the observations This is called <span class="math inline">\(n\)</span>-fold cross validation. If <span class="math inline">\(n\)</span> equals the number of observation, it is called leave-one-out cross validation (LOOCV).</li>
+</ul>
 </section>
 <section id="cross-validation-what-does-it-yield" class="level3">
 <h3 class="anchored" data-anchor-id="cross-validation-what-does-it-yield">Cross validation: what does it yield?</h3>
@@ -491,7 +496,7 @@ V_{m,1} &amp; V_{m,2} &amp; ... &amp; V_{m,m} \\\\
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(meuse<span class="sc">$</span>zinc <span class="sc">&lt;</span> <span class="dv">500</span>)</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># [1] 0.632</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-hash="si6_cache/html/unnamed-chunk-4_602bf2c73010cb3697f0e608e7caa4b0">
+<div class="cell" data-hash="si6_cache/html/unnamed-chunk-4_8931372bc149144b05c98cac4ad9581f">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>v <span class="ot">=</span> <span class="fu">variogram</span>(<span class="fu">I</span>(zinc <span class="sc">&gt;</span> <span class="dv">500</span>)<span class="sc">~</span><span class="dv">1</span>, meuse)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>v_I.fit <span class="ot">=</span> <span class="fu">fit.variogram</span>(v, <span class="fu">vgm</span>(.<span class="dv">2</span>, <span class="st">"Sph"</span>, <span class="dv">900</span>, .<span class="dv">02</span>))</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(v, v_I.fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -500,216 +505,16 @@ V_{m,1} &amp; V_{m,2} &amp; ... &amp; V_{m,m} \\\\
 </div>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>out<span class="sc">$</span>I500 <span class="ot">=</span> <span class="fu">krige</span>(<span class="fu">I</span>(zinc <span class="sc">&gt;</span> <span class="dv">500</span>)<span class="sc">~</span><span class="dv">1</span>, meuse, meuse.grid, v_I.fit)<span class="sc">$</span>var1.pred</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># [using ordinary kriging]</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(out<span class="sc">$</span>I500)</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">#        V1            V2            V3            V4     </span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :0.7   Min.   :0.6   Min.   :0.6   Min.   :0.5  </span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">#  1st Qu.:0.7   1st Qu.:0.7   1st Qu.:0.7   1st Qu.:0.6  </span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">#  Median :0.7   Median :0.7   Median :0.7   Median :0.7  </span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   :0.7   Mean   :0.7   Mean   :0.7   Mean   :0.7  </span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.:0.7   3rd Qu.:0.7   3rd Qu.:0.8   3rd Qu.:0.8  </span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   :0.7   Max.   :0.7   Max.   :0.8   Max.   :0.8  </span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's   :77    NA's   :75    NA's   :74    NA's   :72   </span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co">#        V5            V6            V7            V8     </span></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :0.4   Min.   :0.4   Min.   :0.3   Min.   :0.2  </span></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="co">#  1st Qu.:0.5   1st Qu.:0.5   1st Qu.:0.4   1st Qu.:0.3  </span></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="co">#  Median :0.7   Median :0.7   Median :0.6   Median :0.5  </span></span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   :0.7   Mean   :0.6   Mean   :0.5   Mean   :0.5  </span></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.:0.8   3rd Qu.:0.8   3rd Qu.:0.7   3rd Qu.:0.6  </span></span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   :0.8   Max.   :0.8   Max.   :0.8   Max.   :0.8  </span></span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's   :70    NA's   :69    NA's   :67    NA's   :67   </span></span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="co">#        V9           V10           V11           V12     </span></span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :0.2   Min.   :0.1   Min.   :0.1   Min.   :0.0  </span></span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="co">#  1st Qu.:0.2   1st Qu.:0.1   1st Qu.:0.1   1st Qu.:0.1  </span></span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="co">#  Median :0.4   Median :0.3   Median :0.2   Median :0.1  </span></span>
-<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   :0.4   Mean   :0.4   Mean   :0.3   Mean   :0.3  </span></span>
-<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.:0.6   3rd Qu.:0.5   3rd Qu.:0.5   3rd Qu.:0.5  </span></span>
-<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   :0.8   Max.   :0.8   Max.   :0.8   Max.   :0.8  </span></span>
-<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's   :65    NA's   :63    NA's   :63    NA's   :61   </span></span>
-<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a><span class="co">#       V13           V14           V15           V16     </span></span>
-<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :0.0   Min.   :0.0   Min.   :0.0   Min.   :0.0  </span></span>
-<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a><span class="co">#  1st Qu.:0.0   1st Qu.:0.0   1st Qu.:0.0   1st Qu.:0.0  </span></span>
-<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a><span class="co">#  Median :0.1   Median :0.1   Median :0.1   Median :0.1  </span></span>
-<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   :0.3   Mean   :0.2   Mean   :0.2   Mean   :0.2  </span></span>
-<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.:0.5   3rd Qu.:0.4   3rd Qu.:0.3   3rd Qu.:0.2  </span></span>
-<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   :0.8   Max.   :0.8   Max.   :0.7   Max.   :0.7  </span></span>
-<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's   :61    NA's   :59    NA's   :58    NA's   :58   </span></span>
-<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a><span class="co">#       V17           V18           V19           V20     </span></span>
-<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :0.0   Min.   :0.0   Min.   :0.0   Min.   :0.0  </span></span>
-<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a><span class="co">#  1st Qu.:0.0   1st Qu.:0.0   1st Qu.:0.0   1st Qu.:0.0  </span></span>
-<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a><span class="co">#  Median :0.1   Median :0.1   Median :0.1   Median :0.1  </span></span>
-<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   :0.2   Mean   :0.2   Mean   :0.2   Mean   :0.2  </span></span>
-<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.:0.3   3rd Qu.:0.3   3rd Qu.:0.3   3rd Qu.:0.3  </span></span>
-<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   :0.7   Max.   :0.8   Max.   :0.7   Max.   :0.7  </span></span>
-<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's   :58    NA's   :57    NA's   :58    NA's   :57   </span></span>
-<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a><span class="co">#       V21           V22           V23           V24     </span></span>
-<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :0.0   Min.   :0.0   Min.   :0.0   Min.   :0.0  </span></span>
-<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a><span class="co">#  1st Qu.:0.0   1st Qu.:0.0   1st Qu.:0.0   1st Qu.:0.0  </span></span>
-<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a><span class="co">#  Median :0.1   Median :0.1   Median :0.0   Median :0.0  </span></span>
-<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   :0.2   Mean   :0.2   Mean   :0.2   Mean   :0.1  </span></span>
-<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.:0.3   3rd Qu.:0.3   3rd Qu.:0.3   3rd Qu.:0.2  </span></span>
-<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   :0.7   Max.   :0.7   Max.   :0.7   Max.   :0.7  </span></span>
-<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's   :58    NA's   :57    NA's   :58    NA's   :58   </span></span>
-<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a><span class="co">#       V25           V26           V27           V28     </span></span>
-<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :0.0   Min.   :0.0   Min.   :0.0   Min.   :0.0  </span></span>
-<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a><span class="co">#  1st Qu.:0.0   1st Qu.:0.0   1st Qu.:0.0   1st Qu.:0.0  </span></span>
-<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a><span class="co">#  Median :0.1   Median :0.1   Median :0.1   Median :0.1  </span></span>
-<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   :0.2   Mean   :0.2   Mean   :0.2   Mean   :0.2  </span></span>
-<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.:0.3   3rd Qu.:0.2   3rd Qu.:0.3   3rd Qu.:0.3  </span></span>
-<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   :0.8   Max.   :0.8   Max.   :0.9   Max.   :0.9  </span></span>
-<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's   :58    NA's   :58    NA's   :58    NA's   :58   </span></span>
-<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a><span class="co">#       V29           V30           V31           V32     </span></span>
-<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :0.0   Min.   :0.0   Min.   :0.0   Min.   :0.0  </span></span>
-<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a><span class="co">#  1st Qu.:0.0   1st Qu.:0.0   1st Qu.:0.0   1st Qu.:0.0  </span></span>
-<span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a><span class="co">#  Median :0.1   Median :0.1   Median :0.1   Median :0.2  </span></span>
-<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   :0.3   Mean   :0.3   Mean   :0.3   Mean   :0.3  </span></span>
-<span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.:0.4   3rd Qu.:0.5   3rd Qu.:0.6   3rd Qu.:0.7  </span></span>
-<span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   :0.9   Max.   :0.9   Max.   :1.0   Max.   :1.0  </span></span>
-<span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's   :58    NA's   :57    NA's   :57    NA's   :56   </span></span>
-<span id="cb5-68"><a href="#cb5-68" aria-hidden="true" tabindex="-1"></a><span class="co">#       V33           V34           V35           V36     </span></span>
-<span id="cb5-69"><a href="#cb5-69" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :0.0   Min.   :0.0   Min.   :0.0   Min.   :0.0  </span></span>
-<span id="cb5-70"><a href="#cb5-70" aria-hidden="true" tabindex="-1"></a><span class="co">#  1st Qu.:0.0   1st Qu.:0.1   1st Qu.:0.1   1st Qu.:0.1  </span></span>
-<span id="cb5-71"><a href="#cb5-71" aria-hidden="true" tabindex="-1"></a><span class="co">#  Median :0.2   Median :0.2   Median :0.3   Median :0.3  </span></span>
-<span id="cb5-72"><a href="#cb5-72" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   :0.4   Mean   :0.4   Mean   :0.4   Mean   :0.4  </span></span>
-<span id="cb5-73"><a href="#cb5-73" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.:0.7   3rd Qu.:0.6   3rd Qu.:0.6   3rd Qu.:0.7  </span></span>
-<span id="cb5-74"><a href="#cb5-74" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   :1.0   Max.   :1.0   Max.   :1.0   Max.   :1.0  </span></span>
-<span id="cb5-75"><a href="#cb5-75" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's   :56    NA's   :55    NA's   :55    NA's   :52   </span></span>
-<span id="cb5-76"><a href="#cb5-76" aria-hidden="true" tabindex="-1"></a><span class="co">#       V37           V38           V39           V40     </span></span>
-<span id="cb5-77"><a href="#cb5-77" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :0.0   Min.   :0.1   Min.   :0.1   Min.   :0.0  </span></span>
-<span id="cb5-78"><a href="#cb5-78" aria-hidden="true" tabindex="-1"></a><span class="co">#  1st Qu.:0.1   1st Qu.:0.1   1st Qu.:0.1   1st Qu.:0.1  </span></span>
-<span id="cb5-79"><a href="#cb5-79" aria-hidden="true" tabindex="-1"></a><span class="co">#  Median :0.3   Median :0.3   Median :0.5   Median :0.5  </span></span>
-<span id="cb5-80"><a href="#cb5-80" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   :0.4   Mean   :0.5   Mean   :0.5   Mean   :0.4  </span></span>
-<span id="cb5-81"><a href="#cb5-81" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.:0.9   3rd Qu.:0.9   3rd Qu.:0.8   3rd Qu.:0.8  </span></span>
-<span id="cb5-82"><a href="#cb5-82" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   :1.0   Max.   :0.9   Max.   :0.9   Max.   :0.9  </span></span>
-<span id="cb5-83"><a href="#cb5-83" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's   :50    NA's   :46    NA's   :43    NA's   :42   </span></span>
-<span id="cb5-84"><a href="#cb5-84" aria-hidden="true" tabindex="-1"></a><span class="co">#       V41           V42           V43           V44     </span></span>
-<span id="cb5-85"><a href="#cb5-85" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :0.0   Min.   :0.0   Min.   :0.0   Min.   :0.0  </span></span>
-<span id="cb5-86"><a href="#cb5-86" aria-hidden="true" tabindex="-1"></a><span class="co">#  1st Qu.:0.1   1st Qu.:0.1   1st Qu.:0.1   1st Qu.:0.1  </span></span>
-<span id="cb5-87"><a href="#cb5-87" aria-hidden="true" tabindex="-1"></a><span class="co">#  Median :0.5   Median :0.4   Median :0.3   Median :0.2  </span></span>
-<span id="cb5-88"><a href="#cb5-88" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   :0.4   Mean   :0.4   Mean   :0.3   Mean   :0.3  </span></span>
-<span id="cb5-89"><a href="#cb5-89" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.:0.7   3rd Qu.:0.6   3rd Qu.:0.5   3rd Qu.:0.4  </span></span>
-<span id="cb5-90"><a href="#cb5-90" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   :0.8   Max.   :0.8   Max.   :0.8   Max.   :0.8  </span></span>
-<span id="cb5-91"><a href="#cb5-91" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's   :42    NA's   :41    NA's   :42    NA's   :41   </span></span>
-<span id="cb5-92"><a href="#cb5-92" aria-hidden="true" tabindex="-1"></a><span class="co">#       V45           V46           V47           V48     </span></span>
-<span id="cb5-93"><a href="#cb5-93" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :0.0   Min.   :0.0   Min.   :0.0   Min.   :0.0  </span></span>
-<span id="cb5-94"><a href="#cb5-94" aria-hidden="true" tabindex="-1"></a><span class="co">#  1st Qu.:0.1   1st Qu.:0.0   1st Qu.:0.0   1st Qu.:0.0  </span></span>
-<span id="cb5-95"><a href="#cb5-95" aria-hidden="true" tabindex="-1"></a><span class="co">#  Median :0.1   Median :0.1   Median :0.1   Median :0.1  </span></span>
-<span id="cb5-96"><a href="#cb5-96" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   :0.2   Mean   :0.2   Mean   :0.2   Mean   :0.1  </span></span>
-<span id="cb5-97"><a href="#cb5-97" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.:0.3   3rd Qu.:0.2   3rd Qu.:0.2   3rd Qu.:0.2  </span></span>
-<span id="cb5-98"><a href="#cb5-98" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   :0.7   Max.   :0.7   Max.   :0.7   Max.   :0.7  </span></span>
-<span id="cb5-99"><a href="#cb5-99" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's   :42    NA's   :42    NA's   :42    NA's   :42   </span></span>
-<span id="cb5-100"><a href="#cb5-100" aria-hidden="true" tabindex="-1"></a><span class="co">#       V49           V50           V51           V52     </span></span>
-<span id="cb5-101"><a href="#cb5-101" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :0.0   Min.   :0.0   Min.   :0.0   Min.   :0.0  </span></span>
-<span id="cb5-102"><a href="#cb5-102" aria-hidden="true" tabindex="-1"></a><span class="co">#  1st Qu.:0.0   1st Qu.:0.0   1st Qu.:0.0   1st Qu.:0.0  </span></span>
-<span id="cb5-103"><a href="#cb5-103" aria-hidden="true" tabindex="-1"></a><span class="co">#  Median :0.1   Median :0.0   Median :0.0   Median :0.0  </span></span>
-<span id="cb5-104"><a href="#cb5-104" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   :0.1   Mean   :0.1   Mean   :0.1   Mean   :0.1  </span></span>
-<span id="cb5-105"><a href="#cb5-105" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.:0.1   3rd Qu.:0.1   3rd Qu.:0.1   3rd Qu.:0.1  </span></span>
-<span id="cb5-106"><a href="#cb5-106" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   :0.7   Max.   :0.7   Max.   :0.7   Max.   :0.7  </span></span>
-<span id="cb5-107"><a href="#cb5-107" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's   :43    NA's   :44    NA's   :43    NA's   :44   </span></span>
-<span id="cb5-108"><a href="#cb5-108" aria-hidden="true" tabindex="-1"></a><span class="co">#       V53           V54            V55            V56      </span></span>
-<span id="cb5-109"><a href="#cb5-109" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :0.0   Min.   :-0.1   Min.   :-0.1   Min.   :-0.1  </span></span>
-<span id="cb5-110"><a href="#cb5-110" aria-hidden="true" tabindex="-1"></a><span class="co">#  1st Qu.:0.0   1st Qu.: 0.0   1st Qu.: 0.0   1st Qu.: 0.0  </span></span>
-<span id="cb5-111"><a href="#cb5-111" aria-hidden="true" tabindex="-1"></a><span class="co">#  Median :0.0   Median : 0.0   Median : 0.1   Median : 0.1  </span></span>
-<span id="cb5-112"><a href="#cb5-112" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   :0.1   Mean   : 0.1   Mean   : 0.1   Mean   : 0.1  </span></span>
-<span id="cb5-113"><a href="#cb5-113" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.:0.1   3rd Qu.: 0.1   3rd Qu.: 0.2   3rd Qu.: 0.2  </span></span>
-<span id="cb5-114"><a href="#cb5-114" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   :0.7   Max.   : 0.6   Max.   : 0.7   Max.   : 0.6  </span></span>
-<span id="cb5-115"><a href="#cb5-115" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's   :44    NA's   :45     NA's   :44     NA's   :45    </span></span>
-<span id="cb5-116"><a href="#cb5-116" aria-hidden="true" tabindex="-1"></a><span class="co">#       V57            V58            V59            V60      </span></span>
-<span id="cb5-117"><a href="#cb5-117" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :-0.1   Min.   :-0.1   Min.   :-0.1   Min.   :-0.1  </span></span>
-<span id="cb5-118"><a href="#cb5-118" aria-hidden="true" tabindex="-1"></a><span class="co">#  1st Qu.: 0.0   1st Qu.: 0.0   1st Qu.: 0.0   1st Qu.: 0.0  </span></span>
-<span id="cb5-119"><a href="#cb5-119" aria-hidden="true" tabindex="-1"></a><span class="co">#  Median : 0.1   Median : 0.1   Median : 0.1   Median : 0.1  </span></span>
-<span id="cb5-120"><a href="#cb5-120" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   : 0.1   Mean   : 0.1   Mean   : 0.1   Mean   : 0.1  </span></span>
-<span id="cb5-121"><a href="#cb5-121" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.: 0.2   3rd Qu.: 0.2   3rd Qu.: 0.2   3rd Qu.: 0.2  </span></span>
-<span id="cb5-122"><a href="#cb5-122" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   : 0.7   Max.   : 0.6   Max.   : 0.7   Max.   : 0.8  </span></span>
-<span id="cb5-123"><a href="#cb5-123" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's   :44     NA's   :45     NA's   :44     NA's   :44    </span></span>
-<span id="cb5-124"><a href="#cb5-124" aria-hidden="true" tabindex="-1"></a><span class="co">#       V61           V62           V63           V64     </span></span>
-<span id="cb5-125"><a href="#cb5-125" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :0.0   Min.   :0.0   Min.   :0.0   Min.   :0.0  </span></span>
-<span id="cb5-126"><a href="#cb5-126" aria-hidden="true" tabindex="-1"></a><span class="co">#  1st Qu.:0.0   1st Qu.:0.0   1st Qu.:0.0   1st Qu.:0.0  </span></span>
-<span id="cb5-127"><a href="#cb5-127" aria-hidden="true" tabindex="-1"></a><span class="co">#  Median :0.1   Median :0.1   Median :0.1   Median :0.1  </span></span>
-<span id="cb5-128"><a href="#cb5-128" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   :0.2   Mean   :0.2   Mean   :0.2   Mean   :0.3  </span></span>
-<span id="cb5-129"><a href="#cb5-129" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.:0.2   3rd Qu.:0.2   3rd Qu.:0.3   3rd Qu.:0.4  </span></span>
-<span id="cb5-130"><a href="#cb5-130" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   :0.9   Max.   :0.9   Max.   :0.9   Max.   :1.0  </span></span>
-<span id="cb5-131"><a href="#cb5-131" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's   :43    NA's   :43    NA's   :42    NA's   :42   </span></span>
-<span id="cb5-132"><a href="#cb5-132" aria-hidden="true" tabindex="-1"></a><span class="co">#       V65           V66           V67           V68     </span></span>
-<span id="cb5-133"><a href="#cb5-133" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :0.0   Min.   :0.0   Min.   :0.0   Min.   :0.0  </span></span>
-<span id="cb5-134"><a href="#cb5-134" aria-hidden="true" tabindex="-1"></a><span class="co">#  1st Qu.:0.0   1st Qu.:0.0   1st Qu.:0.0   1st Qu.:0.0  </span></span>
-<span id="cb5-135"><a href="#cb5-135" aria-hidden="true" tabindex="-1"></a><span class="co">#  Median :0.1   Median :0.1   Median :0.1   Median :0.1  </span></span>
-<span id="cb5-136"><a href="#cb5-136" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   :0.3   Mean   :0.3   Mean   :0.3   Mean   :0.3  </span></span>
-<span id="cb5-137"><a href="#cb5-137" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.:0.5   3rd Qu.:0.6   3rd Qu.:0.6   3rd Qu.:0.6  </span></span>
-<span id="cb5-138"><a href="#cb5-138" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   :1.0   Max.   :1.0   Max.   :1.0   Max.   :1.0  </span></span>
-<span id="cb5-139"><a href="#cb5-139" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's   :42    NA's   :42    NA's   :42    NA's   :43   </span></span>
-<span id="cb5-140"><a href="#cb5-140" aria-hidden="true" tabindex="-1"></a><span class="co">#       V69           V70           V71           V72     </span></span>
-<span id="cb5-141"><a href="#cb5-141" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :0.0   Min.   :0.0   Min.   :0.1   Min.   :0.1  </span></span>
-<span id="cb5-142"><a href="#cb5-142" aria-hidden="true" tabindex="-1"></a><span class="co">#  1st Qu.:0.1   1st Qu.:0.1   1st Qu.:0.1   1st Qu.:0.1  </span></span>
-<span id="cb5-143"><a href="#cb5-143" aria-hidden="true" tabindex="-1"></a><span class="co">#  Median :0.1   Median :0.1   Median :0.2   Median :0.2  </span></span>
-<span id="cb5-144"><a href="#cb5-144" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   :0.3   Mean   :0.3   Mean   :0.4   Mean   :0.4  </span></span>
-<span id="cb5-145"><a href="#cb5-145" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.:0.5   3rd Qu.:0.6   3rd Qu.:0.6   3rd Qu.:0.6  </span></span>
-<span id="cb5-146"><a href="#cb5-146" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   :1.0   Max.   :1.0   Max.   :1.0   Max.   :1.0  </span></span>
-<span id="cb5-147"><a href="#cb5-147" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's   :42    NA's   :41    NA's   :39    NA's   :38   </span></span>
-<span id="cb5-148"><a href="#cb5-148" aria-hidden="true" tabindex="-1"></a><span class="co">#       V73           V74           V75           V76     </span></span>
-<span id="cb5-149"><a href="#cb5-149" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :0.1   Min.   :0.2   Min.   :0.1   Min.   :0.1  </span></span>
-<span id="cb5-150"><a href="#cb5-150" aria-hidden="true" tabindex="-1"></a><span class="co">#  1st Qu.:0.2   1st Qu.:0.2   1st Qu.:0.2   1st Qu.:0.2  </span></span>
-<span id="cb5-151"><a href="#cb5-151" aria-hidden="true" tabindex="-1"></a><span class="co">#  Median :0.2   Median :0.2   Median :0.3   Median :0.3  </span></span>
-<span id="cb5-152"><a href="#cb5-152" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   :0.4   Mean   :0.4   Mean   :0.4   Mean   :0.4  </span></span>
-<span id="cb5-153"><a href="#cb5-153" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.:0.6   3rd Qu.:0.6   3rd Qu.:0.6   3rd Qu.:0.6  </span></span>
-<span id="cb5-154"><a href="#cb5-154" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   :1.0   Max.   :1.0   Max.   :1.0   Max.   :0.9  </span></span>
-<span id="cb5-155"><a href="#cb5-155" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's   :37    NA's   :38    NA's   :37    NA's   :36   </span></span>
-<span id="cb5-156"><a href="#cb5-156" aria-hidden="true" tabindex="-1"></a><span class="co">#       V77           V78           V79           V80     </span></span>
-<span id="cb5-157"><a href="#cb5-157" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :0.1   Min.   :0.1   Min.   :0.1   Min.   :0.1  </span></span>
-<span id="cb5-158"><a href="#cb5-158" aria-hidden="true" tabindex="-1"></a><span class="co">#  1st Qu.:0.2   1st Qu.:0.2   1st Qu.:0.2   1st Qu.:0.2  </span></span>
-<span id="cb5-159"><a href="#cb5-159" aria-hidden="true" tabindex="-1"></a><span class="co">#  Median :0.3   Median :0.4   Median :0.4   Median :0.4  </span></span>
-<span id="cb5-160"><a href="#cb5-160" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   :0.4   Mean   :0.4   Mean   :0.4   Mean   :0.4  </span></span>
-<span id="cb5-161"><a href="#cb5-161" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.:0.6   3rd Qu.:0.5   3rd Qu.:0.5   3rd Qu.:0.5  </span></span>
-<span id="cb5-162"><a href="#cb5-162" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   :0.9   Max.   :0.9   Max.   :0.8   Max.   :0.8  </span></span>
-<span id="cb5-163"><a href="#cb5-163" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's   :34    NA's   :34    NA's   :33    NA's   :32   </span></span>
-<span id="cb5-164"><a href="#cb5-164" aria-hidden="true" tabindex="-1"></a><span class="co">#       V81            V82            V83             V84       </span></span>
-<span id="cb5-165"><a href="#cb5-165" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :0.02   Min.   :0.00   Min.   :-0.03   Min.   :-0.05  </span></span>
-<span id="cb5-166"><a href="#cb5-166" aria-hidden="true" tabindex="-1"></a><span class="co">#  1st Qu.:0.15   1st Qu.:0.14   1st Qu.: 0.11   1st Qu.: 0.08  </span></span>
-<span id="cb5-167"><a href="#cb5-167" aria-hidden="true" tabindex="-1"></a><span class="co">#  Median :0.42   Median :0.35   Median : 0.34   Median : 0.35  </span></span>
-<span id="cb5-168"><a href="#cb5-168" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   :0.38   Mean   :0.37   Mean   : 0.36   Mean   : 0.36  </span></span>
-<span id="cb5-169"><a href="#cb5-169" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.:0.56   3rd Qu.:0.60   3rd Qu.: 0.62   3rd Qu.: 0.65  </span></span>
-<span id="cb5-170"><a href="#cb5-170" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   :0.80   Max.   :0.78   Max.   : 0.76   Max.   : 0.74  </span></span>
-<span id="cb5-171"><a href="#cb5-171" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's   :30     NA's   :29     NA's   :28      NA's   :26     </span></span>
-<span id="cb5-172"><a href="#cb5-172" aria-hidden="true" tabindex="-1"></a><span class="co">#       V85             V86             V87             V88       </span></span>
-<span id="cb5-173"><a href="#cb5-173" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :-0.07   Min.   :-0.08   Min.   :-0.09   Min.   :-0.09  </span></span>
-<span id="cb5-174"><a href="#cb5-174" aria-hidden="true" tabindex="-1"></a><span class="co">#  1st Qu.: 0.07   1st Qu.: 0.04   1st Qu.: 0.04   1st Qu.: 0.03  </span></span>
-<span id="cb5-175"><a href="#cb5-175" aria-hidden="true" tabindex="-1"></a><span class="co">#  Median : 0.34   Median : 0.37   Median : 0.37   Median : 0.31  </span></span>
-<span id="cb5-176"><a href="#cb5-176" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   : 0.35   Mean   : 0.34   Mean   : 0.33   Mean   : 0.29  </span></span>
-<span id="cb5-177"><a href="#cb5-177" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.: 0.64   3rd Qu.: 0.61   3rd Qu.: 0.60   3rd Qu.: 0.53  </span></span>
-<span id="cb5-178"><a href="#cb5-178" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   : 0.77   Max.   : 0.79   Max.   : 0.77   Max.   : 0.72  </span></span>
-<span id="cb5-179"><a href="#cb5-179" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's   :25      NA's   :24      NA's   :23      NA's   :27     </span></span>
-<span id="cb5-180"><a href="#cb5-180" aria-hidden="true" tabindex="-1"></a><span class="co">#       V89            V90            V91            V92     </span></span>
-<span id="cb5-181"><a href="#cb5-181" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :-0.1   Min.   :-0.1   Min.   :-0.1   Min.   :0.0  </span></span>
-<span id="cb5-182"><a href="#cb5-182" aria-hidden="true" tabindex="-1"></a><span class="co">#  1st Qu.: 0.0   1st Qu.: 0.0   1st Qu.: 0.0   1st Qu.:0.0  </span></span>
-<span id="cb5-183"><a href="#cb5-183" aria-hidden="true" tabindex="-1"></a><span class="co">#  Median : 0.3   Median : 0.2   Median : 0.2   Median :0.2  </span></span>
-<span id="cb5-184"><a href="#cb5-184" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   : 0.2   Mean   : 0.2   Mean   : 0.2   Mean   :0.2  </span></span>
-<span id="cb5-185"><a href="#cb5-185" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.: 0.4   3rd Qu.: 0.4   3rd Qu.: 0.4   3rd Qu.:0.4  </span></span>
-<span id="cb5-186"><a href="#cb5-186" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   : 0.6   Max.   : 0.6   Max.   : 0.6   Max.   :0.6  </span></span>
-<span id="cb5-187"><a href="#cb5-187" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's   :33     NA's   :35     NA's   :38     NA's   :41   </span></span>
-<span id="cb5-188"><a href="#cb5-188" aria-hidden="true" tabindex="-1"></a><span class="co">#       V93           V94           V95           V96     </span></span>
-<span id="cb5-189"><a href="#cb5-189" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :0.0   Min.   :0.0   Min.   :0.0   Min.   :0.1  </span></span>
-<span id="cb5-190"><a href="#cb5-190" aria-hidden="true" tabindex="-1"></a><span class="co">#  1st Qu.:0.0   1st Qu.:0.1   1st Qu.:0.1   1st Qu.:0.1  </span></span>
-<span id="cb5-191"><a href="#cb5-191" aria-hidden="true" tabindex="-1"></a><span class="co">#  Median :0.2   Median :0.2   Median :0.2   Median :0.2  </span></span>
-<span id="cb5-192"><a href="#cb5-192" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   :0.2   Mean   :0.2   Mean   :0.3   Mean   :0.3  </span></span>
-<span id="cb5-193"><a href="#cb5-193" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.:0.4   3rd Qu.:0.4   3rd Qu.:0.5   3rd Qu.:0.5  </span></span>
-<span id="cb5-194"><a href="#cb5-194" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   :0.6   Max.   :0.6   Max.   :0.6   Max.   :0.6  </span></span>
-<span id="cb5-195"><a href="#cb5-195" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's   :44    NA's   :45    NA's   :46    NA's   :47   </span></span>
-<span id="cb5-196"><a href="#cb5-196" aria-hidden="true" tabindex="-1"></a><span class="co">#       V97           V98           V99           V100    </span></span>
-<span id="cb5-197"><a href="#cb5-197" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :0.1   Min.   :0.1   Min.   :0.2   Min.   :0.2  </span></span>
-<span id="cb5-198"><a href="#cb5-198" aria-hidden="true" tabindex="-1"></a><span class="co">#  1st Qu.:0.2   1st Qu.:0.2   1st Qu.:0.2   1st Qu.:0.3  </span></span>
-<span id="cb5-199"><a href="#cb5-199" aria-hidden="true" tabindex="-1"></a><span class="co">#  Median :0.3   Median :0.4   Median :0.5   Median :0.6  </span></span>
-<span id="cb5-200"><a href="#cb5-200" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   :0.4   Mean   :0.4   Mean   :0.5   Mean   :0.5  </span></span>
-<span id="cb5-201"><a href="#cb5-201" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.:0.6   3rd Qu.:0.7   3rd Qu.:0.7   3rd Qu.:0.7  </span></span>
-<span id="cb5-202"><a href="#cb5-202" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   :0.6   Max.   :0.7   Max.   :0.8   Max.   :0.8  </span></span>
-<span id="cb5-203"><a href="#cb5-203" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's   :48    NA's   :49    NA's   :51    NA's   :53   </span></span>
-<span id="cb5-204"><a href="#cb5-204" aria-hidden="true" tabindex="-1"></a><span class="co">#       V101          V102          V103          V104    </span></span>
-<span id="cb5-205"><a href="#cb5-205" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :0.2   Min.   :0.3   Min.   :0.5   Min.   :0.7  </span></span>
-<span id="cb5-206"><a href="#cb5-206" aria-hidden="true" tabindex="-1"></a><span class="co">#  1st Qu.:0.4   1st Qu.:0.6   1st Qu.:0.7   1st Qu.:0.7  </span></span>
-<span id="cb5-207"><a href="#cb5-207" aria-hidden="true" tabindex="-1"></a><span class="co">#  Median :0.7   Median :0.7   Median :0.8   Median :0.8  </span></span>
-<span id="cb5-208"><a href="#cb5-208" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   :0.6   Mean   :0.7   Mean   :0.7   Mean   :0.8  </span></span>
-<span id="cb5-209"><a href="#cb5-209" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.:0.8   3rd Qu.:0.8   3rd Qu.:0.8   3rd Qu.:0.8  </span></span>
-<span id="cb5-210"><a href="#cb5-210" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   :0.8   Max.   :0.8   Max.   :0.8   Max.   :0.8  </span></span>
-<span id="cb5-211"><a href="#cb5-211" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's   :55    NA's   :59    NA's   :62    NA's   :69</span></span>
-<span id="cb5-212"><a href="#cb5-212" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">merge</span>(out[<span class="fu">c</span>(<span class="st">"p500"</span>, <span class="st">"I500"</span>)]), <span class="at">col =</span> <span class="fu">bpy.colors</span>(), <span class="at">breaks =</span> <span class="st">"equal"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>out[<span class="st">"I500"</span>] <span class="co"># summarizes</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># stars object with 2 dimensions and 1 attribute</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># attribute(s):</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">#          Min. 1st Qu. Median  Mean 3rd Qu. Max. NA's</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># I500  -0.0876  0.0546  0.193 0.296   0.525 1.03 5009</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co"># dimension(s):</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">#   from  to offset delta x/y</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co"># x    1  78 178440    40 [x]</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co"># y    1 104 333760   -40 [y]</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">merge</span>(out[<span class="fu">c</span>(<span class="st">"p500"</span>, <span class="st">"I500"</span>)]), <span class="at">col =</span> <span class="fu">bpy.colors</span>(), <span class="at">breaks =</span> <span class="st">"equal"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="si6_files/figure-html/unnamed-chunk-4-2.png" class="img-fluid" width="672"></p>
 </div>

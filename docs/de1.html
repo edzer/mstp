@@ -269,7 +269,7 @@ ul.task-list li input[type="checkbox"] {
 <li>the state of a system (initial conditions), and</li>
 <li>the characteristics at boundaries of the system (boundary conditions): what are the sources and sinks, when does what escape or enter the modelled area.</li>
 </ul>
-<p>for a (perfect) prediction of the changes over time, and in space.</p>
+<p>for a (perfect) prediction of the changes over time, and in space. Examples of output of such models include all prediction models, weather models, and <a href="https://atmosphere.copernicus.eu/">atmospheric composition models</a></p>
 <p>Let us look at an example: air quality (fine particles, PM10).</p>
 <section id="model-domain" class="level3">
 <h3 class="anchored" data-anchor-id="model-domain">Model domain</h3>
@@ -279,7 +279,11 @@ ul.task-list li input[type="checkbox"] {
 <h3 class="anchored" data-anchor-id="initial-conditions">Initial conditions</h3>
 <p>The initial conditions usually describe the variable of interest (the concentration field) at the highest possible level of detail. In our case this is the PM10 concentration field at the start of the modelling period.</p>
 <p>As this is a continuous field, we need some way to describe this and usually the spatial domain is discretized into model usually square, rectuangular or triangular model elements.</p>
-<p>This discretization should match the level of detail * at which we know initial conditions and * at which we want to model features.</p>
+<p>This discretization should match the level of detail</p>
+<ul>
+<li>at which we know initial conditions and</li>
+<li>at which we want to model features.</li>
+</ul>
 <p>As an example: if we want to quantify the effect of individual car fumes, spatial elements of 10 cm–1 m may work; if we want to describe the effect of a complete streets something of 10m–100m seems more appropriate. Smaller elements and time steps mean more memory and CPU time requirements.</p>
 </section>
 <section id="initial-conditions-2" class="level3">
@@ -294,9 +298,14 @@ ul.task-list li input[type="checkbox"] {
 <section id="processes" class="level3">
 <h3 class="anchored" data-anchor-id="processes">Processes</h3>
 <p>Particles move mostly for two or three reasons: by large-scale movement of air (wind), by medium/small-scale movement of air (turbulence, dispersion) and by themselves (diffusion; think Brownian motian of a single particle in a gas).</p>
-<p>As an example, take a look at the LOTOS-EUROS model (http://www.lotos-euros.nl/) model documentation.</p>
-<p>As you can read in the <em>model formulation and domain</em>, the model uses external modelling results (interpolation or mechanistic modelling) to get the atmospheric driving forces (height mixing layer, wind fields), e.g.&nbsp;from FUB and ECMWF (http://www.ecmwf.int/).</p>
-<p>Basically, the model <em>code</em> * reads a lot of initial and boundary data, * solves the differential equations and * writes out everything that is of interest, such as the space-time concentration fields.</p>
+<p>As an example, take a look at the <a href="https://www.lotos-euros.nl/">LOTOS-EUROS</a> model documentation.</p>
+<p>As you can read in the <em>model formulation and domain</em>, the model uses external modelling results (interpolation or mechanistic modelling) to get the atmospheric driving forces (height mixing layer, wind fields), e.g.&nbsp;from FUB and <a href="https://www.ecmwf.int/">ECMWF</a>.</p>
+<p>Basically, the model <em>code</em></p>
+<ul>
+<li>reads a lot of initial and boundary data,</li>
+<li>solves the differential equations and</li>
+<li>writes out everything that is of interest, such as the space-time concentration fields.</li>
+</ul>
 </section>
 <section id="solving-differential-equations" class="level3">
 <h3 class="anchored" data-anchor-id="solving-differential-equations">Solving differential equations</h3>
@@ -324,7 +333,12 @@ W\frac{\delta C}{\delta z} \]</span> <span class="math display">\[
 <section id="solving-pdes" class="level3">
 <h3 class="anchored" data-anchor-id="solving-pdes">Solving PDE’s</h3>
 <p>The simples method to solve PDE’s by discretization is, <em>finite difference</em>, uses a regular mesh size, <span class="math inline">\(\Delta x\)</span>. The solution is computed at location <span class="math inline">\(j \Delta x\)</span>, with <span class="math inline">\(j=1,...,N\)</span>.</p>
-<p>In one dimension the first derivative uses one of the three approximations: * backward: <span class="math display">\[\frac{\delta u}{\delta x}(j \Delta x) \approx \frac{u_j-u_{j-1}}{\Delta x} \]</span> * forward: <span class="math display">\[\frac{\delta u}{\delta x}(j \Delta x) \approx \frac{u_{j+1}-u_{j}}{\Delta x} \]</span> * centered: <span class="math display">\[\frac{\delta u}{\delta x}(j \Delta x) \approx \frac{u_{j+1}-u_{j-1}}{2\Delta x} \]</span> and for the second order derivative (centered): <span class="math display">\[\frac{\delta^2 u}{\delta x^2}(j \Delta x) \approx \frac{u_{j+1}-2u_j+u_{j-1}}{(\Delta x)^2} \]</span></p>
+<p>In one dimension the first derivative uses one of the three approximations:</p>
+<ul>
+<li>backward: <span class="math display">\[\frac{\delta u}{\delta x}(j \Delta x) \approx \frac{u_j-u_{j-1}}{\Delta x} \]</span></li>
+<li>forward: <span class="math display">\[\frac{\delta u}{\delta x}(j \Delta x) \approx \frac{u_{j+1}-u_{j}}{\Delta x} \]</span></li>
+<li>centered: <span class="math display">\[\frac{\delta u}{\delta x}(j \Delta x) \approx \frac{u_{j+1}-u_{j-1}}{2\Delta x} \]</span> and for the second order derivative (centered): <span class="math display">\[\frac{\delta^2 u}{\delta x^2}(j \Delta x) \approx \frac{u_{j+1}-2u_j+u_{j-1}}{(\Delta x)^2} \]</span></li>
+</ul>
 </section>
 <section id="diffusion-equations-1-d" class="level3">
 <h3 class="anchored" data-anchor-id="diffusion-equations-1-d">Diffusion equations, 1-D</h3>
@@ -381,7 +395,7 @@ W\frac{\delta C}{\delta z} \]</span> <span class="math display">\[
 <li>comparison of ordinary kriging, universal kriging with predictor <span class="math inline">\(X_1\)</span>, and universal kriging with predictor <span class="math inline">\(X_1\)</span> and <span class="math inline">\(X_2\)</span> for a given interpolation problem.</li>
 </ul>
 <p>In this case, the models compared are nested (i.e., AR(1) is a special case of AR(2), etc), which may simplify the problem to testing the significance of the extension (is the additional parameter significantly different from zero?) If they are not nested, comparison becomes harder, conceptually.</p>
-<p>A famous model comparison on the other end of the extreme is that of the <em>coupled model intercomparison project</em>, CMIP, e.g.&nbsp;<a href="https://cmip.llnl.gov/">CMIP</a>; it involves large, international groups of climate scientists who agree, prior to the experiment, which models to compare.</p>
+<p>A famous model comparison on the other end of the extreme is that of the <em>coupled model intercomparison project</em>, CMIP, e.g.&nbsp;<a href="https://www.wcrp-climate.org/wgcm-cmip/wgcm-cmip6">CMIP</a>; it involves large, international groups of climate scientists who agree, prior to the experiment, which models to compare.</p>
 
 
 </section>

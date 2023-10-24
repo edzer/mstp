@@ -11,7 +11,7 @@
     "href": "index.html#literature",
     "title": "Modelling Spatiotemporal Processes",
     "section": "Literature",
-    "text": "Literature\n\nC. Chatfield, The analysis of time series: an introduction. Chapman and Hall: chapters 1, 2 and 3 (Chatfield 2003)\nSpatial Data Science, with applications in R (Pebesma and Bivand 2022):\n\nCh 1 (intro), 7 (sf, stars)\nCh 12 (interpolation)"
+    "text": "Literature\n\nC. Chatfield, The analysis of time series: an introduction. Chapman and Hall: chapters 1, 2 and 3 (Chatfield 2003)\nR. Hyndman, G. Athanasopoulos: Foreasting: Principles and Practice\nSpatial Data Science, with applications in R (Pebesma and Bivand 2022):\n\nCh 1 (intro), 7 (sf, stars)\nCh 12 (interpolation)"
   },
   {
     "objectID": "index.html#organization",

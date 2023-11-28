@@ -377,7 +377,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="what-is-geostatistical-interpolation" class="level3">
 <h3 class="anchored" data-anchor-id="what-is-geostatistical-interpolation">What is Geostatistical Interpolation?</h3>
-<p>Geostatistical interpolation (kriging) uses linear predictors <span class="math display">\[\hat{z}(s_0) = \sum_{i=1}^n \lambda_i z(s_i)\]</span> with weights chosen such that * the interpolated values is unbiased: <span class="math inline">\(\mbox{E}(\hat{z}(s_0)-z(s_0))=0\)</span> and * has mininum variance: <span class="math inline">\(\mbox{Var}(\hat{z}(s_0)-z(s_0))\)</span> is at minimum.</p>
+<p>Geostatistical interpolation (kriging) uses linear predictors <span class="math display">\[\hat{z}(s_0) = \sum_{i=1}^n \lambda_i z(s_i)\]</span> with weights chosen such that</p>
+<ul>
+<li>the interpolated values is unbiased: <span class="math inline">\(\mbox{E}(\hat{z}(s_0)-z(s_0))=0\)</span> and</li>
+<li>has mininum variance: <span class="math inline">\(\mbox{Var}(\hat{z}(s_0)-z(s_0))\)</span> is at minimum.</li>
+</ul>
 <p>All that is needed is variances and correlations.</p>
 </section>
 <section id="the-quadratic-form" class="level3">

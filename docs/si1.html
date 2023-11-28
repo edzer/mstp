@@ -443,7 +443,12 @@ div.csl-indent {
 </section>
 <section id="inverse-distance-weighted-interpolation" class="level3">
 <h3 class="anchored" data-anchor-id="inverse-distance-weighted-interpolation">Inverse distance weighted interpolation</h3>
-<p>Uses a <strong>weighted</strong> average: <span class="math display">\[\hat{Z}(s_0) = \sum_{i=1}^n \lambda_i Z(s_i)\]</span> with <span class="math inline">\(s_0 = \{x_0, y_0\}\)</span>, or <span class="math inline">\(s_0 = \{x_0, y_0, \mbox{depth}_0\}\)</span> weights inverse proportional to power <span class="math inline">\(p\)</span> of distance: <span class="math display">\[\lambda_i = \frac{|s_i-s_0|^{-p}}{\sum_{i=1}^n |s_i-s_0|^{-p}}\]</span> * power <span class="math inline">\(p\)</span>: tuning parameter * if for some <span class="math inline">\(i\)</span>, <span class="math inline">\(|s_i-s_0| = 0\)</span>, then <span class="math inline">\(\lambda_i = 1\)</span> and other weights become zero * <span class="math inline">\(\Rightarrow\)</span> <strong>exact</strong> interpolator</p>
+<p>Uses a <strong>weighted</strong> average: <span class="math display">\[\hat{Z}(s_0) = \sum_{i=1}^n \lambda_i Z(s_i)\]</span> with <span class="math inline">\(s_0 = \{x_0, y_0\}\)</span>, or <span class="math inline">\(s_0 = \{x_0, y_0, \mbox{depth}_0\}\)</span> weights inverse proportional to power <span class="math inline">\(p\)</span> of distance: <span class="math display">\[\lambda_i = \frac{|s_i-s_0|^{-p}}{\sum_{i=1}^n |s_i-s_0|^{-p}}\]</span></p>
+<ul>
+<li>power <span class="math inline">\(p\)</span>: tuning parameter</li>
+<li>if for some <span class="math inline">\(i\)</span>, <span class="math inline">\(|s_i-s_0| = 0\)</span>, then <span class="math inline">\(\lambda_i = 1\)</span> and other weights become zero</li>
+<li><span class="math inline">\(\Rightarrow\)</span> <strong>exact</strong> interpolator</li>
+</ul>
 </section>
 <section id="effect-of-power-p" class="level3">
 <h3 class="anchored" data-anchor-id="effect-of-power-p">Effect of power <span class="math inline">\(p\)</span></h3>
@@ -492,7 +497,7 @@ div.csl-indent {
 <li>we may have soil type or geological data</li>
 <li>we may have remote sensing imagery</li>
 <li>we may have all kinds of relevant information, related to processes that cause (or result from) <span class="math inline">\(Z(x)\)</span></li>
-<li>we have google maps</li>
+<li>we have google maps and other tiled web map sources</li>
 </ul>
 <p><em>We don’t want to ignore anything important</em></p>
 </section>

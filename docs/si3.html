@@ -324,12 +324,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="stationarity-1" class="level3">
 <h3 class="anchored" data-anchor-id="stationarity-1">Stationarity 1</h3>
 <p>Given prediction location <span class="math inline">\(s_0\)</span>, and data locations <span class="math inline">\(s_1\)</span> and <span class="math inline">\(s_2\)</span>, we need: <span class="math inline">\(\Var(Z(s_0))\)</span>, <span class="math inline">\(\Var(Z(s_1))\)</span>, <span class="math inline">\(\Var(Z(s_2))\)</span>, <span class="math inline">\(\Cov(Z(s_0),Z(s_1))\)</span>, <span class="math inline">\(\Cov(Z(s_0),Z(s_2))\)</span>, <span class="math inline">\(\Cov(Z(s_1),Z(s_2))\)</span>.</p>
-<p>How to get these covariances? * given a single measurement <span class="math inline">\(z(s_1)\)</span>, we can not infer <span class="math inline">\(\Var(Z(s_1))\)</span> * given two measurements <span class="math inline">\(z(s_1)\)</span> and <span class="math inline">\(z(s_2)\)</span>, we can <em>never</em> infer <span class="math inline">\(\Cov(Z(s_1),Z(s_2))\)</span> * geven a time series at <span class="math inline">\(s_1\)</span> and <span class="math inline">\(s_2\)</span>, we can infer * <span class="math inline">\(\Cov(Z(s_1),Z(s_2))\)</span>, but how to infer * <span class="math inline">\(\Cov(Z(s_0),Z(s_1))\)</span> and * <span class="math inline">\(\Cov(Z(s_0),Z(s_2))\)</span>?</p>
+<p>How to get these covariances?</p>
+<ul>
+<li>given a single measurement <span class="math inline">\(z(s_1)\)</span>, we can not infer <span class="math inline">\(\Var(Z(s_1))\)</span></li>
+<li>given two measurements <span class="math inline">\(z(s_1)\)</span> and <span class="math inline">\(z(s_2)\)</span>, we can <em>never</em> infer <span class="math inline">\(\Cov(Z(s_1),Z(s_2))\)</span></li>
+<li>geven a time series at <span class="math inline">\(s_1\)</span> and <span class="math inline">\(s_2\)</span>, we can infer
+<ul>
+<li><span class="math inline">\(\Cov(Z(s_1),Z(s_2))\)</span>, but how to infer</li>
+<li><span class="math inline">\(\Cov(Z(s_0),Z(s_1))\)</span> and</li>
+<li><span class="math inline">\(\Cov(Z(s_0),Z(s_2))\)</span>?</li>
+</ul></li>
+</ul>
 <p>Solution: assume <em>stationarity</em>.</p>
 </section>
 <section id="stationarity-2" class="level3">
 <h3 class="anchored" data-anchor-id="stationarity-2">Stationarity 2</h3>
-<p>Stationarity of the * <em>mean</em> <span class="math inline">\(\E(Z(s_1)) = \E(Z(s_2)) = ... = m\)</span> * <em>variance</em> <span class="math inline">\(\Var(Z(s_1)) = \Var(Z(s_2)) = ... = \sigma^2_0\)</span> * <em>covariance</em> <span class="math inline">\(\Cov(Z(s_1),Z(s_2)) = \Cov(Z(s_3),Z(s_4))\)</span> if <span class="math inline">\(s_1-s_2=s_3-s_4\)</span>: distance/direction dependence</p>
+<p>Stationarity of the</p>
+<ul>
+<li><em>mean</em> <span class="math inline">\(\E(Z(s_1)) = \E(Z(s_2)) = ... = m\)</span></li>
+<li><em>variance</em> <span class="math inline">\(\Var(Z(s_1)) = \Var(Z(s_2)) = ... = \sigma^2_0\)</span></li>
+<li><em>covariance</em> <span class="math inline">\(\Cov(Z(s_1),Z(s_2)) = \Cov(Z(s_3),Z(s_4))\)</span> if <span class="math inline">\(s_1-s_2=s_3-s_4\)</span>: distance/direction dependence</li>
+</ul>
 <p>Second order stationarity: <span class="math inline">\(\Cov(Z(s),Z(s+h)) = C(h)\)</span></p>
 <p>which implies: <span class="math inline">\(\Cov(Z(s),Z(s)) = \Var(Z(s))= C(0)\)</span></p>
 <p>The function <span class="math inline">\(C(h)\)</span> is the <em>covariogram</em> of the random function <span class="math inline">\(Z(s)\)</span></p>
@@ -373,7 +388,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="variogram-how-to-compute" class="level3">
 <h3 class="anchored" data-anchor-id="variogram-how-to-compute">Variogram: how to compute</h3>
 <p>average squared differences: <span class="math display">\[\hat{\gamma}(\tilde{h})=\frac{1}{2N_h}\sum_{i=1}^{N_h}(Z(s_i)-Z(s_i+h))^2 \ \
-h \in \tilde{h}\]</span> * divide by <span class="math inline">\(2N_h\)</span>: * if finite, <span class="math inline">\(\gamma(\infty)=\sigma^2\)</span> * <em>semi</em> variance * if data are not gridded, group <span class="math inline">\(N_h\)</span> pairs <span class="math inline">\(s_i,s_i+h\)</span> for which <span class="math inline">\(h \in \tilde{h}\)</span>, <span class="math inline">\(\tilde{h}=[h_1,h_2]\)</span> * choose about 10-25 distance intervals <span class="math inline">\(\tilde{h}\)</span>, from length 0 to about on third of the area size * plot <span class="math inline">\(\gamma\)</span> against <span class="math inline">\(\tilde{h}\)</span> taken as the average value of all <span class="math inline">\(h \in \tilde{h}\)</span></p>
+h \in \tilde{h}\]</span></p>
+<ul>
+<li>divide by <span class="math inline">\(2N_h\)</span>:
+<ul>
+<li>if finite, <span class="math inline">\(\gamma(\infty)=\sigma^2\)</span></li>
+<li><em>semi</em> variance</li>
+</ul></li>
+<li>if data are not gridded, group <span class="math inline">\(N_h\)</span> pairs <span class="math inline">\(s_i,s_i+h\)</span> for which <span class="math inline">\(h \in \tilde{h}\)</span>, <span class="math inline">\(\tilde{h}=[h_1,h_2]\)</span></li>
+<li>choose about 10-25 distance intervals <span class="math inline">\(\tilde{h}\)</span>, from length 0 to about on third of the area size</li>
+<li>plot <span class="math inline">\(\gamma\)</span> against <span class="math inline">\(\tilde{h}\)</span> taken as the average value of all <span class="math inline">\(h \in \tilde{h}\)</span></li>
+</ul>
 </section>
 <section id="variogram-terminology" class="level3">
 <h3 class="anchored" data-anchor-id="variogram-terminology">Variogram: terminology</h3>
@@ -405,7 +430,12 @@ h \in \tilde{h}\]</span> * divide by <span class="math inline">\(2N_h\)</span>: 
 <h3 class="anchored" data-anchor-id="why-prefer-the-variogram-over-the-covariogram">Why prefer the variogram over the covariogram</h3>
 <p>Covariance: <span class="math inline">\(\Cov(Z(s),Z(s+h)) = C(h) = \E[(Z(s)-m)(Z(s+h)-m)]\)</span></p>
 <p>Semivariance: <span class="math inline">\(\gamma(h) = \frac{1}{2} \E[(Z(s)-Z(s+h))^2]\)</span></p>
-<p><span class="math inline">\(\gamma(h)=C(0)-C(h)\)</span> * tradition * <span class="math inline">\(C(h)\)</span> needs (an estimate of) <span class="math inline">\(m\)</span>, <span class="math inline">\(\gamma(h)\)</span> does not * <span class="math inline">\(C(0)\)</span> may not exist (<span class="math inline">\(\infty\)</span>!), when <span class="math inline">\(\gamma(h)\)</span> does (e.g., Brownian motion)</p>
+<p><span class="math display">\[\gamma(h)=C(0)-C(h)\]</span></p>
+<ul>
+<li>tradition</li>
+<li><span class="math inline">\(C(h)\)</span> needs (an estimate of) <span class="math inline">\(m\)</span>, <span class="math inline">\(\gamma(h)\)</span> does not</li>
+<li><span class="math inline">\(C(0)\)</span> may not exist (<span class="math inline">\(\infty\)</span>!), when <span class="math inline">\(\gamma(h)\)</span> does (e.g., Brownian motion)</li>
+</ul>
 </section>
 <section id="known-varying-mean" class="level3">
 <h3 class="anchored" data-anchor-id="known-varying-mean">Known, varying mean</h3>

@@ -28,7 +28,7 @@ regression kriging.
 Example in `meuse` data set: `log(zinc)` depending on
 `sqrt(meuse)`
 
-```{webr-r}
+```{r}
 library(sf) # st_distance
 cov = function(h) exp(-h)
 
@@ -65,7 +65,7 @@ x0 = matrix(1, nrow(newdata), 1)
 uk(data, newdata, X, x0, cov) # mu = unknown
 ```
 Plotting them:
-```{webr-r}
+```{r}
 newdata = st_as_sf(data.frame(x = seq(-4,6,by=.1), y = 1), coords = c("x", "y"))
 x0 = matrix(1, nrow(newdata), 1)
 z_hat = uk(data, newdata, X, x0, cov) # mu unknown
@@ -79,7 +79,7 @@ abline(beta, 0, col = 'blue', lty = 2)
 
 ### Linear trend:
 
-```{webr-r}
+```{r}
 X = cbind(matrix(1,3,1), 1:3)
 X
 xcoord = seq(-4,6,by=.1)
@@ -95,7 +95,7 @@ abline(beta, col = 'blue', lty = 2)
 
 ### With Gaussian covariance:
 
-```{webr-r}
+```{r}
 cov = function(h) exp(-(h^2))
 z_hat = uk(data, newdata, X, x0, cov) # mu unknown
 plot(st_coordinates(newdata)[,1], z_hat, type='l')

@@ -1,3 +1,11 @@
+---
+title: Unknown, varying mean
+format: html
+engine: knitr
+filters:
+  - webr
+---
+
 $$
 \newcommand{\E}{{\rm E}}       % E expectation operator
 \newcommand{\Var}{{\rm Var}}   % Var variance operator
@@ -5,7 +13,6 @@ $$
 \newcommand{\Cor}{{\rm Corr}}
 $$
 
-### Unknown, varying mean
 For this, we need to know how the mean varies. Suppose we model this as
 a linear regression model in $p$ known predictors:
 $$Z(s_i) = \sum_{j=0}^p \beta_j X_j(s_i) + e(s_i)$$

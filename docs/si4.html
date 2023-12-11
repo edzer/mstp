@@ -632,7 +632,8 @@ ul.task-list li input[type="checkbox"] {
   let editor;
   require(['vs/editor/editor.main'], function () {
     editor = monaco.editor.create(editorDiv, {
-      value: `library(sf) # st_distance
+      value: `webr::install("sf")
+library(sf) # st_distance
 cov = function(h) exp(-h)
 
 calc_beta = function(X, V, z) {

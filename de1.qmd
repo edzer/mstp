@@ -1,6 +1,6 @@
-# Spatial temporal variation modelled by differential equations
+# Differential equations
 
-###  Deterministic spatial dynamic models
+##  Deterministic spatial dynamic models
 Deterministic models are based on the assumption that the processes
 governing change are known. Given that knowledge, we need
 
@@ -9,7 +9,10 @@ governing change are known. Given that knowledge, we need
 conditions): what are the sources and sinks, when does what escape or enter the
 modelled area.
 
-for a (perfect) prediction of the changes over time, and in space.
+for a (perfect) prediction of the changes over time, and
+in space. Examples of output of such models include all
+prediction models, weather models, and [atmospheric composition
+models](https://atmosphere.copernicus.eu/)
 
 Let us look at an example: air quality (fine particles, PM10).
 
@@ -33,6 +36,7 @@ usually the spatial domain is discretized into model usually
 square, rectuangular or triangular model elements.
 
 This discretization should match the level of detail 
+
 * at which we know initial conditions and 
 * at which we want to model features. 
 
@@ -67,15 +71,15 @@ air (wind), by medium/small-scale movement of air (turbulence, dispersion)
 and by themselves (diffusion; think Brownian motian of a single particle
 in a gas).
 
-As an example, take a look at the LOTOS-EUROS model
-(http://www.lotos-euros.nl/) model documentation.
+As an example, take a look at the [LOTOS-EUROS](https://www.lotos-euros.nl/) model documentation.
 
 As you can read in the _model formulation and domain_, the model
 uses external modelling results (interpolation or mechanistic modelling)
 to get the atmospheric driving forces (height mixing layer, wind fields),
-e.g. from FUB and ECMWF (http://www.ecmwf.int/).
+e.g. from FUB and [ECMWF](https://www.ecmwf.int/).
 
 Basically, the model _code_ 
+
 * reads a lot of initial and boundary data, 
 * solves the differential equations and 
 * writes out everything that is of interest, such as the space-time concentration fields.
@@ -117,6 +121,7 @@ The simples method to solve PDE's by discretization is, _finite difference_, use
 location $j \Delta x$, with $j=1,...,N$.
 
 In one dimension the first derivative uses one of the three approximations:
+
 * backward: 
 $$\frac{\delta u}{\delta x}(j \Delta x) \approx \frac{u_j-u_{j-1}}{\Delta x} $$
 * forward:
@@ -265,6 +270,6 @@ comparison becomes harder, conceptually.
 
 A famous model comparison on the other end of the extreme
 is that of the _coupled model intercomparison project_, CMIP,
-e.g. [CMIP](https://cmip.llnl.gov/); it involves large, international
+e.g. [CMIP](https://www.wcrp-climate.org/wgcm-cmip/wgcm-cmip6); it involves large, international
 groups of climate scientists who agree, prior to the experiment,
 which models to compare.

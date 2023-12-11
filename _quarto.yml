@@ -4,10 +4,10 @@ project:
 book:
   title: "Modelling Spatiotemporal Processes"
   author: "Edzer Pebesma, Christian Knoth"
-  date: "10/07/2022"
+  date: "10/08/2022"
   site-url: https://edzer.github.io/mstp/
   repo-url: https://github.com/edzer/mstp/
-  repo-branch: main
+  repo-branch: master
   repo-actions: [edit]
   chapters:
     - index.qmd
@@ -25,6 +25,8 @@ book:
         - si2.qmd
         - si3.qmd
         - si4.qmd
+        - si5.qmd
+        - si6.qmd
     - part: Other topics
       chapters:
         - de1.qmd

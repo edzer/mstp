@@ -25,23 +25,23 @@ $s_2$, we need: $\Var(Z(s_0))$, $\Var(Z(s_1))$, $\Var(Z(s_2))$,
 $\Cov(Z(s_0),Z(s_1))$, $\Cov(Z(s_0),Z(s_2))$, $\Cov(Z(s_1),Z(s_2))$.
 
 How to get these covariances?
+
 * given a single measurement $z(s_1)$, we can not infer $\Var(Z(s_1))$
-* given two measurements $z(s_1)$ and $z(s_2)$, we can _never_
-infer $\Cov(Z(s_1),Z(s_2))$
+* given two measurements $z(s_1)$ and $z(s_2)$, we can _never_ infer $\Cov(Z(s_1),Z(s_2))$
 * geven a time series at $s_1$ and $s_2$, we can infer 
- * $\Cov(Z(s_1),Z(s_2))$, but how to infer 
- * $\Cov(Z(s_0),Z(s_1))$ and
- * $\Cov(Z(s_0),Z(s_2))$?
+    * $\Cov(Z(s_1),Z(s_2))$, but how to infer 
+    * $\Cov(Z(s_0),Z(s_1))$ and
+    * $\Cov(Z(s_0),Z(s_2))$?
 
 Solution: assume _stationarity_.
 
 ### Stationarity 2
 
 Stationarity of the
+
 * _mean_ $\E(Z(s_1)) = \E(Z(s_2)) = ... = m$
 * _variance_ $\Var(Z(s_1)) = \Var(Z(s_2)) = ... = \sigma^2_0$
-* _covariance_ $\Cov(Z(s_1),Z(s_2)) = \Cov(Z(s_3),Z(s_4))$
-if $s_1-s_2=s_3-s_4$: distance/direction dependence
+* _covariance_ $\Cov(Z(s_1),Z(s_2)) = \Cov(Z(s_3),Z(s_4))$ if $s_1-s_2=s_3-s_4$: distance/direction dependence
 
 Second order stationarity:
 $\Cov(Z(s),Z(s+h)) = C(h)$
@@ -81,9 +81,9 @@ plot(v, v.fit)
 ```
 
 ### The _Variogram_
+
 * the central tool to geostatistics
-* like a mean squares (variance) in analysis of variance, like
-a $t$ to a $t$-test
+* like a mean squares (variance) in analysis of variance, like a $t$ to a $t$-test
 * measures spatial correlation
 * subject to debate: it involves _modelling_
 * synonymous to _semivariogram_, but
@@ -93,13 +93,12 @@ a $t$ to a $t$-test
 average squared differences: 
 $$\hat{\gamma}(\tilde{h})=\frac{1}{2N_h}\sum_{i=1}^{N_h}(Z(s_i)-Z(s_i+h))^2 \ \ 
 h \in \tilde{h}$$
+
 * divide by $2N_h$:
- * if finite, $\gamma(\infty)=\sigma^2$
- * _semi_ variance
-* if data are not gridded, group $N_h$ pairs $s_i,s_i+h$ for which
-$h \in \tilde{h}$, $\tilde{h}=[h_1,h_2]$
-* choose about 10-25 distance intervals $\tilde{h}$, from length
-0 to about on third of the area size
+    * if finite, $\gamma(\infty)=\sigma^2$
+    * _semi_ variance
+* if data are not gridded, group $N_h$ pairs $s_i,s_i+h$ for which $h \in \tilde{h}$, $\tilde{h}=[h_1,h_2]$
+* choose about 10-25 distance intervals $\tilde{h}$, from length 0 to about on third of the area size
 * plot $\gamma$ against $\tilde{h}$ taken as the average value of all $h \in \tilde{h}$
 
 ### Variogram: terminology
@@ -122,11 +121,11 @@ Covariance: $\Cov(Z(s),Z(s+h)) = C(h) = \E[(Z(s)-m)(Z(s+h)-m)]$
 
 Semivariance: $\gamma(h) = \frac{1}{2} \E[(Z(s)-Z(s+h))^2]$
 
-$\gamma(h)=C(0)-C(h)$
+$$\gamma(h)=C(0)-C(h)$$
+
 * tradition
 * $C(h)$ needs (an estimate of) $m$, $\gamma(h)$ does not
-* $C(0)$ may not exist ($\infty$!), when $\gamma(h)$ does
-(e.g., Brownian motion)
+* $C(0)$ may not exist ($\infty$!), when $\gamma(h)$ does (e.g., Brownian motion)
 
 ### Known, varying mean
 This is nothing else then simple kriging, except that the mean is no longer

@@ -11,11 +11,10 @@ $$
 
 ## Taking a step back
 Why do we need models?
+
 * to understand _relations_ or _processes_
-* to assess (predict, forcast, map) something we do 
-or did not measure _and cannot see_
-* to assess the consequence of decisions (scenarios)
-where we cannot measure
+* to assess (predict, forcast, map) something we do or did not measure _and cannot see_
+* to assess the consequence of decisions (scenarios) where we cannot measure
 
 ### A sample dataset
 
@@ -69,9 +68,9 @@ with $s_0 = \{x_0, y_0\}$,
 or $s_0 = \{x_0, y_0, \mbox{depth}_0\}$
 weights inverse proportional to power $p$ of distance:
 $$\lambda_i = \frac{|s_i-s_0|^{-p}}{\sum_{i=1}^n |s_i-s_0|^{-p}}$$
+
 * power $p$: tuning parameter
-* if for some $i$, $|s_i-s_0| = 0$, then $\lambda_i = 1$ and other
-weights become zero
+* if for some $i$, $|s_i-s_0| = 0$, then $\lambda_i = 1$ and other weights become zero
 * $\Rightarrow$ **exact** interpolator
 
 ### Effect of power $p$
@@ -106,15 +105,13 @@ Correspondences
 
 ### What information do we have?
  
-* We have measurements $Z(x)$, with $x$ two-dimensional
-(location on the map)
+* We have measurements $Z(x)$, with $x$ two-dimensional (location on the map)
 * we have $x$ and $y$
 * we may have land use data 
 * we may have soil type or geological data 
 * we may have remote sensing imagery 
-* we may have all kinds of relevant information, related
-to processes that cause (or result from) $Z(x)$ 
-* we have google maps 
+* we may have all kinds of relevant information, related to processes that cause (or result from) $Z(x)$ 
+* we have google maps and other tiled web map sources
 
 _We don't want to ignore anything important_
 
@@ -153,8 +150,7 @@ Differences:
 * Regression distinguishes $y$ from $x$: $y$ depends on $x$, not reverse;
 * the line $y=ax+b$ is _not_ equal to the line $x = cy + d$
 * Correlation is symmetric: $\Cor(x,y)=\Cor(y,x)$
-* Correlation coefficient is unitless and within $[-1,1]$, 
-regression coeficients have data units
+* Correlation coefficient is unitless and within $[-1,1]$, regression coeficients have data units
 * Regression is concerned with _prediction_ of $y$ from $x$.
 
 ### The power of regression models for spatial prediction
@@ -162,11 +158,9 @@ regression coeficients have data units
 ... is hard to overestimate. Regression and correlation are the
 fork and knife of statistics.
 
-* linear models have endless application: polynomials, interactions, nested
-effects, ANOVA/ANCOVA models, hypothesis testing, lack of fit testing, ...
+* linear models have endless application: polynomials, interactions, nested effects, ANOVA/ANCOVA models, hypothesis testing, lack of fit testing, ...
 * predictors can be transformed non-linearly
-* linear models can be generalized: logistic regression, Poisson regression, ...,
-to cope with discrete data (0/1 data, counts, log-normal)
+* linear models can be generalized: logistic regression, Poisson regression, ..., to cope with discrete data (0/1 data, counts, log-normal)
 * many derived techniques solve one particular issue in regression, e.g.:
     * ridge regression solves collinearity (extreme correlation among predictors)
     * stepwise regression automatically selects "best" models among many candidates
@@ -180,10 +174,8 @@ to some degree spatially correlated.
 This does not mean we should discard regression, but rather think about
 
 * to which extent is an outcome dependent on independence?
-* to which extent is regression _robust_ agains a violated assumption 
-of independent observations?
-* to which extent _is_ the assumption violated? (how strong is the
-correlation)
+* to which extent is regression _robust_ agains a violated assumption of independent observations?
+* to which extent _is_ the assumption violated? (how strong is the correlation)
 
 ### What is spatial correlation?
 

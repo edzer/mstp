@@ -46,58 +46,6 @@ by the mean vector $E(Z)=\mu=(\mu_1,...\mu_p)$ and covariance
 matrix $V$, of which element $(i,j)$ equals $\Cov(Z_i,Z_j)$
 * covariance matrices have variances on the diagonal
 
-```{r}
-library(mvtnorm)
-r = 0.0
-Sigma = cbind(c(1, r), c(r, 1))
-out = rmvnorm(500, c(5,5), Sigma)
-x = out[,1]
-y = out[,2]
-plot(x, y)
-model = lm(y~x)
-summary(model)
-lines(abline(model))
-mse = round(mean((x-y)^2), digits=3)
-title(paste("correlation:", round(cor(x,y),digits=3), "MSE", mse))
-
-r = .5
-Sigma = cbind(c(1, r), c(r, 1))
-out = rmvnorm(500, c(5,5), Sigma)
-x = out[,1]
-y = out[,2]
-plot(x, y)
-model = lm(y~x)
-summary(model)
-lines(abline(model))
-mse = round(mean((x-y)^2), digits=3)
-title(paste("correlation:", round(cor(x,y),digits=3), "MSE", mse))
-
-r = .9
-Sigma = cbind(c(1, r), c(r, 1))
-out = rmvnorm(500, c(5,5), Sigma)
-x = out[,1]
-y = out[,2]
-plot(x, y)
-model = lm(y~x)
-summary(model)
-lines(abline(model))
-mse = round(mean((x-y)^2), digits=3)
-title(paste("correlation:", round(cor(x,y),digits=3), "MSE", mse))
-
-r = .95
-Sigma = cbind(c(1, r), c(r, 1))
-out = rmvnorm(500, c(5,5), Sigma)
-x = out[,1]
-y = out[,2]
-y = x + 0.1 * rnorm(500)
-plot(x, y)
-model = lm(y~x)
-summary(model)
-lines(abline(model))
-mse = round(mean((x-y)^2), digits=3)
-title(paste("correlation:", round(cor(x,y),digits=3), "MSE", mse))
-```
-
 ### How can correlation help prediction?
 
 Problem:
@@ -150,45 +98,11 @@ $$\hat{z}(s_0) = (1-r) \mu + r z(s_1)$$
 Geostatistical interpolation (kriging) uses linear predictors
 $$\hat{z}(s_0) = \sum_{i=1}^n \lambda_i z(s_i)$$
 with weights chosen such that 
+
 * the interpolated values is unbiased: $\mbox{E}(\hat{z}(s_0)-z(s_0))=0$ and
-* has mininum variance:
-$\mbox{Var}(\hat{z}(s_0)-z(s_0))$ is at minimum.
+* has mininum variance: $\mbox{Var}(\hat{z}(s_0)-z(s_0))$ is at minimum.
 
 All that is needed is variances and correlations.
-
-
-###  Random variables 
-Random variables (RVs) are numeric variables whose outcomes are subject
-to chance.
-
-The cumulative distribution of probability $F_x(\cdot)$ over outcomes $z$ 
-over all possible values of the RV $Z$ is the probability distribution function:
-$$P(Z \le z) = F_Z(z) = \int_{-\infty}^z f_Z(u)du$$
-where $f_Z(\cdot)$ is the probability _density_ function of $Z$. The
-sum of all probability is 1.
-
-Random variables have an expectation (mean): $E(Z) =
-\int_{-\infty}^{\infty} u f_Z(u) du$ and a variance: $\Var(Z) =
-E[(Z-E(Z))^2]$. 
-
-Try to think of $E(Z)$ as $\frac{1}{n}\sum_{i=1}^{n} z_i$, with $i \rightarrow \infty$.
-
-Two random variables $X$ and $Y$ have covariance defined as
-$\Cov(X,Y) = E[(X-E(X))(Y-E(Y))]$
-
-###  Correlation and covariance
-
-Correlation is scaled covariance, scaled by the variances. For two
-variables $X$ and $Y$, it is
-$$\Cor(X,Y) = \frac{\Cov(X,Y)}{\sqrt{\Var(X)\Var(Y)}}$$
-
-It is quite easy to show that $|\Cov(X,Y)| \le \sqrt{\Var(X)\Var(Y)}$, so correlation
-ranges from -1 to 1.  For this, note that $\Cov(X,X)=\Var(X)$.
-and $\Cov(X,-X)=-\Var(X)$.
-
-It is perhaps easier to think of covariance as unscaled correlation.
-
-Note: _A large covariance does not imply a strong correlation_
 
 ###  The quadratic form
 We will not consider single random variables, but rather

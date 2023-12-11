@@ -1,3 +1,10 @@
+$$
+\newcommand{\E}{{\rm E}}       % E expectation operator
+\newcommand{\Var}{{\rm Var}}   % Var variance operator
+\newcommand{\Cov}{{\rm Cov}}   % Cov covariance operator
+\newcommand{\Cor}{{\rm Corr}}
+$$
+
 # Cokriging, cross validation, conditional simulation
 
 ## cokriging
@@ -28,7 +35,7 @@ Two types of applications:
 Cokriging prediction is not substantially different from kriging
 prediction, it is just a lot of book-keeping.
 
-How to set up Z(s), X, beta, e(s), x(s_0), v, V?
+How to set up $Z(s)$, $X$, $\beta$, $e(s)$, $x(s_0)$, $v$, $V$?
 
 Multivariable prediction involves the joint prediction of multiple,
 both spatially and cross-variable correlated variables.  Consider $m$
@@ -99,7 +106,7 @@ The main tool for estimating semivariances between different variables
 is the _cross variogram_, defined for collocated data as
 $$\gamma_{ij}(h) = \mbox{E}[(Z_i(s)-Z_i(s+h))(Z_j(s)-Z_j(s+h))]$$
 and for non-collocated data as
-$$\gamma_{ij}(h) = \mbox{E}[(Z_i(s)-m_i)(Z_j(s)-m_j)]$$
+$$\gamma_{ij}(h) = \mbox{E}[(Z_i(s)-m_i)(Z_j(s+h)-m_j)]$$
 with $m_i$ and $m_j$ the means of the respective variables. Sample cross
 variograms are the obvious sums over the available pairs or cross pairs,
 as in one of
@@ -126,14 +133,15 @@ the function `gstat`. This function does nothing else than ordering
 Consider the following definitions of four heavy metals:
 
 ```{r}
+library(sf)
 library(sp)
-data(meuse)
-meuse = st_as_sf(meuse, coords = c("x", "y"))
 library(gstat)
-g <- gstat(NULL, "logCd", log(cadmium)~1, meuse)
-g <- gstat(g, "logCu", log(copper)~1, meuse)
-g <- gstat(g, "logPb", log(lead)~1, meuse)
-g <- gstat(g, "logZn", log(zinc)~1, meuse)
+data(meuse, package = "sp")
+meuse = st_as_sf(meuse, coords = c("x", "y"))
+g <- gstat(id = "logCd", formula = log(cadmium)~1, data = meuse)
+g <- gstat(g, "logCu", log(copper)~1, data = meuse)
+g <- gstat(g, "logPb", log(lead)~1, data = meuse)
+g <- gstat(g, "logZn", log(zinc)~1, data = meuse)
 g 
 vm <- variogram(g)
 vm.fit <- fit.lmc(vm, g, vgm(1, "Sph", 800, 1))
@@ -143,6 +151,7 @@ plot(vm, vm.fit)
 ### Kriging predictions and errors -- how good are they?
 Cross validation can be used to assess the quality of any interpolation,
 including kriging. We split the data set in $n$ parts (folds). For each part, we
+
 * leave out the observations of this fold
 * use the observations of all other folds to predict the values at the
 locations of this fold
@@ -180,9 +189,9 @@ $\sigma(s_0)$.
 a measure of interpolation accuracy
 
 ### Conditional probability
+
 * we can use e.g. the normal distribution (on the log-scale?) to 
 assess the conditional probability $\Pr(Z(s_0) > 500 | z(s_1),...,z(s_n))$
-
 * the additional assumption underlying this is _multivariate
 normality_: in addition to having stationary mean and covariance, the
 field $Z$ is now assumed to follow a stationary, multivariate normal
@@ -216,7 +225,7 @@ v = variogram(I(zinc > 500)~1, meuse)
 v_I.fit = fit.variogram(v, vgm(.2, "Sph", 900, .02))
 plot(v, v_I.fit)
 out$I500 = krige(I(zinc > 500)~1, meuse, meuse.grid, v_I.fit)$var1.pred
-summary(out$I500)
+out["I500"] # summarizes
 plot(merge(out[c("p500", "I500")]), col = bpy.colors(), breaks = "equal")
 ```
 

@@ -10,9 +10,8 @@ knit:
 view:
 	google-chrome _book/index.html
 
-www:
-	# scp lec*html epebe_01@ifgifiles.uni-muenster.de:WWW/mstp
-	cp *png lec*html docs
+publish:
+	cp -rp _book/* docs
 	git add docs/*
 	git commit -m 'update'
 	git push

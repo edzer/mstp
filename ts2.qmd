@@ -13,15 +13,22 @@ lines(T.per~date,meteo,col='red')
 ## Removing the diurnal periodicity
 
 Assuming this is a sinus function, 
-$$\alpha_1 + \alpha_2 \sin(t + \alpha_3)$$,
+$$\alpha_1 + \alpha_2 \sin(t + \alpha_3),$$
 we need non-linear regression ($\alpha_3$)
 ```{r}
-attach(meteo) # so we can use variable names directly:
+attach(meteo) 
 f = function(x) {
 	sum((T.outside - (x[1] + x[2] * sin(pi * (hours + x[3])/12)))^2)
 }
 nlm(f, c(0, 0, 0)) # zero initial values
 ```
+We attached `meteo` so we can use variable names
+directly: `f` has acces to `T.outside` and `hours`,
+without needing them to be passed as arguments ([lexical
+scoping](https://bookdown.org/rdpeng/rprogdatascience/scoping-rules-of-r.html)).
+Without attaching, that would not work.
+
+In the next part on optimization we will see what `nlm` does.
 
 ## Temperature anomaly
 
@@ -39,8 +46,8 @@ title("anomaly")
 
 ## How to select a "best" model?
 
-A possible approach is to find the minimum for {\em Akaike's Information
-Criterion} (AIC) for ARMA($p,q$) models and series of length $n$:
+A possible approach is to find the minimum for _Akaike's Information
+Criterion_ (AIC) for ARMA($p,q$) models and series of length $n$:
 $$AIC = \log \hat{\sigma}^2 + 2(p+q+1)/n$$
 with $\hat{\sigma}^2$ the estimated residual (noise) variance.
 

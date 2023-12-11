@@ -222,7 +222,7 @@ the value inbetween $y_{t-1}$ is obtained by
 on _both_ intermediate values $y_{t-1}$ and $y_{t-2}$
 + etc.
 
-Partial correlation can help reveal what the order of an AR(p) series is.
+Partial correlation can help reveal what the order of an MA(q) or AR(p) series is:
 
 ```{r}
 plot(pacf(e5, na.action = na.omit))
@@ -230,7 +230,6 @@ plot(pacf(e20, na.action = na.omit))
 plot(pacf(y))
 plot(pacf(y2))
 ```
-
 
 ### Relation between AR and MA processes
 Chatfield [@chatfield] has more details about this.  Substitute the AR(1) as follows

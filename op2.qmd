@@ -6,12 +6,12 @@
 * Main problem: a minimum may be _local_, other initial values may result in other, better minima
 * Cure: apply Gauss-Newton from many different starting points (cumbersome, costly, cpu intensive)
 * Global search:
-  * apply a grid search -- curse of dimensionality. E.g. for three
+    * apply a grid search -- curse of dimensionality. E.g. for three
  parameters, 50 grid nodes along each direction: $50^3= 125000$
-  * apply random sampling (same problem)
-  * use search methods that not _only_ go downhill:
-    * Metropolis-Hastings (sampling)
-    * Simulated Annealing (optimizing)
+    * apply random sampling (same problem)
+    * use search methods that not _only_ go downhill:
+        * Metropolis-Hastings (sampling)
+        * Simulated Annealing (optimizing)
 
 ## Metropolis-Hastings
 Why would one want probabilistic search?
@@ -34,8 +34,8 @@ we keep $x_t$ and set $x_{t+1}\leftarrow x_t$.
 
 * if $P(x') > P(x_t)$, we accept $x'$ and set $x_{t+1}=x'$
 * if $P(x') < P(x_t)$, then
-   * we draw $U$, a random uniform value from $[0,1]$, and
-   * accept $x'$ if $U < \frac{P(x')}{P(x_t)}$
+    * we draw $U$, a random uniform value from $[0,1]$, and
+    * accept $x'$ if $U < \frac{P(x')}{P(x_t)}$
 
 Often, $x'$ is drawn from some normal distribution centered around $x_t$:
 $N(x_t,\sigma^2 I)$. Suppose we accept it always, then

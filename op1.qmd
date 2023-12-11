@@ -9,7 +9,7 @@ Take $x_1$ the example
 
 $$
 	\begin{array}{ll}
-	a x_{11} + b x_{12} & = y_1 \\\\
+	a x_{11} + b x_{12} & = y_1 \\
 	a x_{21} + b x_{22} & = y_2
 	\end{array}
 $$
@@ -19,7 +19,7 @@ similar to fitting a straight line through two points: let $(x_1,y_1)$
 be the first point and $(x_2,y_2)$ be the second, then
 $$
 	\begin{array}{ll}
-	a + b x_1 & = y_1 \\\\
+	a + b x_1 & = y_1 \\
 	a + b x_2 & = y_2
 	\end{array}
 $$
@@ -31,7 +31,7 @@ $a$ or $b$, and substitute that in the second.
 We can rewrite
 $$
 	\begin{array}{ll}
-	a x_{11} + b x_{12} & = y_1\\\\
+	a x_{11} + b x_{12} & = y_1\\
 	a x_{21} + b x_{22} & = y_2
 	\end{array}
 $$
@@ -39,19 +39,19 @@ as the matrix product
 $$
   \left[
   \begin{array}{ll}
-  x_{11} & x_{12}\\\\
+  x_{11} & x_{12}\\
   x_{21} & x_{22} 
   \end{array}
   \right] 
   \left[
   \begin{array}{l}
-  a \\\\ b
+  a \\ b
   \end{array}
   \right]
   =
   \left[
   \begin{array}{l}
-  y_1 \\\\ y_2
+  y_1 \\ y_2
   \end{array}
   \right]
 $$
@@ -64,9 +64,9 @@ If
 $$A = 
 	\left[
 	\begin{array}{rr}
-	1 & 4 \\\\
-	2 & -1 \\\\
-	8 & 9 \\\\
+	1 & 4 \\
+	2 & -1 \\
+	8 & 9 \\
 	\end{array}
 	\right] 
 $$
@@ -74,8 +74,8 @@ then it's transpose,
 $$
 	A' = \left[
 	\begin{array}{rrr}
-	1 & 2 & 8 \\\\
-	4 & -1 & 9 \\\\
+	1 & 2 & 8 \\
+	4 & -1 & 9 \\
 	\end{array}
 	\right] 
 $$
@@ -89,9 +89,9 @@ number) and zeroes elsewhere. E.g. the $3 \times 3$ identity
 $$
 	I = \left[
 	\begin{array}{lll}
-	1 & 0 & 0 \\\\
-	0 & 1 & 0 \\\\
-	0 & 0 & 1 \\\\
+	1 & 0 & 0 \\
+	0 & 1 & 0 \\
+	0 & 0 & 1 \\
 	\end{array}
 	\right] 
 $$
@@ -102,9 +102,9 @@ $$X^{-1}X = I$$ and $$X X^{-1}=I$$
 Suppose we have $n$ equations with $p$ unknowns:
 $$
 	\begin{array}{cccccc}
-	a_1 x_{11} + a_2 x_{12} + & ... & + & a_p x_{1p} & = & y_1 \\\\
-	a_1 x_{21} + a_2 x_{22} + & ... & + & a_p x_{2p} & = & y_2 \\\\
-	\vdots & \ddots & & \vdots & & \vdots \\\\
+	a_1 x_{11} + a_2 x_{12} + & ... & + & a_p x_{1p} & = & y_1 \\
+	a_1 x_{21} + a_2 x_{22} + & ... & + & a_p x_{2p} & = & y_2 \\
+	\vdots & \ddots & & \vdots & & \vdots \\
 	a_1 x_{n1} + a_2 x_{n2} + & ... & + & a_p x_{np} & = & y_n
 	\end{array}
 $$ 
@@ -184,19 +184,19 @@ nature, A4 paper, ...
 
 ### Minimum outside current section
 
-![golden1](http://ifgi.uni-muenster.de/~epebe_01/golden1.pdf)
+![golden1](images/golden1.pdf)
 
 ### Minimum inside current section
 
-![golden2](http://ifgi.uni-muenster.de/~epebe_01/golden2.pdf)
+![golden2](images/golden2.pdf)
 
-![golden3](http://ifgi.uni-muenster.de/~epebe_01/golden3.pdf)
+![golden3](images/golden3.pdf)
 
-![golden4](http://ifgi.uni-muenster.de/~epebe_01/golden4.pdf)
+![golden4](images/golden4.pdf)
 
-![golden5](http://ifgi.uni-muenster.de/~epebe_01/golden5.pdf)
+![golden5](images/golden5.pdf)
 
-![golden6](http://ifgi.uni-muenster.de/~epebe_01/golden6.pdf)
+![golden6](images/golden6.pdf)
 
 ### the algorithm
 Recursive zooming:
@@ -215,16 +215,16 @@ Spherical variogram with nugget has three parameters: nugget $c_0$,
 $$
 \gamma(h) = \left\{
 \begin{array}{ll}
-		  0 & \mbox{if}\ \  h = 0 \\\\
-		  c_0 + c_1 f(a,h) & \mbox{if}\ \  h > 0 \\\\
+		  0 & \mbox{if}\ \  h = 0 \\
+		  c_0 + c_1 f(a,h) & \mbox{if}\ \  h > 0 \\
 \end{array}
 \right.
 $$
 with 
 $$f(a, h)= \left\{
 \begin{array}{ll}
-\frac{3h}{2a}-\frac{1}{2}(\frac{h}{a})^3 & \mbox{if} \ \ 0 \le h \le a \\\\
-1 & \mbox{if} \ \ h > a \\\\
+\frac{3h}{2a}-\frac{1}{2}(\frac{h}{a})^3 & \mbox{if} \ \ 0 \le h \le a \\
+1 & \mbox{if} \ \ h > a \\
 \end{array}
 \right.
 $$
@@ -272,9 +272,9 @@ $$
 J_f(\theta^k) =
 \left[
 \begin{array}{ccccc}
-\frac{\delta f_1(\theta^k)}{\delta\theta_1} & ... &  \frac{\delta f_1(\theta^k)}{\delta\theta_m} \\\\
-\vdots & \ddots & \vdots \\\\
-\frac{\delta f_n(\theta^k)}{\delta\theta_1} & ... &  \frac{\delta f_n(\theta^k)}{\delta\theta_m} \\\\
+\frac{\delta f_1(\theta^k)}{\delta\theta_1} & ... &  \frac{\delta f_1(\theta^k)}{\delta\theta_m} \\
+\vdots & \ddots & \vdots \\
+\frac{\delta f_n(\theta^k)}{\delta\theta_1} & ... &  \frac{\delta f_n(\theta^k)}{\delta\theta_m} \\
 \end{array}
 \right]
 $$ 

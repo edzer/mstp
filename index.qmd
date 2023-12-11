@@ -3,6 +3,7 @@
 ## Literature
 
 * C. Chatfield, The analysis of time series: an introduction. Chapman and Hall: chapters 1, 2 and 3 [@chatfield] 
+* R. Hyndman, G. Athanasopoulos: [Foreasting: Principles and Practice](https://otexts.com/fpp3/)
 * Spatial Data Science, with applications in R [@sdsr]:
     * Ch 1 (intro), 7 (sf, stars)
     * Ch 12 (interpolation)
@@ -117,7 +118,7 @@ Topics:
 
 ### Aggregations
 + we can aggregate fields, or objects, but do this differently:
-+ population can be summed, temperature cannot
++ population can be summed, temperature cannot (see [intensive/extensive properties](https://en.wikipedia.org/wiki/Intensive_and_extensive_properties))
 
 ## Aims of modelling
 ... could be
@@ -133,6 +134,9 @@ More scientific aims of modelling are
 ### What is a model?
 
 + conceptual models, e.g. the water cycle ([wikipedia](http://en.wikipedia.org/wiki/File:Water_cycle.png):) ![the water cycle](https://upload.wikimedia.org/wikipedia/commons/9/94/Water_cycle.png)
+
+ ![the water cycle, updated](https://i0.wp.com/eos.org/wp-content/uploads/2022/10/usgs-water-cycle.png)
+
 + object models, such as UML ([wikipedia](http://en.wikipedia.org/wiki/File:UML_diagrams_overview.svg):) ![UML](https://upload.wikimedia.org/wikipedia/commons/e/ed/UML_diagrams_overview.svg)
 + mathematical models, such as Navier Stokes' equation, ([wikipedia](https://en.wikipedia.org/wiki/Navier%E2%80%93Stokes_equations):)
 ![Navier Stokes equation](http://upload.wikimedia.org/math/4/f/e/4fef570fa684173cbc6e70a904dd5e66.png) 

@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.514">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Modelling Spatiotemporal Processes - 5&nbsp; Simple approaches</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./si2.html" rel="next">
+<link href="./op2.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./si1.html">Spatial Interpolation</a></li><li class="breadcrumb-item"><a href="./si1.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Simple approaches</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Modelling Spatiotemporal Processes</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/edzer/mstp/" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Course overview</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Time Series</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ts1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Time Series</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ts2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Fitting and choosing models</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Optimisation</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./op1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Optimization: linear and non-linear</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./op2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Optimization: stochastic methods</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text">Spatial Interpolation</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./si1.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Simple approaches</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./si2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Spatial prediction</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./si3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Unknown, constant mean</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./si4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Unknown, varying mean</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./si5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Local predictors, block kriging</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./si6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Cokriging, cross validation, conditional simulation</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+ <span class="menu-text">Other topics</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./de1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Differential equations</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#taking-a-step-back" id="toc-taking-a-step-back" class="nav-link active" data-scroll-target="#taking-a-step-back"><span class="header-section-number">5.1</span> Taking a step back</a>
+  <ul class="collapse">
+  <li><a href="#a-sample-dataset" id="toc-a-sample-dataset" class="nav-link" data-scroll-target="#a-sample-dataset">A sample dataset</a></li>
+  <li><a href="#thiessen-polygons-1-nn" id="toc-thiessen-polygons-1-nn" class="nav-link" data-scroll-target="#thiessen-polygons-1-nn">Thiessen “polygons”, 1-NN</a></li>
+  <li><a href="#zinc-concentration-vs.-distance-to-river" id="toc-zinc-concentration-vs.-distance-to-river" class="nav-link" data-scroll-target="#zinc-concentration-vs.-distance-to-river">Zinc concentration vs.&nbsp;distance to river</a></li>
+  <li><a href="#zinc-conc.-vs.-distance-to-river-map-of-linear-trend" id="toc-zinc-conc.-vs.-distance-to-river-map-of-linear-trend" class="nav-link" data-scroll-target="#zinc-conc.-vs.-distance-to-river-map-of-linear-trend">Zinc conc. vs.&nbsp;distance to river: map of linear trend</a></li>
+  <li><a href="#inverse-distance-weighted-interpolation" id="toc-inverse-distance-weighted-interpolation" class="nav-link" data-scroll-target="#inverse-distance-weighted-interpolation">Inverse distance weighted interpolation</a></li>
+  <li><a href="#effect-of-power-p" id="toc-effect-of-power-p" class="nav-link" data-scroll-target="#effect-of-power-p">Effect of power <span class="math inline">\(p\)</span></a></li>
+  <li><a href="#time-series-versus-spatial-data" id="toc-time-series-versus-spatial-data" class="nav-link" data-scroll-target="#time-series-versus-spatial-data">Time series versus spatial data</a></li>
+  <li><a href="#what-information-do-we-have" id="toc-what-information-do-we-have" class="nav-link" data-scroll-target="#what-information-do-we-have">What information do we have?</a></li>
+  <li><a href="#regression-or-correlation" id="toc-regression-or-correlation" class="nav-link" data-scroll-target="#regression-or-correlation">Regression or correlation?</a></li>
+  <li><a href="#correlation-vs.-regression" id="toc-correlation-vs.-regression" class="nav-link" data-scroll-target="#correlation-vs.-regression">Correlation vs.&nbsp;regression:</a></li>
+  <li><a href="#the-power-of-regression-models-for-spatial-prediction" id="toc-the-power-of-regression-models-for-spatial-prediction" class="nav-link" data-scroll-target="#the-power-of-regression-models-for-spatial-prediction">The power of regression models for spatial prediction</a></li>
+  <li><a href="#why-is-regression-difficult-in-spatial-problems" id="toc-why-is-regression-difficult-in-spatial-problems" class="nav-link" data-scroll-target="#why-is-regression-difficult-in-spatial-problems">Why is regression difficult in spatial problems?</a></li>
+  <li><a href="#what-is-spatial-correlation" id="toc-what-is-spatial-correlation" class="nav-link" data-scroll-target="#what-is-spatial-correlation">What is spatial correlation?</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/edzer/mstp/edit/master/si1.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./si1.html">Spatial Interpolation</a></li><li class="breadcrumb-item"><a href="./si1.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Simple approaches</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Simple approaches</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p><span class="math display">\[
+\newcommand{\Cor}{{\rm Corr}}
+\]</span></p>
+<ul>
+<li>Simple ways of interpolation</li>
+<li>Simple statistical models for interpolation</li>
+<li>Geostatistical interpolation</li>
+<li>Deterministic models</li>
+<li>Combined approaches</li>
+</ul>
+<section id="taking-a-step-back" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="taking-a-step-back"><span class="header-section-number">5.1</span> Taking a step back</h2>
+<p>Why do we need models?</p>
+<ul>
+<li>to understand <em>relations</em> or <em>processes</em></li>
+<li>to assess (predict, forcast, map) something we do or did not measure <em>and cannot see</em></li>
+<li>to assess the consequence of decisions (scenarios) where we cannot measure</li>
+</ul>
+<section id="a-sample-dataset" class="level3">
+<h3 class="anchored" data-anchor-id="a-sample-dataset">A sample dataset</h3>
+<p>The <code>meuse</code> dataset is loaded from package <strong>sp</strong>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(meuse.riv, <span class="at">package =</span> <span class="st">"sp"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(meuse, <span class="at">package =</span> <span class="st">"sp"</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>meuse.sf <span class="ot">=</span> <span class="fu">st_as_sf</span>(meuse, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>))</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>meuse.sr <span class="ot">=</span> <span class="fu">st_sfc</span>(<span class="fu">st_polygon</span>(<span class="fu">list</span>(meuse.riv)))</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>br <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">100</span>,<span class="dv">200</span>,<span class="dv">400</span>,<span class="dv">700</span>,<span class="dv">1200</span>,<span class="dv">2000</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(meuse.sf[<span class="st">"zinc"</span>], <span class="at">pch =</span> <span class="dv">16</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">breaks =</span> br, <span class="at">at =</span> br, <span class="at">key.pos =</span> <span class="dv">4</span>,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">main =</span> <span class="st">"zinc, ppm"</span>, <span class="at">reset =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(meuse.sr, <span class="at">col =</span> <span class="st">"lightblue"</span>, <span class="at">add =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="si1_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="thiessen-polygons-1-nn" class="level3">
+<h3 class="anchored" data-anchor-id="thiessen-polygons-1-nn">Thiessen “polygons”, 1-NN</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gstat)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(meuse.grid, <span class="at">package =</span> <span class="st">"sp"</span>) <span class="co"># data.frame</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stars)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>meuse.grid <span class="ot">=</span> <span class="fu">st_as_stars</span>(meuse.grid) <span class="co"># makes it a raster</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>meuse.grid</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># stars object with 2 dimensions and 5 attributes</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co"># attribute(s):</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">#     part.a         part.b          dist        soil      </span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :0      Min.   :0      Min.   :0      1   :1665  </span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co">#  1st Qu.:0      1st Qu.:0      1st Qu.:0      2   :1084  </span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co">#  Median :0      Median :1      Median :0      3   : 354  </span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   :0      Mean   :1      Mean   :0      NA's:5009  </span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.:1      3rd Qu.:1      3rd Qu.:0                 </span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   :1      Max.   :1      Max.   :1                 </span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's   :5009   NA's   :5009   NA's   :5009              </span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="co">#   ffreq     </span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="co">#  1   : 779  </span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="co">#  2   :1335  </span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="co">#  3   : 989  </span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="co">#  NA's:5009  </span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="co">#             </span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="co">#             </span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="co">#             </span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="co"># dimension(s):</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="co">#   from  to offset delta x/y</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="co"># x    1  78 178440    40 [x]</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="co"># y    1 104 333760   -40 [y]</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>meuse.th <span class="ot">=</span> <span class="fu">idw</span>(zinc<span class="sc">~</span><span class="dv">1</span>, meuse.sf, meuse.grid, <span class="at">nmax =</span> <span class="dv">1</span>)</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="co"># [inverse distance weighted interpolation]</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(meuse.th[<span class="dv">1</span>], <span class="at">nbreaks =</span> <span class="dv">29</span>, <span class="at">col =</span> <span class="fu">sf.colors</span>(<span class="dv">28</span>),</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">main =</span> <span class="st">"Zinc, 1-nearest neighbour"</span>, <span class="at">reset =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">st_geometry</span>(meuse.sf), <span class="at">col =</span> <span class="dv">3</span>, <span class="at">cex=</span>.<span class="dv">5</span>, <span class="at">add =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="si1_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="zinc-concentration-vs.-distance-to-river" class="level3">
+<h3 class="anchored" data-anchor-id="zinc-concentration-vs.-distance-to-river">Zinc concentration vs.&nbsp;distance to river</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">log</span>(zinc)<span class="sc">~</span><span class="fu">sqrt</span>(dist), meuse.sf)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="fu">lm</span>(<span class="fu">log</span>(zinc) <span class="sc">~</span> <span class="fu">sqrt</span>(dist), meuse.sf))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="si1_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="zinc-conc.-vs.-distance-to-river-map-of-linear-trend" class="level3">
+<h3 class="anchored" data-anchor-id="zinc-conc.-vs.-distance-to-river-map-of-linear-trend">Zinc conc. vs.&nbsp;distance to river: map of linear trend</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>meuse.grid<span class="sc">$</span>sqrtdist <span class="ot">=</span> <span class="fu">sqrt</span>(meuse.grid<span class="sc">$</span>dist)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(meuse.grid[<span class="st">"sqrtdist"</span>], <span class="at">col =</span> <span class="fu">sf.colors</span>(), <span class="at">breaks =</span> <span class="st">"equal"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="si1_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="inverse-distance-weighted-interpolation" class="level3">
+<h3 class="anchored" data-anchor-id="inverse-distance-weighted-interpolation">Inverse distance weighted interpolation</h3>
+<p>Uses a <strong>weighted</strong> average: <span class="math display">\[\hat{Z}(s_0) = \sum_{i=1}^n \lambda_i Z(s_i)\]</span> with <span class="math inline">\(s_0 = \{x_0, y_0\}\)</span>, or <span class="math inline">\(s_0 = \{x_0, y_0, \mbox{depth}_0\}\)</span> weights inverse proportional to power <span class="math inline">\(p\)</span> of distance: <span class="math display">\[\lambda_i = \frac{|s_i-s_0|^{-p}}{\sum_{i=1}^n |s_i-s_0|^{-p}}\]</span></p>
+<ul>
+<li>power <span class="math inline">\(p\)</span>: tuning parameter</li>
+<li>if for some <span class="math inline">\(i\)</span>, <span class="math inline">\(|s_i-s_0| = 0\)</span>, then <span class="math inline">\(\lambda_i = 1\)</span> and other weights become zero</li>
+<li><span class="math inline">\(\Rightarrow\)</span> <strong>exact</strong> interpolator</li>
+</ul>
+</section>
+<section id="effect-of-power-p" class="level3">
+<h3 class="anchored" data-anchor-id="effect-of-power-p">Effect of power <span class="math inline">\(p\)</span></h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">13531</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>pts <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, <span class="at">y =</span> <span class="fu">rep</span>(<span class="dv">0</span>,<span class="dv">10</span>), <span class="at">z =</span> <span class="fu">rnorm</span>(<span class="dv">10</span>)<span class="sc">*</span><span class="dv">3</span> <span class="sc">+</span> <span class="dv">6</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>pts.sf <span class="ot">=</span> <span class="fu">st_as_sf</span>(pts, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>))</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>xpts <span class="ot">=</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">1100</span> <span class="sc">/</span> <span class="dv">100</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>grd <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">x =</span> xpts, <span class="at">y =</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="fu">length</span>(xpts)))</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>grd <span class="ot">=</span> <span class="fu">st_as_sf</span>(grd, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>))</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(z <span class="sc">~</span> x, <span class="fu">as.data.frame</span>(pts), <span class="at">xlab =</span><span class="st">'location'</span>, <span class="at">ylab =</span> <span class="st">'attribute value'</span>)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(xpts, <span class="fu">idw</span>(z<span class="sc">~</span><span class="dv">1</span>, pts.sf, grd, <span class="at">idp =</span> <span class="dv">2</span>)<span class="sc">$</span>var1.pred)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co"># [inverse distance weighted interpolation]</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(xpts, <span class="fu">idw</span>(z<span class="sc">~</span><span class="dv">1</span>, pts.sf, grd, <span class="at">idp =</span> <span class="dv">5</span>)<span class="sc">$</span>var1.pred, <span class="at">col =</span> <span class="st">'darkgreen'</span>)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co"># [inverse distance weighted interpolation]</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(xpts, <span class="fu">idw</span>(z<span class="sc">~</span><span class="dv">1</span>, pts.sf, grd, <span class="at">idp =</span> .<span class="dv">5</span>)<span class="sc">$</span>var1.pred, <span class="at">col =</span> <span class="st">'red'</span>)</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co"># [inverse distance weighted interpolation]</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"bottomright"</span>, <span class="fu">c</span>(<span class="st">"2"</span>, <span class="st">".5"</span>, <span class="st">"5"</span>), <span class="at">lty =</span> <span class="dv">1</span>, </span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">col=</span><span class="fu">c</span>(<span class="st">"black"</span>, <span class="st">"red"</span>, <span class="st">"darkgreen"</span>), <span class="at">title =</span> <span class="st">"invese distance power"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="si1_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="time-series-versus-spatial-data" class="level3">
+<h3 class="anchored" data-anchor-id="time-series-versus-spatial-data">Time series versus spatial data</h3>
+<p>Differences:</p>
+<ul>
+<li>spatial data live in 2 (or 3) dimensions</li>
+<li>there’s no past and future</li>
+<li>there’s no simple conditional independence (AR)</li>
+</ul>
+<p>Correspondences</p>
+<ul>
+<li>nearby observations are more alike (auto-correlation)</li>
+<li>we can form moving averages</li>
+<li>coordinate reference systems are a bit like time zones and DST</li>
+</ul>
+</section>
+<section id="what-information-do-we-have" class="level3">
+<h3 class="anchored" data-anchor-id="what-information-do-we-have">What information do we have?</h3>
+<ul>
+<li>We have measurements <span class="math inline">\(Z(x)\)</span>, with <span class="math inline">\(x\)</span> two-dimensional (location on the map)</li>
+<li>we have <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span></li>
+<li>we may have land use data</li>
+<li>we may have soil type or geological data</li>
+<li>we may have remote sensing imagery</li>
+<li>we may have all kinds of relevant information, related to processes that cause (or result from) <span class="math inline">\(Z(x)\)</span></li>
+<li>we have google maps and other tiled web map sources</li>
+</ul>
+<p><em>We don’t want to ignore anything important</em></p>
+</section>
+<section id="regression-or-correlation" class="level3">
+<h3 class="anchored" data-anchor-id="regression-or-correlation">Regression or correlation?</h3>
+<p>(Correlation between two different variables, no auto-correlation:)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="dv">500</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">=</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>y <span class="ot">=</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>R <span class="ot">=</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>),<span class="dv">2</span>,<span class="dv">2</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>R</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">#      [,1] [,2]</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co"># [1,]    1    0</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co"># [2,]    0    1</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">cbind</span>(x,y) <span class="sc">%*%</span> <span class="fu">chol</span>(R))</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span>(<span class="st">"zero correlation"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="si1_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>R[<span class="dv">2</span>,<span class="dv">1</span>] <span class="ot">=</span> R[<span class="dv">1</span>,<span class="dv">2</span>] <span class="ot">=</span> <span class="fl">0.5</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">cbind</span>(x,y) <span class="sc">%*%</span> <span class="fu">chol</span>(R))</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span>(<span class="st">"correlation 0.5"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="si1_files/figure-html/unnamed-chunk-6-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>R[<span class="dv">2</span>,<span class="dv">1</span>] <span class="ot">=</span> R[<span class="dv">1</span>,<span class="dv">2</span>] <span class="ot">=</span> <span class="fl">0.9</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">cbind</span>(x,y) <span class="sc">%*%</span> <span class="fu">chol</span>(R))</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span>(<span class="st">"correlation 0.9"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="si1_files/figure-html/unnamed-chunk-6-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>R[<span class="dv">2</span>,<span class="dv">1</span>] <span class="ot">=</span> R[<span class="dv">1</span>,<span class="dv">2</span>] <span class="ot">=</span> <span class="fl">0.98</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">cbind</span>(x,y) <span class="sc">%*%</span> <span class="fu">chol</span>(R))</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span>(<span class="st">"correlation 0.98"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="si1_files/figure-html/unnamed-chunk-6-4.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="correlation-vs.-regression" class="level3">
+<h3 class="anchored" data-anchor-id="correlation-vs.-regression">Correlation vs.&nbsp;regression:</h3>
+<p>Correspondences:</p>
+<ul>
+<li>both are in the “classic statistics” book, and may involve hypothesis testing</li>
+<li>both deal with <em>two</em> continuous variables</li>
+<li>both look at (first order) <em>linear</em> relations</li>
+<li>when correlation is significant, the regression <em>slope</em> is significant</li>
+</ul>
+<p>Differences:</p>
+<ul>
+<li>Regression distinguishes <span class="math inline">\(y\)</span> from <span class="math inline">\(x\)</span>: <span class="math inline">\(y\)</span> depends on <span class="math inline">\(x\)</span>, not reverse;</li>
+<li>the line <span class="math inline">\(y=ax+b\)</span> is <em>not</em> equal to the line <span class="math inline">\(x = cy + d\)</span></li>
+<li>Correlation is symmetric: <span class="math inline">\(\Cor(x,y)=\Cor(y,x)\)</span></li>
+<li>Correlation coefficient is unitless and within <span class="math inline">\([-1,1]\)</span>, regression coeficients have data units</li>
+<li>Regression is concerned with <em>prediction</em> of <span class="math inline">\(y\)</span> from <span class="math inline">\(x\)</span>.</li>
+</ul>
+</section>
+<section id="the-power-of-regression-models-for-spatial-prediction" class="level3">
+<h3 class="anchored" data-anchor-id="the-power-of-regression-models-for-spatial-prediction">The power of regression models for spatial prediction</h3>
+<p>… is hard to overestimate. Regression and correlation are the fork and knife of statistics.</p>
+<ul>
+<li>linear models have endless application: polynomials, interactions, nested effects, ANOVA/ANCOVA models, hypothesis testing, lack of fit testing, …</li>
+<li>predictors can be transformed non-linearly</li>
+<li>linear models can be generalized: logistic regression, Poisson regression, …, to cope with discrete data (0/1 data, counts, log-normal)</li>
+<li>many derived techniques solve one particular issue in regression, e.g.:
+<ul>
+<li>ridge regression solves collinearity (extreme correlation among predictors)</li>
+<li>stepwise regression automatically selects “best” models among many candidates</li>
+<li>classification and regression trees</li>
+</ul></li>
+</ul>
+</section>
+<section id="why-is-regression-difficult-in-spatial-problems" class="level3">
+<h3 class="anchored" data-anchor-id="why-is-regression-difficult-in-spatial-problems">Why is regression difficult in spatial problems?</h3>
+<p>Regression models assume independent observations. Spatial data are always to some degree spatially correlated.</p>
+<p>This does not mean we should discard regression, but rather think about</p>
+<ul>
+<li>to which extent is an outcome dependent on independence?</li>
+<li>to which extent is regression <em>robust</em> agains a violated assumption of independent observations?</li>
+<li>to which extent <em>is</em> the assumption violated? (how strong is the correlation)</li>
+</ul>
+</section>
+<section id="what-is-spatial-correlation" class="level3">
+<h3 class="anchored" data-anchor-id="what-is-spatial-correlation">What is spatial correlation?</h3>
+<p>Waldo Tobler’s first “law” in geography: “Everything is related to everything else, but near things are more related than distant things.” <span class="citation" data-cites="tobler">(<a href="references.html#ref-tobler" role="doc-biblioref">Tobler 1970</a>)</span></p>
+<p>Setting aside whether Tobler was the first to acknowledge this, and also whether the expression can be called a “law”, we wonder how <em>being related</em> can be expressed?</p>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-tobler" class="csl-entry" role="listitem">
+Tobler, W. R. 1970. <span>“A Computer Movie Simulating Urban Growth in the Detroit Region.”</span> <em>Economic Geography</em> 46: 234–40. <a href="https://doi.org/10.2307/143141">https://doi.org/10.2307/143141</a>.
+</div>
+</div>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    const typesetMath = (el) => {
+      if (window.MathJax) {
+        // MathJax Typeset
+        window.MathJax.typeset([el]);
+      } else if (window.katex) {
+        // KaTeX Render
+        var mathElements = el.getElementsByClassName("math");
+        var macros = [];
+        for (var i = 0; i < mathElements.length; i++) {
+          var texText = mathElements[i].firstChild;
+          if (mathElements[i].tagName == "SPAN") {
+            window.katex.render(texText.data, mathElements[i], {
+              displayMode: mathElements[i].classList.contains('display'),
+              throwOnError: false,
+              macros: macros,
+              fleqn: false
+            });
+          }
+        }
+      }
+    }
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        typesetMath(container);
+        return container.innerHTML
+      } else {
+        typesetMath(note);
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      typesetMath(note);
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./op2.html" class="pagination-link  aria-label=" &lt;span="" stochastic="" methods&lt;="" span&gt;"="">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Optimization: stochastic methods</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./si2.html" class="pagination-link" aria-label="<span class='chapter-number'>6</span>&nbsp; <span class='chapter-title'>Spatial prediction</span>">
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Spatial prediction</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

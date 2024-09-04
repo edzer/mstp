@@ -1,0 +1,788 @@
+---
+title: "Lecture 3"
+subtitle: "Optimization: linear and non-linear"
+
+include-in-header:
+  - text: |
+      <style>
+      .reveal .slide-logo {
+        max-height: unset;
+        height: 70px;
+      }
+      </style>
+format: revealjs
+editor: visual
+---
+
+```{r echo=FALSE}
+options("digits")
+```
+
+## Optimization
+
+**Optimization of what?**
+
+-   Mathematical models for spatiotemporal processes can be controlled by parameters. Given a particular model and a limited number of process observations (data), we want to infer *best fitting* values for the parameters.
+
+. . .
+
+-   To define *best fitting*, we need to setup an *objective function* which takes parameters as arguments and yields a single scalar measure that reflects how well (or usually how badly) specific parameter values fit the the data.
+
+-   The goal of optimization is simply to find minima of the objective function.
+
+## Optimization
+
+**Why different methods?**
+
+The objective function might be
+
+-   one-dimensional or multidimensional (single or multiple model parameters)
+-   linear or nonlinear in the parameters
+-   unimodal or multimodal
+
+Methods
+
+-   could be deterministic or randomized
+-   might yield point estimations or probability distributions
+-   may have closed form or need iterations
+
+## Objective function
+
+The Objective function compares model evaluations (predictions) and known observations. Model predictions depend on
+
+-   parameter values
+-   other input variables that are observed along the modeled process (e.g. time, space, compare explanatory variables in regression)
+
+Consider the following notation:
+
+-   $\theta$ represents the parameter(s) of a model
+-   $X_i$ denotes explanatory variable(s) of the $i$-th observation (measurements taken as model input)
+-   $y_i$ denotes the observation of the modeled process (dependent variable in regression or model output, we limit to univariate models here)
+
+## Objective function
+
+Then the model evaluation (prediction) of the $i$-th observation is $f(X_i, \theta)$. The objective function $G$ then compares predictions and observed values.
+
+Useful objective functions could be:
+
+-   $G(\theta) = \sum_{i=1}^{n}{\left(y_i-f(X_i, \theta) \right)^2}$ (Sum of squared residuals)
+-   $G(\theta) = \sum_{i=1}^{n}{\left| y_i-f(X_i, \theta) \right|}$ (Sum of absolute residuals)
+
+but might be more complex. In this course, we will concentrate on the *sum of squared residuals*. Notice, however, that the complexity of $G$ depends also on the model itself, which is evaluated for each observation. Let us start with linear models.
+
+## Objective function
+
+**Example:**
+
+```{r,echo=FALSE,fig.width=10,fig.height=5}
+data(co2)
+
+par(mfrow=c(1,2))
+par(mar=c(5,4,3,2))
+par(mgp=c(2.7,1,0))
+CEX = 1.2
+par(cex.lab = CEX,cex = CEX, cex.axis = CEX, cex.sub = CEX)
+#par(oma=c(1,0,0,0))
+
+y.ts = (aggregate(co2, nfrequency = 1, FUN = mean))
+
+y = y.ts@.Data
+x1 = time(y.ts)@.Data
+x0 = rep(1,length(x1))
+
+X = cbind(x0, x1)
+b = solve(t(X)%*%X, t(X)%*%y)
+#b # Parameter des linearen Modells
+res = y-(b[1]*x0+b[2]*x1) # Residuen berechnen
+ssr = sum(res^2) # Summe der quadrierten Residuen berechnen
+
+
+plot(y.ts,type="p",ylab="Atmospheric CO2 (ppm)",xlab="Year")
+abline(b[1],b[2],col="green")
+segments(x0=x1,y0=(b[1]*x0+b[2]*x1),y1=y,col="green")
+text(labels=paste("Sum of squared errors:", round(ssr,2)),x=1998,y=320,cex=0.8,adj=c(1,1))
+
+
+b[2] = (350-330)/40
+b[1]= 330 - b[2]*1960
+
+
+res = y-(b[1]*x0+b[2]*x1) # Residuen berechnen
+ssr = sum(res^2) # Summe der quadrierten Residuen berechnen
+
+plot(y.ts,type="p",ylab="Atmospheric CO2 (ppm)",xlab="Year")
+abline(b[1],b[2],col="red")
+segments(x0=x1,y0=(b[1]*x0+b[2]*x1),y1=y,col="red")
+text(labels=paste("Sum of squared errors:", round(ssr,2)),x=1998,y=320,cex=0.8,adj=c(1,1))
+
+title("Lines of best fit?", outer=TRUE, line=-1)
+```
+
+# Linear optimization
+
+## Linear optimization
+
+Linear models can be written as linear equation systems which are relatively easy to deal with.
+
+**Examples:**
+
+-   $y_t = \beta_0 + \beta_1 t + \beta_2 t^2 + \beta_3 t^3 + ...$ (polynomial trend)
+
+-   $y_t = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \beta_3 x_3 + ... + \epsilon_t$ (multiple linear regression)
+
+-   $y_{t} = \beta_0 + \beta_1  + \sin (2 \pi t / 24 )$ (seasonality with known frequency)
+
+## Linear systems
+
+Take $x_1$ the example
+
+$$
+    \begin{array}{ll}
+    a x_{11} + b x_{12} & = y_1 \\
+    a x_{21} + b x_{22} & = y_2
+    \end{array}
+$$
+
+with the $x$ and $y$ values known, and $a$ and $b$ unknown.
+
+. . .
+
+This is similar to fitting a straight line through two points: let $(x_1,y_1)$ be the first point and $(x_2,y_2)$ be the second, then $$
+    \begin{array}{ll}
+    a + b x_1 & = y_1 \\
+    a + b x_2 & = y_2
+    \end{array}
+$$ The approach is substition: rewrite one equation such that it isolates $a$ or $b$, and substitute that in the second.
+
+## Matrix notation
+
+We can rewrite $$
+    \begin{array}{ll}
+    a x_{11} + b x_{12} & = y_1\\
+    a x_{21} + b x_{22} & = y_2
+    \end{array}
+$$ as the matrix product $$
+  \left[
+  \begin{array}{ll}
+  x_{11} & x_{12}\\
+  x_{21} & x_{22} 
+  \end{array}
+  \right] 
+  \left[
+  \begin{array}{l}
+  a \\ b
+  \end{array}
+  \right]
+  =
+  \left[
+  \begin{array}{l}
+  y_1 \\ y_2
+  \end{array}
+  \right]
+$$ or $$Xa = y$$
+
+## Matrix transposition
+
+The transpose of a matrix is the matrix formed when rows and columns are reversed. If $$A = 
+    \left[
+    \begin{array}{rr}
+    1 & 4 \\
+    2 & -1 \\
+    8 & 9 \\
+    \end{array}
+    \right] 
+$$ then it's transpose, $$
+    A' = \left[
+    \begin{array}{rrr}
+    1 & 2 & 8 \\
+    4 & -1 & 9 \\
+    \end{array}
+    \right] 
+$$ (and may be written as $A^T$)
+
+## Matrix inverse and identity
+
+The identity matrix is square (nr of rows equals nr of columns), has ones on the diagona (for which the row number equals the column number) and zeroes elsewhere. E.g. the $3 \times 3$ identity $$
+    I = \left[
+    \begin{array}{lll}
+    1 & 0 & 0 \\
+    0 & 1 & 0 \\
+    0 & 0 & 1 \\
+    \end{array}
+    \right] 
+$$ The *inverse* of a square matrix $X$, $X^{-1}$, is *defined* by the products $$X^{-1}X = I$$ and $$X X^{-1}=I$$
+
+## Linear systems
+
+Suppose we have $n$ equations with $p$ unknowns: $$
+    \begin{array}{cccccc}
+    a_1 x_{11} + a_2 x_{12} + & ... & + & a_p x_{1p} & = & y_1 \\
+    a_1 x_{21} + a_2 x_{22} + & ... & + & a_p x_{2p} & = & y_2 \\
+    \vdots & \ddots & & \vdots & & \vdots \\
+    a_1 x_{n1} + a_2 x_{n2} + & ... & + & a_p x_{np} & = & y_n
+    \end{array}
+$$ we can rewrite this in matrix notation as $Xa=y$, with $x_{ij}$ corresponding to element $(i,j)$ (row i, column j) in $X$, having $n$ rows and $p$ columns; $a$ and $y$ column vectors having $p$ and $n$ elements, respectively. Now, $X$ and $y$ are known, and $a$ is unknown.
+
+## Linear systems
+
+Solutions:
+
+-   if $p > n$, there is no single solution
+-   if $p = n$ and $X$ is not singular, then $a = X^{-1}y$
+-   if $p < n$ we have an overdetermined system, and may e.g. look for
+
+a least square (best approximating) solution.
+
+## Linear least squares solution
+
+If $p < n$, an exact solution usually does not exist: try fitting a straight line through three or more arbitrary points.
+
+Now rewrite $Xa = y$ as $y=Xb+e$, with $e$ the distance (in $y$-direction) from the line. If we want to minimize the sum of squared distances, then we need to find $b$ for which $R=\sum_{i=1}^n e_i^2$ is minimum. In matrix terms, $R = (y-Xb)'(y-Xb)$ with $'$ denoting transpose (row/col swap). $$\frac{\delta R}{\delta b} = 0$$ $$\frac{\delta (y-Xb)'(y-Xb)}{\delta b} = 0$$ $$\frac{\delta (y'y - (Xb)'y- y'(Xb) + (Xb)'Xb)}{\delta b} = 0$$
+
+## Linear least squares solution
+
+now you should first note that $(Xb)'=b'X'$, and second that $b'X'y=y'Xb$ ,because these are scalars. Then, $$-2X'y + 2X'Xb = 0$$ $$X'Xb = X'y$$ $$b = (X'X)^{-1}X'y$$ this yields the least squares solution for $b$; the solution equations are called the *normal equations*.
+
+## The practice of solving systems
+
+when we write $$A x = b$$ with known $A$ and $b$ and unknown $x$, the solution is $$x = A^{-1}b$$ In practice however, we do not need to compute $A^{-1}$, but can directly solve for $x$. This is much cheaper.
+
+## The practice of solving systems
+
+```{r}
+m=matrix(0,3000,3000)
+diag(m)=1
+system.time(x <- solve(m))
+system.time(x <- solve(m,rep(0,3000)))
+```
+
+```{r}
+X=cbind(c(1,1,1),c(1,2,3))
+X
+y = c(1,0,2)
+solve(t(X) %*% X, t(X) %*% y)
+plot(X[,2], y, xlim = c(0,3), asp = 1)
+abline(lm(y~X[,2]))
+lm(y~X[,2])
+```
+
+# Non-linear optimization
+
+## Non-linear optimization
+
+Our target function for minimization in least squares was linear in the parameters. How can we optimize parameters of non-linear models?
+
+**Examples:**
+
+-   $y_t = \beta_0 + \beta_1 e^{\beta_2 t}$ (exponential growth)
+
+-   $y_t = \beta_0 + \beta_1 \sin (2 \pi \beta_2 t + \beta_3)$ (seasonality)
+
+-   $y_{x,y} = \beta_0 - \log \left(\sqrt{(x-\beta_1)^2 - (y-\beta_2)^2}\right)$ (dependence on logarithmic spatial distances from center point $(\beta_1,\beta_2)$)
+
+## Non-linear optimization
+
+We will discuss the following methods:
+
+-   one-dimensional search on a unimodal function: golden search
+-   non-linear least squares: the Gauss Newton algorithm
+-   probabilistic methods: global search
+-   Metropolis-Hastings
+-   Simulated Annealing
+
+## Golden search
+
+-   Aim: Finding the optimum of a **one-dimensional**, **unimodal**, **nonlinear** function.
+
+Golden ratio: $$
+    \frac{x_1}{x_2} = \frac{x_2}{x_1+x_2}
+$$ Solution (check): if $x_1=1$, then $x_2\approx1.618$ or $x_2\approx0.618$
+
+Found in: art, sculpture, geometry (pentagrams), Egyptian pyramides, architecture, nature, A4 paper, ...
+
+## Golden search: the algorithm
+
+Recursive zooming:
+
+1.  find three GR points, a, b and c such that the minimum lies within a and c
+2.  put a point d in the largest section according to GR, with the smallest interval closest to the smallest value
+3.  (In case of adbc) determine whether the mininum is between a and b or d and c
+4.  continue with either adb or dbc as if it were abc, unless we're sufficiently close (in terms of our goal, or of numerical resolution)
+
+## Golden search example
+
+-   Example: $f(x) = 0.1 \exp(x) + 0.2 x^2  \sin(x)$ for $x \in \left[ -5,5 \right]$
+-   $f$ is:
+    -   nonlinear in $x$
+    -   unimodal in $\left[ -5,5 \right]$ (see plot)
+
+```{r, echo=FALSE, fig.height=5}
+par(mar=c(7, 3, 0, 2))
+f <- function(x) 0.1*exp(x)+0.2*x^2*sin(x)
+#f <- function(x) exp(x)-x^3
+x <- seq(from=-5,to=5,by = 0.01)
+plot(x,f(x),type='l')
+```
+
+
+## Golden search example: Step 1
+
+-   Let $\Phi=(-1+\sqrt{5})/2$ be the golden ratio.
+-   Set $a=-5, b=5, c=b-\Phi(b-a), d=a+\Phi(b-a)$ and evaluate $f$ at $a,b,c,d$
+
+```{r, echo=FALSE,eval=FALSE,results='hide'}
+dev.off()
+```
+
+```{r, echo=FALSE, fig.height=3, fig.width=8}
+Phi=(-1+sqrt(5))/2
+a=-5
+b=5
+c=b-Phi*(b-a)
+d=a+Phi*(b-a)
+par(mar=c(5, 3, 0, 2))
+plot(x,f(x),type='l',ylim=c(-2,12))
+points(c(a,b,c,d),f(c(a,b,c,d)), pch=19)
+segments(x0=c(a,b,c,d),y0=c(-5,-5,-5,-5),y1=f(c(a,b,c,d)) )
+text(x=c(a,b,c,d),y=c(12,12,12,12),label=c("a","b","c","d"))
+```
+
+
+We see that $f(c)$ is smaller than $f(d)$, so the minimum must be located between $a$ and $d$. 
+
+
+
+## Golden search example: Step 1
+
+-   Let $\Phi=(-1+\sqrt{5})/2$ be the golden ratio.
+-   Set $a=-5, b=5, c=b-\Phi(b-a), d=a+\Phi(b-a)$ and evaluate $f$ at $a,b,c,d$
+
+```{r, echo=FALSE,eval=FALSE,results='hide'}
+dev.off()
+```
+
+```{r, echo=FALSE, fig.height=3, fig.width=8}
+Phi=(-1+sqrt(5))/2
+a=-5
+b=5
+c=b-Phi*(b-a)
+d=a+Phi*(b-a)
+par(mar=c(5, 3, 0, 2))
+plot(x,f(x),type='l',ylim=c(-2,12))
+points(c(a,b,d),f(c(a,b,d)), pch=19)
+points(c,f(c), col="blue", pch=19)
+segments(x0=c(a,b,d),y0=c(-5,-5,-5),y1=f(c(a,b,d)))
+segments(x0=c,y0=-5,y1=f(c),col="blue" )
+text(x=c(a,b,c,d),y=c(12,12,12,12),label=c("a","b","c","d"))
+text(x=c(a,d),y=c(12,12),label=c("a","d"), col="red")
+text(x=c,y=12,label="c", col = "blue")
+```
+
+We see that <span style="color:blue;">$f(c)$</span> is smaller than $f(d)$, so the minimum must be located between <span style="color:red;">$a$</span>  and <span style="color:red;">$d$</span>. 
+
+
+## Golden search example: Step 2
+
+-   Set $a=-5, b:=d, c=b-\Phi(b-a), d=a+\Phi(b-a)$ and evaluate $f$ at $a,b,c,d$
+
+```{r, echo=FALSE,eval=FALSE}
+dev.off()
+```
+
+```{r, echo=FALSE, fig.height=3, fig.width=8}
+b=d
+c=b-Phi*(b-a)
+d=a+Phi*(b-a)
+
+par(mar=c(5, 3, 0, 2))
+plot(x,f(x),type='l',ylim=c(-2,12),xlim=c(a,b))
+points(c(a,b,c,d),f(c(a,b,c,d)), pch=19)
+segments(x0=c(a,b,c,d),y0=c(-5,-5,-5,-5),y1=f(c(a,b,c,d)) )
+text(x=c(a,b,c,d),y=c(12,12,12,12),label=c("a","b","c","d"))
+```
+
+Again, $f(c)$ is smaller than $f(d)$.
+
+## Golden search example: Step 3
+
+-   Set $a=-5, b:=d, c=b-\Phi(b-a), d=a+\Phi(b-a)$ and evaluate $f$ at $a,b,c,d$
+
+```{r, echo=FALSE,eval=FALSE}
+dev.off()
+```
+
+```{r, echo=FALSE, fig.height=3, fig.width=8}
+b=d
+c=b-Phi*(b-a)
+d=a+Phi*(b-a)
+
+par(mar=c(5, 3, 0, 2))
+plot(x,f(x),type='l',ylim=c(-2,12),xlim=c(a,b))
+points(c(a,b,c,d),f(c(a,b,c,d)), pch=19)
+segments(x0=c(a,b,c,d),y0=c(-5,-5,-5,-5),y1=f(c(a,b,c,d)) )
+text(x=c(a,b,c,d),y=c(12,12,12,12),label=c("a","b","c","d"))
+```
+
+Now, $f(c)$ is greater than $f(d)$ and the minimum must be located between $c$ and $b$.
+
+## Golden search example: Step 4
+
+-   Set $a=c, c=b-\Phi(b-a), d=a+\Phi(b-a)$ and evaluate $f$ at $a,b,c,d$
+
+```{r, echo=FALSE,eval=FALSE}
+dev.off()
+```
+
+```{r, echo=FALSE, fig.height=3, fig.width=8}
+a=c
+c=b-Phi*(b-a)
+d=a+Phi*(b-a)
+
+par(mar=c(5, 3, 0, 2))
+plot(x,f(x),type='l',ylim=c(-2,12),xlim=c(a,b))
+points(c(a,b,c,d),f(c(a,b,c,d)), pch=19)
+segments(x0=c(a,b,c,d),y0=c(-5,-5,-5,-5),y1=f(c(a,b,c,d)) )
+text(x=c(a,b,c,d),y=c(12,12,12,12),label=c("a","b","c","d"))
+```
+
+## Golden search example: 20 more iterations...
+
+```{r, echo=FALSE,eval=FALSE}
+dev.off()
+```
+
+```{r, echo=FALSE, fig.height=3, fig.width=8}
+for (i in 1:20) {
+  if (f(c) > f(d)) {
+    a=c
+  }
+  else {
+    b=d
+  }
+  
+  c=b-Phi*(b-a)
+  d=a+Phi*(b-a)
+}
+
+
+par(mar=c(5, 3, 0, 2))
+plot(x,f(x),type='l',ylim=c(-2,12),xlim=c(a,b))
+points(c(a,b,c,d),f(c(a,b,c,d)), pch=19)
+segments(x0=c(a,b,c,d),y0=c(-5,-5,-5,-5),y1=f(c(a,b,c,d)) )
+text(x=c(a,b,c,d),y=c(12,12,12,12),label=c("a","b","c","d"))
+```
+
+Termination criteria can be based on the desired precision.
+
+## Combined linear and golden search
+
+Spherical variogram with nugget has three parameters: nugget $c_0$, (partial) sill $c_1$ and range $a$: $$
+\gamma(h) = \left\{
+\begin{array}{ll}
+          0 & \mbox{if}\ \  h = 0 \\
+          c_0 + c_1 f(a,h) & \mbox{if}\ \  h > 0 \\
+\end{array}
+\right.
+$$ with $$f(a, h)= \left\{
+\begin{array}{ll}
+\frac{3h}{2a}-\frac{1}{2}(\frac{h}{a})^3 & \mbox{if} \ \ 0 \le h \le a \\
+1 & \mbox{if} \ \ h > a \\
+\end{array}
+\right.
+$$
+
+## Approach
+
+Provide an initial estimate $a_0$; then iterate: 1. given current fit for $a$, fit the linear coefficients $c_0$ and $c_1$ 2. given this fit, do golden search for $a$ until convergence (vector $(a,c_0,c_1)$ does not move).
+
+```{r fig.width=10, fig.height=5}
+#| echo: true
+library(sp)
+data(meuse)
+coordinates(meuse) = ~x+y
+library(gstat)
+v = variogram(log(zinc)~1, meuse)
+m = vgm(0.5, "Sph", 700, 0.1)
+plot(v)
+```
+
+## Approach
+
+```{r fig.width=10, fig.height=5}
+#| echo: true
+plot(v, vgm(0.5, "Sph", 700, 0.1))
+```
+
+## Approach
+
+```{r fig.width=10, fig.height=5}
+#| echo: true
+plot(v, fit.variogram(v, vgm(0.5, "Sph", 700, 0.1)))
+```
+
+## Non-linear least squares
+
+Golden search may be used for any criterion, e.g. $f(x)=\sum_{i=1}^n
+g_i(x)^p$ for any chosen $p$. If we limit ourselves to *least squares* (i.e., $p=2$) and want to generalize this for higher dimensional (i.e., multiple parameter) $x$ (e.g. $x=[x_1,...,x_q]'$) we may use the **Gauss-Newton algorithm** (non-linear least squares).
+
+## Newton's method
+
+**Newton's method** computes $f(x) = 0$ for nonlinear differentiable functions by linear approximations. Ideas of the Gauss-Newton method build on top of it.
+
+Example: $f(x) = 0.1 \exp(x) + 0.2 x^2  \sin(x)$ for $x \in \left[ -5,5 \right]$
+
+```{r, echo=FALSE, fig.height=4}
+par(mar=c(7, 3, 0, 2))
+f <- function(x) 0.1*exp(x)+0.2*x^2*sin(x)
+#f <- function(x) exp(x)-x^3
+x <- seq(from=-5,to=5,length.out = 1000)
+plot(x,f(x),type='l')
+abline(h = 0, col="black", lty="dashed")
+```
+
+## Newton's method
+
+We equate the function expression to zero and see $$
+\begin{aligned}
+&f(x) = 0 \\
+\Leftrightarrow ~ &0.1 \exp(x) + 0.2 x^2  \sin(x) = 0 \\
+\Leftrightarrow ~  &x = ? \\
+\end{aligned}
+$$ that we can't solve this directly.
+
+-   We need a numerical algorithm that iteratively approaches to a solution.
+
+## Newton's method
+
+**Algorithm:**
+
+-   
+
+    1.  Start at a given $x_0$
+
+-   
+
+    2.  Approximate $f(x)$ around $x_0$ using its first order derivative (tangent)
+
+-   
+
+    3.  Compute $x_1$ where the tangent is zero
+
+-   
+
+    4.  Repeat 2. and 3. until difference of $x_i$ and $x_{i+1}$ is below a threshold
+
+## Newton's method (example)
+
+```{r, echo=FALSE, fig.height=3, fig.width=6}
+par(mar=c(4, 3, 2, 2))
+x0=4
+f <- function(x) 0.1*exp(x)+0.2*x^2*sin(x)
+fi <- function(x) 0.1*exp(x)+0.4*x*sin(x)+0.2*x^2*cos(x)
+
+xn = x0
+p = NULL
+m = 0
+b = 0
+I = 1
+for (i in 1:I)
+{ 
+  p <- rbind(p,c(xn,f(xn)))
+  m <- fi(xn)
+  b = -xn*m + f(xn)
+  xn = xn - f(xn)/fi(xn)
+}
+
+plot(x,f(x),type='l', main=paste("Newton iteration", I))
+abline(h = 0, col="black", lty="dashed")
+abline(a = b,b=m, col="red")
+points(p[,1], p[,2], pch=19)
+```
+
+## Newton's method (example)
+
+```{r, echo=FALSE, fig.height=3, fig.width=6}
+par(mar=c(4, 3, 2, 2))
+x0=4
+f <- function(x) 0.1*exp(x)+0.2*x^2*sin(x)
+fi <- function(x) 0.1*exp(x)+0.4*x*sin(x)+0.2*x^2*cos(x)
+
+xn = x0
+p = NULL
+m = 0
+b = 0
+I = 2
+for (i in 1:I)
+{ 
+  p <- rbind(p,c(xn,f(xn)))
+  m <- fi(xn)
+  b = -xn*m + f(xn)
+  xn = xn - f(xn)/fi(xn)
+}
+
+plot(x,f(x),type='l', main=paste("Newton iteration", I))
+abline(h = 0, col="black", lty="dashed")
+abline(a = b,b=m, col="red")
+points(p[,1], p[,2], pch=19)
+```
+
+## Newton's method (example)
+
+```{r, echo=FALSE, fig.height=3, fig.width=6}
+par(mar=c(4, 3, 2, 2))
+x0=4
+f <- function(x) 0.1*exp(x)+0.2*x^2*sin(x)
+fi <- function(x) 0.1*exp(x)+0.4*x*sin(x)+0.2*x^2*cos(x)
+
+xn = x0
+p = NULL
+m = 0
+b = 0
+I = 3
+for (i in 1:I)
+{ 
+  p <- rbind(p,c(xn,f(xn)))
+  m <- fi(xn)
+  b = -xn*m + f(xn)
+  xn = xn - f(xn)/fi(xn)
+}
+
+plot(x,f(x),type='l', main=paste("Newton iteration", I))
+abline(h = 0, col="black", lty="dashed")
+abline(a = b,b=m, col="red")
+points(p[,1], p[,2], pch=19)
+```
+
+## Newton's method (example)
+
+```{r, echo=FALSE, fig.height=3, fig.width=6}
+par(mar=c(4, 3, 2, 2))
+x0=4
+f <- function(x) 0.1*exp(x)+0.2*x^2*sin(x)
+fi <- function(x) 0.1*exp(x)+0.4*x*sin(x)+0.2*x^2*cos(x)
+
+xn = x0
+p = NULL
+m = 0
+b = 0
+I = 20
+for (i in 1:I)
+{ 
+  p <- rbind(p,c(xn,f(xn)))
+  m <- fi(xn)
+  b = -xn*m + f(xn)
+  xn = xn - f(xn)/fi(xn)
+}
+
+plot(x,f(x),type='l', main=paste("Newton iteration", I))
+abline(h = 0, col="black", lty="dashed")
+abline(a = b,b=m, col="red")
+points(p[,1], p[,2], pch=19)
+```
+
+## Newton's method for optimization
+
+**Properties**:
+
+-   Depending on provided starting values, we may find different outcomes
+-   $|f(x_{i+1})| \leq |f(x_{i})|$
+
+If we apply the Newton algorithm to the first derivative, we can find potential extreme values of a function. However,
+
+-   we need the second derivative,
+-   our parameter space is usually multidimensional, i.e. $f: \mathbb{R}^p \rightarrow \mathbb{R}$,
+-   and we can use the structure of the sum of squared errors.
+
+## Gauss-Newton: background
+
+Recall that our objective function in least squares is
+
+$$G(\theta) = \sum_{i=1}^{n}{\left(y_i-f(X_i, \theta) \right)^2}$$
+
+and we want to find $\mbox{min}_\theta G(\theta)$. We can split up the sum by defining $n$ residual functions (one for each measurement):
+
+$$r_i(\theta)=y_i - f(X_i,\theta)$$
+
+where $G(\theta) = \sum_{i=1}^{n} r_i(\theta)$
+
+## Gauss-Newton: background
+
+Collecting all $r_i(\theta)$ in one function $R$ yields
+
+$$R(\theta) = 
+\begin{pmatrix}
+r_1(\theta) \\
+\vdots \\
+r_n(\theta)
+\end{pmatrix} = 
+\begin{pmatrix}
+y_1 - f(X_1,\theta) \\
+\vdots \\
+y_n - f(X_n,\theta)
+\end{pmatrix}$$
+
+This function takes $p$ input parameters and yields $n$ output values (assuming real numbers i.e. $R: \mathbb{R}^p \rightarrow \mathbb{R}^n$). To take the idea of the Newton method and to improve parameter values, we need to compute the first derivative of $R(\theta)$, which is the *Jacobian* matrix $J_{R}(\theta)$.
+
+## Gauss-Newton: background
+
+Elements of the Jacobian are
+
+$$J_{R,ij} = \frac{\partial r_i}{\partial \theta_j},$$
+
+which means it has $n$ rows and $p$ columns. Due to the least squared assumption, we can approximate the second derivative of G (its *Hessian matrix*) with $$H \approx 2 J_{R}(\theta)^T J_{R}(\theta)$$
+
+while its first order derivative (gradient) is
+
+$$g = 2 J_{R}(\theta)^T R(\theta).$$
+
+This yields the iteration / recurrence formula of the Gauss Newton algorithm (see next slide).
+
+## Gauss-Newton: the algorithm
+
+**Algorithm:**
+
+-   
+
+    1.  Start at a given $\theta_0$ (which is a vector of $p$ elements)
+
+-   
+
+    2.  Write down the residual functions and Jacobian
+
+-   
+
+    3.  Update $\theta_i$ according to the rule below until the difference of $\theta_i$ and $\theta_{i+1}$ is below a threshold
+
+**Update rule:** $$
+\begin{aligned}
+\theta_{i+1} &= \theta_{i} + \delta \\
+\delta &= -(H^{-1})g \\
+&= -(2 J_{R}^T(\theta_i) J_{R}(\theta_i))^{-1} \cdot 2 J_{R}^T(\theta_i) R(\theta_i) \\
+&= -(J_{R}^T(\theta_i) J_{R}(\theta_i))^{-1} \cdot J_{R}^T(\theta_i) R(\theta_i) \\
+&= -(J^T J)^{-1} \cdot J^T R(\theta_i) \\
+\end{aligned}
+$$
+
+## Gauss-Newton and the Normal equations
+
+Recall that in multiple *linear* regression, with $y=X\theta+e$ the solution is given by the normal equations $$X'X\theta = X'y$$ Note that here, the Jacobian of $y-X\theta$ is $-X$, so if we take (arbitrarily) $\theta_0 = (0,0,...,0)'$, then $$
+J_f(\theta_k)'J_f(\theta_k) \delta^k = - J_f(\theta_k) f(\theta^k)
+$$ yields after one step the final solution $\delta^1=\theta$, as $(-X)'(-X)\delta=X'y$.
+
+Other starting points yield the same solution for $\theta$.
+
+Further steps will not improve it (i.e., yield $\delta^k=0$).
+
+See also the [Gradient descent](https://en.wikipedia.org/wiki/Gradient_descent) wikipedia site.
+
+## Problems with steepest descent
+
+-   steepest descent may be very slow
+-   Main problem: a minimum may be *local*, other initial values may result in other, better minima
+-   Cure: apply Gauss-Newton from many different starting points (cumbersome, costly, cpu intensive)
+-   Global search:
+    -   apply a grid search -- curse of dimensionality. E.g. for three parameters, 50 grid nodes along each direction: $50^3= 125000$
+    -   apply random sampling (same problem)
+    -   use search methods that not *only* go downhill:
+        -   Metropolis-Hastings (sampling)
+        -   Simulated Annealing (optimizing)

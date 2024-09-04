@@ -2,7 +2,21 @@
 // Base document colors
 $body-color: #3F3F3C;
 $link-color: #7AB629;
+$presentation-list-bullet-color: #7AB629;
 $code-block-bg: lighten($body-color,70%);
 
 
 
+:root {
+  --r-list-bullet-color: #{$presentation-list-bullet-color};
+}
+
+.reveal {
+    // Dracula colored list bullets and numbers
+  ul,
+  ol {
+    li::marker {
+      color: var(--r-list-bullet-color);
+    }
+  }
+}

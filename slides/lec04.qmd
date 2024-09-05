@@ -381,3 +381,5 @@ temperature decreases search is more and more local and downhill. Random,
 uphill jumps prevent SA to fall into a local minimum.
 
 A related algorithm (stochastic optimization) is the Genetic Algorithm.
+
+## Optimization methods by example

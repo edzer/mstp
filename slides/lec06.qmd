@@ -1,0 +1,388 @@
+---
+title: "Lecture 6"
+subtitle: "Spatial Correlation and Variography"
+
+include-in-header:
+  - text: |
+      <style>
+      .reveal .slide-logo {
+        max-height: unset;
+        height: 70px;
+      }
+      </style>
+format: revealjs
+editor: visual
+---
+
+## Random variables
+
+$$
+\newcommand{\E}{{\rm E}}       % E expectation operator
+\newcommand{\Var}{{\rm Var}}   % Var variance operator
+\newcommand{\Cov}{{\rm Cov}}   % Cov covariance operator
+\newcommand{\Cor}{{\rm Corr}}
+$$
+
+
+Random variables (RVs) are numeric variables whose outcomes are subject
+to chance.
+
+The cumulative distribution of probability $F_x(\cdot)$ over outcomes $z$ 
+over all possible values of the RV $Z$ is the probability distribution function:
+
+$$P(Z \le z) = F_Z(z) = \int_{-\infty}^z f_Z(u)du$$
+where $f_Z(\cdot)$ is the probability *density* function of $Z$. The
+sum of all probability is 1.
+
+
+## Random variables 
+
+Random variables have an expectation (mean): $E(Z) =
+\int_{-\infty}^{\infty} u f_Z(u) du$ and a variance: $\Var(Z) =
+E[(Z-E(Z))^2]$. 
+
+Try to think of $E(Z)$ as $\frac{1}{n}\sum_{i=1}^{n} z_i$, with $i \rightarrow \infty$.
+
+Two random variables $X$ and $Y$ have covariance defined as
+$\Cov(X,Y) = E[(X-E(X))(Y-E(Y))]$
+
+
+## Correlation and covariance
+
+Correlation is scaled covariance, scaled by the variances. For two
+variables $X$ and $Y$, it is
+$$\Cor(X,Y) = \frac{\Cov(X,Y)}{\sqrt{\Var(X)\Var(Y)}}$$
+
+It is quite easy to show that $|\Cov(X,Y)| \le \sqrt{\Var(X)\Var(Y)}$, so correlation
+ranges from -1 to 1.  For this, note that $\Cov(X,X)=\Var(X)$.
+and $\Cov(X,-X)=-\Var(X)$.
+
+It is perhaps easier to think of covariance as unscaled correlation.
+
+Note: _A large covariance does not imply a strong correlation_
+
+
+## Expectation, variance, covariance, correlation
+
+
+
+Random variable: $Z$ follows a probability distribution, specified by
+a density function
+$f(z)= \Pr(Z=z)$ or a distribution function $F(z)=\Pr(Z \le z)$
+
+Expectation: $\E(Z) = \int_{-\infty}^{\infty} f(s)ds$ -- center of mass, mean.
+
+Variance: $\Var(Z)=\E(Z-\E(Z))^2$ -- mean squared distance from mean;
+measure of spread; square root: standard deviation of $Z$.
+
+Covariance: $\Cov(X,Y)=\E((X-\E(X))(Y-\E(Y)))$ -- mean product;
+can be negative; $\Cov(X,X)=\Var(X)$.
+
+ Correlation: $r_{XY}=\frac{\Cov(X,Y)}{\sqrt{\Var(X)\Var(Y)}}$ -- normalized
+$[-1,1]$ covariance. -1 or +1: perfect correlation.
+
+
+## Correlation
+
+```{r,echo=FALSE,warning=FALSE,results='hide', fig.height=7}
+library(mvtnorm)
+r = 0.0
+Sigma = cbind(c(1, r), c(r, 1))
+out = rmvnorm(500, c(5,5), Sigma)
+x = out[,1]
+y = out[,2]
+par(mfrow=c(2,2))
+plot(x, y)
+model = lm(y~x)
+summary(model)
+lines(abline(model))
+mse = round(mean((x-y)^2), digits=3)
+title(paste("correlation:", round(cor(x,y),digits=3), "MSE", mse))
+
+r = .5
+Sigma = cbind(c(1, r), c(r, 1))
+out = rmvnorm(500, c(5,5), Sigma)
+x = out[,1]
+y = out[,2]
+plot(x, y)
+model = lm(y~x)
+summary(model)
+lines(abline(model))
+mse = round(mean((x-y)^2), digits=3)
+title(paste("correlation:", round(cor(x,y),digits=3), "MSE", mse))
+
+r = .9
+Sigma = cbind(c(1, r), c(r, 1))
+out = rmvnorm(500, c(5,5), Sigma)
+x = out[,1]
+y = out[,2]
+plot(x, y)
+model = lm(y~x)
+summary(model)
+lines(abline(model))
+mse = round(mean((x-y)^2), digits=3)
+title(paste("correlation:", round(cor(x,y),digits=3), "MSE", mse))
+
+r = .95
+Sigma = cbind(c(1, r), c(r, 1))
+out = rmvnorm(500, c(5,5), Sigma)
+x = out[,1]
+y = out[,2]
+y = x + 0.1 * rnorm(500)
+plot(x, y)
+model = lm(y~x)
+summary(model)
+lines(abline(model))
+mse = round(mean((x-y)^2), digits=3)
+title(paste("correlation:", round(cor(x,y),digits=3), "MSE", mse))
+```
+
+
+## What is spatial correlation?
+
+Waldo Tobler's first law in geography:
+
+_"Everything is related to everything else, but near things are more
+related than distant things."_ [Tobler, 1970, p.236]*
+
+
+* *But how then is "being related" expressed?*
+
+\vspace{30mm}
+\scriptsize*TOBLER, W. R. (1970). "A computer model simulation of urban growth in
+the Detroit region". Economic Geography, 46(2): 234-240.
+
+
+## What is spatial correlation?
+
+Spatial correlation can be explored in different ways. 
+
+One way is to take up an idea from time series: look at lagged correlations, and the $h$-scatterplot.
+
+What is it? Plots of (or correlation between) $Z(s)$ and $Z(s+h)$, where
+$s+h$ is $s$, shifted by $h$ (time distance, spatial distance).
+
+
+## What is spatial correlation? - $h$-scatterplots
+
+```{r,warning=F,echo=FALSE}
+library(gstat)
+library(sf)
+data(meuse, package = "sp")
+meuse.sf = st_as_sf(meuse, coords = c("x", "y"))
+hscat(log(zinc) ~ 1, meuse.sf, c(0, 30, 80, 100, 200, 300, 500, 1000))
+```
+
+
+## What is spatial correlation? - covariance against distance 
+
+Another way to explore spatial correlation is to plot covariances of values at point pairs against the distance between these points.
+
+```{r,warning=F,echo=F}
+x = variogram(log(zinc) ~ 1, meuse.sf, covariogram=TRUE, cloud = T)
+plot(x$dist,x$gamma,xlab="distance",ylab="covariance")
+
+```
+
+
+## What is spatial correlation? - covariance against distance 
+
+* Group into distance classes and look at means
+
+```{r,warning=F,echo=F}
+x = variogram(log(zinc) ~ 1, meuse.sf, covariogram=TRUE, cloud = T)
+plot(x$dist,x$gamma,xlab="distance",ylab="covariance")
+abline(v=seq(from= 100, to=1600, by=100))
+```
+
+
+## What is spatial correlation? - Empirical covariogram
+
+
+```{r,warning=F,echo=F}
+x.vgm = variogram(log(zinc) ~ 1, meuse.sf, covariogram=TRUE)
+plot(x.vgm)
+```
+
+## What is spatial correlation? - Theroretical covariogram
+
+* Fit a line to the covariogram
+
+```{r,warning=F,echo=F}
+x = variogram(log(zinc) ~ 1, meuse.sf, covariogram=TRUE)
+x.mod = vgm(-0.52,"Pen",900,0.45)
+plot(x,x.mod)
+```
+
+## From covariance to semivariance 
+
+In geostatistics the spatial correlation is modelled by the semivariogram instead of a covariogram or correlogram. The term _variogram_ is used synonymously with semivariogram. The (semi) _variogram_ plots semivariance as a function of distance.
+
+
+From covariance to semivariance
+
+
+Covariance: $\Cov(Z(s),Z(s+h)) = C(h) = \E[(Z(s)-m)(Z(s+h)-m)]$
+
+Semivariance: $\gamma(h) = \frac{1}{2} \E[(Z(s)-Z(s+h))^2]$
+
+$$\E[(Z(s)-Z(s+h))^2] = \E[(Z(s))^2 + (Z(s+h))^2 -2Z(s)Z(s+h)]$$
+
+Assume $m=0$:
+
+$$\E[(Z(s)-Z(s+h))^2] = \E[(Z(s))^2] + \E[(Z(s+h))^2] - 2\E[Z(s)Z(s+h)] \\ = 2\Var(Z(s)) - 2\Cov(Z(s),Z(s+h)) = 2C(0)-2C(h)$$
+
+$\gamma(h) = C(0)-C(h)$
+
+$\gamma(h)$ is the _semivariogram_ of $Z(s)$.
+
+
+
+
+## The _Variogram_
+
+
+* the central tool to geostatistics
+* like a mean squares (variance) in analysis of variance, like
+a $t$ to a $t$-test
+* measures spatial correlation
+* subject to debate: it involves _modelling_
+* synonymous to _semivariogram_, but
+* semivariance is _not_ synonymous to variance
+
+
+## Variogram: how to compute
+
+
+average squared differences: 
+$$\hat{\gamma}(\tilde{h})=\frac{1}{2N_h}\sum_{i=1}^{N_h}(Z(s_i)-Z(s_i+h))^2 \ \ 
+h \in \tilde{h}$$
+
+* divide by $2N_h$:
+ * if finite, $\gamma(\infty)=\sigma^2$
+ * _semi_ variance
+* if data are not gridded, group $N_h$ pairs $s_i,s_i+h$ for which
+$h \in \tilde{h}$, $\tilde{h}=[h_1,h_2]$
+* choose about 10-25 distance intervals $\tilde{h}$, from length
+0 to about on third of the area size
+* ''plot'' $\tilde{h}$ at the average value of all $h \in \tilde{h}$
+
+
+## Plotting semivariance against distance
+
+
+```{r,echo=FALSE,warning=FALSE}
+x = variogram(log(zinc) ~ 1, meuse.sf, covariogram=F, cloud = T)
+plot(x$dist,x$gamma,xlab="distance",ylab="semivariance")
+```
+
+
+## Plotting semivariance against distance
+
+* Group into distance classes and look at means
+
+```{r,echo=FALSE,warning=FALSE}
+x = variogram(log(zinc) ~ 1, meuse.sf, covariogram=F, cloud = T)
+plot(x$dist,x$gamma,xlab="distance",ylab="semivariance")
+abline(v=seq(from= 100, to=1600, by=100))
+```
+
+## The empirical variogram
+
+
+```{r,echo=FALSE,warning=FALSE}
+x.vgm=variogram(log(zinc) ~ 1, meuse.sf, cloud = F)
+plot(x.vgm)
+```
+
+
+## The theoretical variogram
+
+* Fit a line to the empirical variogram
+
+```{r,echo=FALSE,warning=FALSE}
+x.mod= fit.variogram(x.vgm,vgm(0.6, "Sph", 1000, 0.05))
+plot(x.vgm,x.mod)
+```
+
+
+## Variogram: terminology
+
+
+![](./data/Variogram_example.png)
+
+
+
+## Models for variograms
+
+```{r,warning=F,echo=F}
+show.vgms()
+```
+
+
+## Why prefer the variogram over the covariogram?
+
+Covariance: $\Cov(Z(s),Z(s+h)) = C(h) = \E[(Z(s)-m)(Z(s+h)-m)]$
+
+Semivariance:  
+$\gamma(h) = \frac{1}{2} \E[(Z(s)-Z(s+h))^2]$
+
+$\gamma(h)=C(0)-C(h)$
+
+* tradition
+* $C(h)$ needs (an estimate of) $m$, $\gamma(h)$ does not
+* $C(0)$ may not exist ($\infty$!), when $\gamma(h)$ does
+(e.g., Brownian motion)
+
+## Anisotropy
+
+Some processes are directionally dependent (anisotropic), i.e. _do not_ have identical properties in all directions. When investigating such phenomena the semivariance _does not_ only depend on the distance between two points but also on the direction of the distance vector.
+
+* example: global annual mean temperature.
+
+
+
+## Isotropic (left) vs anisotropic (right) process
+
+![](./data/isoaniso.png)
+
+
+
+## Check for Isotropy/Anisotropy
+
+* group values not only regarding distance but also direction of the distance vector
+* investigate the resulting variograms
+
+\footnotesize
+```{r, warning=F,eval=F,echo=T}
+plot(variogram(log(zinc)~1, meuse.sf, alpha=c(0,45,90,135)))
+```
+
+
+## Check for Isotropy/Anisotropy
+
+```{r, warning=F,eval=T,echo=F}
+plot(variogram(log(zinc)~1, meuse.sf, alpha=c(0,45,90,135)))
+```
+
+## Intrinsic Stationarity
+
+
+In order to be able to estimate spatial correlation from observational data, we need to assume _intrinsic stationarity_.This assumes the underlying process to be a random function composed of a mean and residual 
+
+$Z(s) = m + e(s)$
+
+with a constant mean
+
+$E(Z(s)) = m$
+
+and a variogram defined as
+
+$\gamma(h)= \frac{1}{2}E(Z(s)-Z(s+h))^2$
+
+This imlplies that the variance of $Z$ is constant, and the spatial correlation of $Z$ does not depend on location $(s)$, but only on separation distance $(h)$.
+
+
+
+
+

@@ -20,25 +20,30 @@ options("digits")
 
 ## Optimization
 
-**Optimization of what?**
+[**Optimization of what?**]{.green}
 
--   Mathematical models for spatiotemporal processes can be controlled by parameters. Given a particular model and a limited number of process observations (data), we want to infer *best fitting* values for the parameters.
+- Mathematical models for spatiotemporal processes can be controlled by parameters. Given a particular model and a limited number of process observations (data), we want to infer *best fitting* values for the parameters.
 
 . . .
 
--   To define *best fitting*, we need to setup an *objective function* which takes parameters as arguments and yields a single scalar measure that reflects how well (or usually how badly) specific parameter values fit the the data.
+- To define *best fitting*, we need to setup an *objective function* which takes parameters as arguments and yields a single scalar measure that reflects how well (or usually how badly) specific parameter values fit the the data.
+- The goal of optimization is simply to find minima of the objective function.
 
--   The goal of optimization is simply to find minima of the objective function.
 
 ## Optimization
 
-**Why different methods?**
+[**Why different methods?**]{.green}
+
 
 The objective function might be
 
 -   one-dimensional or multidimensional (single or multiple model parameters)
 -   linear or nonlinear in the parameters
 -   unimodal or multimodal
+
+
+. . . 
+
 
 Methods
 
@@ -324,7 +329,6 @@ x <- seq(from=-5,to=5,by = 0.01)
 plot(x,f(x),type='l')
 ```
 
-
 ## Golden search example: Step 1
 
 -   Let $\Phi=(-1+\sqrt{5})/2$ be the golden ratio.
@@ -347,10 +351,7 @@ segments(x0=c(a,b,c,d),y0=c(-5,-5,-5,-5),y1=f(c(a,b,c,d)) )
 text(x=c(a,b,c,d),y=c(12,12,12,12),label=c("a","b","c","d"))
 ```
 
-
-We see that $f(c)$ is smaller than $f(d)$, so the minimum must be located between $a$ and $d$. 
-
-
+We see that $f(c)$ is smaller than $f(d)$, so the minimum must be located between $a$ and $d$.
 
 ## Golden search example: Step 1
 
@@ -378,8 +379,7 @@ text(x=c(a,d),y=c(12,12),label=c("a","d"), col="red")
 text(x=c,y=12,label="c", col = "blue")
 ```
 
-We see that <span style="color:blue;">$f(c)$</span> is smaller than $f(d)$, so the minimum must be located between <span style="color:red;">$a$</span>  and <span style="color:red;">$d$</span>. 
-
+We see that [$f(c)$]{style="color:blue;"} is smaller than $f(d)$, so the minimum must be located between [$a$]{style="color:red;"} and [$d$]{style="color:red;"}.
 
 ## Golden search example: Step 2
 

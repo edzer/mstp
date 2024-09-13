@@ -1,22 +1,51 @@
 /*-- scss:defaults --*/
-// Base document colors
+// Base document properties
 $body-color: #3F3F3C;
-$link-color: #7AB629;
-$presentation-list-bullet-color: #7AB629;
+$theme-green: #7AB629;
+$link-color: $theme-green;
+$presentation-list-bullet-color: $theme-green;
 $code-block-bg: lighten($body-color,70%);
+$presentation-h3-color: $theme-green;
+$presentation-h3-font-size: 0.8em;
+$presentation-h2-font-size: 1.3em;
+$presentation-heading-line-height: 1.2;
+$font-family-sans-serif: 'muli', sans-serif;
+$presentation-font-smaller: 0.7;	
+$presentation-heading-font-weight: 700;
+$presentation-heading-letter-spacing: -0.01em;
+$presentation-font-weight: 700;	
+
+/*-- scss:rules --*/
+
+
+.green {
+  color: $theme-green;
+}
+
+
 
 
 
 :root {
   --r-list-bullet-color: #{$presentation-list-bullet-color};
+  
 }
 
 .reveal {
-    // Dracula colored list bullets and numbers
+    
   ul,
   ol {
     li::marker {
       color: var(--r-list-bullet-color);
     }
   }
+  
+  h2{
+    margin-bottom: 40px;
+  }
+  
+  h3 {
+    color: $theme-green;
+  }
 }
+

@@ -1,0 +1,192 @@
+---
+title: "Lecture 9"
+subtitle: "Cokriging, Cross Validation"
+
+include-in-header:
+  - text: |
+      <style>
+      .reveal .slide-logo {
+        max-height: unset;
+        height: 70px;
+      }
+      </style>
+format: revealjs
+editor: visual
+---
+
+
+## Cokriging Idea
+
+
+* all kriging varieties we have previously studied, derive estimates using only one variable
+* universal kriging uses a predicting variable to model the mean (instead of assuming it to be constant and/or known) 
+    * but only the spatial (auto-) correlation of the target variable is used during the kriging estimation of the difference to the mean at unsampled locations $e(s)$
+    $$Z(s) = X(s)\beta + e(s)$$
+
+_What if we could also make use of the (cross-)correllation between the target variable and one or more additional variables?_
+
+## Cokriging Idea
+
+
+![](./data/lec_09_cokri1.jpg)
+
+
+## Cokriging Idea
+
+
+![](./data/lec_09_cokri2.jpg)
+
+
+## Cokriging Idea
+
+
+![](./data/lec_09_cokri3.jpg)
+
+
+## Cokriging Idea
+
+
+* instead of only using the target variable _cokriging_ allows to use auxilary variables (co-variables) for the prediction, if they exhibit correlation with the target variable
+* $\hat{z_1}(s_0)$ is not only based on observations of $Z_1$, but also on observations of variables $Z_2, ..., Z_k$
+* the prediction error variance is reduced by exploiting the cross-correlation between the variables
+* this is especially useful when the target variable is undersampled (e.g. because measuring this variable is expensive)
+* the co-variables may be measured at the same points as the target (co-located), at other points, or both
+
+$$
+\newcommand{\E}{{\rm E}}       % E expectation operator
+\newcommand{\Var}{{\rm Var}}   % Var variance operator
+\newcommand{\Cov}{{\rm Cov}}   % Cov covariance operator
+\newcommand{\Cor}{{\rm Corr}}
+$$
+
+
+## Cokriging Idea
+
+Cokriging sets the multivariate equivalent of kriging, which is, in
+terms of number of dependent variables, univariate. Kriging:
+$$Z(s) = X(s)\beta + e(s)$$
+Cokriging:
+$$Z_1(s) = X_1(s)\beta_1 + e_1(s)$$
+$$Z_2(s) = X_2(s)\beta_2 + e_2(s)$$
+$$Z_k(s) = X_k(s)\beta_k + e_k(s)$$
+with $V = \Cov(e_1,e_2,...,e_k)$
+
+
+## Cases where this is useful
+
+Multiple spatial correlated variables such as
+
+* chemical properties (auto-analyzers!)
+* sediment composition
+* electromagnetic spectra (imagery/remote sensing)
+* ecological data (abiotic factors; species abundances)
+* (space-time data, with discrete time)
+
+Two types of applications:
+
+* undersampled case: secondary variables help prediction of a primary, because we have more samples of them (image?)
+* equally sampled case: secondary variables don't help prediction much, but we are interested in _multivariate prediction_, i.e. prediction error covariances.
+
+
+## Cokriging prediction
+
+The estimator based on a sample $Z=(Z_1,Z_2,...,Z_k)$ is given by:
+$$\hat{z_0}(s_0) = \sum_{i=1}^n \sum_{j=1}^k \lambda_{ij} z_j(s_i)$$
+
+The weights are chosen such that the the variance of the
+estimation error is minimized and that
+
+$\sum_{i=1}^n \lambda_{i0} = 1$ and $\sum_{i=1}^n \lambda_{ij} = 0$,  $1\le j\le k$
+
+
+## Cokriging prediction
+
+The weights $\lambda_{ij}$ can be calculated by:
+
+\[
+    \left(
+      \begin{array}{c}
+        \lambda_{11} \\
+        \vdots \\
+        \lambda_{n1} \\
+        \lambda_{12} \\
+        \vdots \\
+        \lambda_{nk} \\
+        \mathcal{L}_1 \\
+        \mathcal{L}_2 \\
+        \vdots \\
+        \mathcal{L}_k \\
+      \end{array}\right)
+      =
+      \left(
+      \begin{array}{cccccccc}
+        K_{11} & \cdots & K_{1k} & 1 & 0 & \cdots & 0 \\
+        K_{21} & \cdots & K_{2k} & 0 & 1 & \ddots & \vdots \\
+        \vdots & \ddots & \vdots & \vdots & \vdots & \ddots & 0 \\
+        K_{k1} & \cdots & K_{kk} & 0 & 0 & \cdots & 1 \\
+        1' & 0 & 0 & 0 & 0 & 0 & 0 \\
+        0 & 1' & 0 & 0 & 0 & 0 & 0 \\
+        \vdots & \ddots & \vdots & \vdots & \vdots & \ddots & \vdots \\
+        0 & \cdots & 1' & 0 & 0 & \cdots & 0 \\
+      \end{array}\right)^{-1}
+    \left(
+    \begin{array}{c}
+      K_{11}(s_0,s_1) \\
+      \vdots \\
+      K_{11}(s_0,s_n) \\
+      K_{12}(s_0,s_1) \\
+      \vdots \\
+      K_{1k}(s_0,s_n) \\
+      1 \\
+      0 \\
+      \vdots\\
+      0\\
+    \end{array}\right)
+  \]
+  
+$$[k(n+1) \times 1] = [k(n+1) \times k(n+1)] \cdot [k(n+1) \times 1]$$
+\normalsize
+where $1':= (1,...,1) \in \mathbb{R}^n$ and each $K_{ij}$ is a matrix of dimension $(n \times n)$.
+
+
+## Cokriging prediction
+
+note equivalence to univariate version (lecture 7, slide 30):
+
+![](./data/lec_09_cokrimatr.jpg)
+
+where $1':= (1,...,1) \in \mathbb{R}^n$ and each $K_{ij}$ is a matrix of dimension $(n \times n)$.
+
+
+
+## Cokriging prediction
+
+\newcommand{\Cov}{{\rm Cov}}
+
+The matrices $K_{ij}$ with $1 \le i$, $j \le k$ are defined as
+
+\[
+K_{ij} 
+:=
+\left(
+      \begin{array}{ccc}
+        K_{ij}(s_1,s_1) & \cdots & K_{ij}(s_1,s_n) \\
+        \vdots & \ddots & \vdots \\
+        K_{ij}(s_n,s_1) & \cdots & K_{ij}(s_n,s_n) \\
+      \end{array}\right)
+    \]
+
+while $K_{ij}(s_u,s_v)$ denotes the auto-/cross-covariance of variable $Z_i$ at location $s_u$ with variable $Z_j$ at location $s_v$:
+
+$K_{ij}(s_u,s_v):=\Cov(Z_i(s_u),Z_j(s_v))$
+
+The covariance matrix needs to be positive definit, in order to achieve valid solutions.
+
+
+
+## Cokriging prediction
+
+
+![](./data/lec_09_cokri_ex.jpg)
+
+##

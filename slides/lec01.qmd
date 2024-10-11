@@ -130,7 +130,7 @@ editor: visual
 
 ## Spatio-temporal phenomena are everywhere
 
-+ if we think about it, there are no data that can be non-spatial or non-temporal.
++ if we think about it, there are no data that can be non-spatial or non-temporal
 + in many cases, the spatial or temporal references are not essential
     + think: brain image of a person: time matters, but mostly referenced with respect to the age of the person, spatial location of the MRI scanner does not
     + but: ID of the patient does!
@@ -162,7 +162,7 @@ editor: visual
 + we can aggregate fields, or objects, but do this differently:
 + population can be summed, temperature cannot (see [intensive/extensive properties](https://en.wikipedia.org/wiki/Intensive_and_extensive_properties))
 
-## Aims of modelling
+## Reasons for modelling
 ... could be
 
 + curiousity

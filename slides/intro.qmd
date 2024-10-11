@@ -1,0 +1,129 @@
+--- 
+title: "Intro & Organisation"
+subtitle: "Modelling spatio-temporal processes"
+
+include-in-header:
+  - text: |
+      <style>
+      .reveal .slide-logo {
+        max-height: unset;
+        height: 70px;
+      }
+      </style>
+format: revealjs
+editor: visual
+
+---
+
+## Overview
+
+
+[**Where we come from...**](.green)
+
++ mathematics, linear algebra, computer science, 
++ **introduction to geostatistics**
+    + types of variables: Stevens' measurement scales -- nominal, ordinal, interval, ratio 
+    + or: discrete, continuous
+    + t-tests, ANOVA
+    + regression, multiple regression (but now how we compute it)
+    + assumption was: observations are independent
+    + what does independence mean?
+
+
+## Overview
+
+[**In this course, **](.green)
+
++ we will study dependence in observations, in space, time, or space-time
++ in space and/or time, Stevens' measurement scales are not enough! 
++ Examples:
+    + linear time, cyclic time
+    + space: functions, fields
++ we will study how we can represent phenomena, by
+    + mathematical representations (models)
+    + computer representations (models)
++ we will consider how well these models correspond to our observations
+
+
+## Topics (planned)
+
+- **Time series models**
+  + (Partial) autocorrelations, ARIMA(p,d,q)
+  + Model selection, AIC
+  + Forecasting, decomposition
+  
+  
+## Topics (planned)
+
+- **Optimisation**
+  + Linear models, least squares, normal equations
+  + Non-linear:
+    + One-dimensional: golden search
+    + Multi-dimensional least squares: Newton
+    + Multi-dimensional stochastic search: Metropolis
+    + Multi-dimensional stochastic optimisation: Simulated annealing 
+
+
+
+## Topics (planned)
+
+- **Spatial models**
+  + Simple, heuristic spatial interpolation approaches
+  + Spatial correlation
+  + Regression with spatially correlated data
+  + Kriging: best linear (unbiased) prediction 
+  + Stationarity, variogram
+  + Kriging varieties: simple, ordinary, universal kriging
+  + Kriging as a probabilistic spatial predictor
+
++ Spatio-temporal variation modelled by partial differential equations
++ Agent-based approaches
+
+
+## Course Organization
+
+
+**Teachers**: Edzer Pebesma / Christian Knoth
+
++ Course style: Lecture + Exercises
++ Lecture discusses the theory, exercises teach you how to work with and analyze data in practice (using R)
++ 5 ECTS (2 lecture, 3 exercises): 150 hours of work
++ Lectures: Tuesday 10-12 Room 130
++ Exercises: Wednesday 12-14 Room 130
+
+
+
+
+## Course Organization
+
+
+**Learnweb**: [EIDMDRP-2024_2](https://sso.uni-muenster.de/LearnWeb/learnweb2/course/view.php?id=80651), password -> kriging
+
+**Slides**:  Weekly updates in Learnweb
+
+**Exam**:
+
++ 21.01.2025, 10:15 - 11:45
++ "single choice", 4 possibilities, 40 questions, 20 need to be correct.
+
+**Exercise**:
+
++ weekly exercises + "Weihnachtsaufgabe"
++ more details in the first exercise meeting
+
+**Communication**:
+
++ Use learnweb forum to ask questions, student answers are very welcome (!)
+
+
+
+## Literature
+
+
++ Full script from 2023: [http://edzer.github.io/mstp/](http://edzer.github.io/mstp/)
++ C. Chatfield (2003): The analysis of time series: an introduction. Chapman and Hall: chapters 1, 2 and 3
++ R. Hyndman, G. Athanasopoulos: [Foreasting: Principles and Practice](https://otexts.com/fpp3/)
++ E. Pebesma , R. Bivand: [Spatial Data Science, with applications in R](https://r-spatial.org/book/):
+    + Ch 1 (intro), 7 (sf, stars)
+    + Ch 12 (interpolation)
+    

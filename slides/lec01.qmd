@@ -1,6 +1,6 @@
 --- 
 title: "Lecture 1"
-subtitle: "Modeling spatio-temporal processes"
+subtitle: "Modelling spatio-temporal processes - Intro & Organisation"
 
 include-in-header:
   - text: |
@@ -14,50 +14,6 @@ format: revealjs
 editor: visual
 
 ---
-
-
-
-## Course Organization
-
-
-**Teachers**: Edzer Pebesma / Christian Knoth
-
-+ Course style: Lecture + Excercises
-+ Lecture discusses the theory, excercises teach you how to work with and analyze data in practice (using R)
-+ 5 ECTS (2 lecture, 3 excercises): 150 hours of work
-+ Lectures: Tuesday 10-12 Room 130
-+ Excercises: Wednesday 12-14 Room 130
-
-
-
-
-## Course Organization
-
-
-**Learnweb**: [MSTP-2015_2](https://sso.uni-muenster.de/LearnWeb/learnweb2/course/view.php?id=18423), password -> mstp1516
-
-**Slides**:  Weekly updates in Learnweb
-
-**Exam**:
-
-+ multiple choice, 4 possibilities, 40 questions, 20 need to be correct.
-
-**Communication**:
-
-+ Use learnweb forum to ask questions, student answers are very welcome (!)
-
-
-
-## Literature
-
-
-+ Full script from 2023: http://edzer.github.io/mstp/
-+ C. Chatfield, The analysis of time series: an introduction. Chapman and Hall: chapters 1, 2 and 3 [@chatfield] 
-+ R. Hyndman, G. Athanasopoulos: [Foreasting: Principles and Practice](https://otexts.com/fpp3/)
-+ Spatial Data Science, with applications in R [@sdsr]:
-    + Ch 1 (intro), 7 (sf, stars)
-    + Ch 12 (interpolation)
-
 
 ## Overview
 
@@ -89,13 +45,16 @@ editor: visual
 + we will consider how well these models correspond to our observations
 
 
-## Topics
+## Topics (planned)
 
 - **Time series models**
   + (Partial) autocorrelations, ARIMA(p,d,q)
   + Model selection, AIC
   + Forecasting, decomposition
-  + Case study: Land use change monitoring from satellite imagery
+  
+  
+## Topics (planned)
+
 - **Optimisation**
   + Linear models, least squares, normal equations
   + Non-linear:
@@ -106,7 +65,7 @@ editor: visual
 
 
 
-## Topics
+## Topics (planned)
 
 - **Spatial models**
   + Simple, heuristic spatial interpolation approaches
@@ -119,6 +78,55 @@ editor: visual
 
 + Spatio-temporal variation modelled by partial differential equations
 + Agent-based approaches
+
+
+## Course Organization
+
+
+**Teachers**: Edzer Pebesma / Christian Knoth
+
++ Course style: Lecture + Exercises
++ Lecture discusses the theory, exercises teach you how to work with and analyze data in practice (using R)
++ 5 ECTS (2 lecture, 3 exercises): 150 hours of work
++ Lectures: Tuesday 10-12 Room 130
++ Exercises: Wednesday 12-14 Room 130
+
+
+
+
+## Course Organization
+
+
+**Learnweb**: [EIDMDRP-2024_2](https://sso.uni-muenster.de/LearnWeb/learnweb2/course/view.php?id=80651), password -> kriging
+
+**Slides**:  Weekly updates in Learnweb
+
+**Exam**:
+
++ 21.01.2025, 10:15 - 11:45
++ "single choice", 4 possibilities, 40 questions, 20 need to be correct.
+
+**Exercise**:
+
++ weekly exercises + "Weihnachtsaufgabe"
++ more details in the first exercise meeting
+
+**Communication**:
+
++ Use learnweb forum to ask questions, student answers are very welcome (!)
+
+
+
+## Literature
+
+
++ Full script from 2023: [http://edzer.github.io/mstp/](http://edzer.github.io/mstp/)
++ C. Chatfield (2003): The analysis of time series: an introduction. Chapman and Hall: chapters 1, 2 and 3
++ R. Hyndman, G. Athanasopoulos: [Foreasting: Principles and Practice](https://otexts.com/fpp3/)
++ E. Pebesma , R. Bivand: [Spatial Data Science, with applications in R](https://r-spatial.org/book/):
+    + Ch 1 (intro), 7 (sf, stars)
+    + Ch 12 (interpolation)
+    
 
 ## Spatio-temporal phenomena are everywhere
 
@@ -169,8 +177,12 @@ More scientific aims of modelling are
 
 + conceptual models, e.g. the water cycle ([wikipedia](http://en.wikipedia.org/wiki/File:Water_cycle.png):) ![the water cycle](https://upload.wikimedia.org/wikipedia/commons/9/94/Water_cycle.png)
 
- ![the water cycle, updated](https://i0.wp.com/eos.org/wp-content/uploads/2022/10/usgs-water-cycle.png)
 
+## What is a model?
++ conceptual models, e.g. the water cycle
+ ![the water cycle, updated](https://i0.wp.com/eos.org/wp-content/uploads/2022/10/usgs-water-cycle.png){height="300"}
+
+## What is a model?
 + object models, such as UML ([wikipedia](http://en.wikipedia.org/wiki/File:UML_diagrams_overview.svg):) ![UML](https://upload.wikimedia.org/wikipedia/commons/e/ed/UML_diagrams_overview.svg)
 + mathematical models, such as Navier Stokes' equation, ([wikipedia](https://en.wikipedia.org/wiki/Navier%E2%80%93Stokes_equations):)
 ![Navier Stokes equation](http://upload.wikimedia.org/math/4/f/e/4fef570fa684173cbc6e70a904dd5e66.png) 

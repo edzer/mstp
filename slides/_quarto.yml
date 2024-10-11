@@ -12,8 +12,9 @@ format:
     theme: [default, custom.scss]
     logo: Logo_ifgi_short.png
     smaller: true
-    embed-resources: true
+    embed-resources: false
     code-fold: false
+    chalkboard: true
     width: 1280
     height: 720
     

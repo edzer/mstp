@@ -58,6 +58,29 @@ plot(T.outside-T.per~date, meteo, type='l')
 title("anomaly")
 ```
 
+
+## Temperature anomaly
+
+* Can we also make estimates of this anomaly? 
+
+
+## Temperature anomaly
+
+
+```{r, echo=FALSE,fig.align="center"}
+an = T.outside-T.per
+x.an = arima(an, c(6,0,0)) # model the anomaly by AR(6)
+pltpred = function(xlim, Title) {
+  plot(an, xlim = xlim, type='l')
+  start = nrow(meteo) + 1
+  pr = predict(x.an, n.ahead = xlim[2] - start + 1)
+  lines(start:xlim[2], pr$pred, col='blue')
+  title(Title)
+}
+pltpred(c(9400, 10000), "e.g. using an AR(p) model?")
+```
+
+
 ## What can we do with such models?
 * try to find out which model fits best (model selection)
 * learn how they were/could have been generated
@@ -72,7 +95,7 @@ with $\hat{\sigma}^2$ the estimated residual (noise) variance.
 . . .
 
 Instead of finding a single best model using this single criterion, it
-may be better is to select a small group of "best" models, and look
+may be better to select a small group of "best" models, and look
 at model diagnostics for each: is the residual white noise? does it have
 stationary variance?
 
@@ -119,32 +142,75 @@ pltpred = function(xlim, Title) {
 
 ```
 
-## Prediction, e.g. with AR(6)
+## Prediction, e.g. with AR(6) - 10 minutes
 
 ```{r}
-#| echo: true
+#| echo: false
 pltpred(c(9860, 9900), "10 minutes")
 ```
 
-## Prediction, e.g. with AR(6)
+## Prediction of Anomaly, e.g. with AR(6) - 10 minutes
+
+```{r, eval=T,echo=F}
+# Prediction, e.g. with AR(6)
+T.per = 18.2-4.9*sin(pi*(hours+1.6)/12)
+an = T.outside - T.per
+x2 = arima(an, c(6,0,0))
+
+pltpred2 = function(xlim, Title) {
+  plot(an, xlim = xlim, type='l')
+  start = nrow(meteo) + 1
+  pr = predict(x2, n.ahead = xlim[2] - start + 1)
+  lines(start:xlim[2], pr$pred, col='red')
+  lines(start:xlim[2], pr$pred+2*pr$se, col='green')
+  lines(start:xlim[2], pr$pred-2*pr$se, col='green')
+  title(Title)
+}
+pltpred2(c(9860, 9900), "10 minutes")
+```
+
+
+
+## Prediction, e.g. with AR(6) - 110 minutes
 
 ```{r}
-#| echo: true
+#| echo: false
 pltpred(c(9400, 10000), "110 minutes")
 ```
 
-## Prediction, e.g. with AR(6)
+## Prediction of Anomaly, e.g. with AR(6) - 110 minutes
 
 ```{r}
-#| echo: true
+#| echo: false
+pltpred2(c(9400, 10000), "110 minutes")
+```
+
+## Prediction, e.g. with AR(6) - 1 day
+
+```{r}
+#| echo: false
 pltpred(c(8000, 11330), "predicting 1 day")
 ```
 
-## Prediction, e.g. with AR(6)
+## Prediction of Anomaly, e.g. with AR(6) - 1 day
 
 ```{r}
-#| echo: true
+#| echo: false
+pltpred2(c(8000, 11330), "predicting 1 day")
+```
+
+## Prediction, e.g. with AR(6) - 1 week
+
+```{r}
+#| echo: false
 pltpred(c(1, 19970), "predicting 1 week")
+```
+
+## Prediction of Anomaly, e.g. with AR(6) - 1 week
+
+```{r}
+#| echo: false
+pltpred2(c(1, 19970), "predicting 1 week")
 ```
 
 ## Predicting 1 week: periodic trend + ar(6) for anomaly
@@ -272,3 +338,191 @@ lm(T.outside~sin(tt)+cos(tt))
 
 ## Next: how do we fit coefficients?
   
+  
+## Sidetrack: time series analysis for satellite-based land use change detection
+
+
+* Satellites continusouly observe the surface of the earth
+* How can we use this information to detect and monitor changes like deforestration?
+* Example dataset: MODIS 16 day vegetation index measaurements over the Brazilian amazon
+```{r fig.width=2.5,fig.height=1.7, echo=FALSE,warning=F,fig.align='center'}
+library(png)
+library(grid)
+img <- readPNG("./data/lec02_googleearth.png")
+par(mar=rep(0,4))
+grid.newpage()
+grid.raster(img,x=0.5,y=0.5)
+```
+
+## A time-series of images
+
+
+The EVI (enhanced vegetation index) is a one-dimensional index computed from near infrared, red, and blue reflection measurements. Values can be interpreted as "greenness" and range from -1 to 1.
+```{r fig.width=3.5,fig.height=2.4,echo=FALSE,warning=F,fig.align='center'}
+library(png)
+library(grid)
+img <- readPNG("./data/lec02_evi.png")
+par(mar=rep(0,4))
+ grid.raster(img)
+```
+
+## A time-series of images
+
+For each of the $1200^2$ pixels, we interpret the set of observations as time series.
+
+Consider the general model:
+$$y_t = T_t + S_t + R_t$$
+
+- $T_t$ describes the trend
+- $S_t$ describes seasonal effects
+- $R_t$ describes remaining variation
+
+We could be interested in both, changes in the trend and seasonality.
+
+
+## Example analysis
+
+
+An example series (1 pixel in forest area):
+
+```{r, fig.width=7,fig.height=4,message=FALSE,echo=FALSE,warning=F,fig.align='center'}
+# One pixel time series
+require(bfast)
+evi=ts(as.vector(harvest),start=c(2005,1), frequency = 23)
+plot(evi, ylab="EVI")
+
+
+```
+
+
+## Example analysis
+
+
+We compute differences from the overall mean to center the series around 0.
+
+```{r, fig.width=7,fig.height=4,message=FALSE,echo=FALSE,warning=F,fig.align='center'}
+# One pixel time series and mean
+require(bfast)
+evi=ts(as.vector(harvest),start=c(2005,1), frequency = 23)
+plot(evi, ylab="EVI")
+evi_m =  evi - mean(evi)
+lines(ts(rep(mean(evi),length(evi)),start=c(2005,1), frequency = 23), col="red")
+```
+
+
+## Example analysis
+
+
+We compute differences from the overall mean to center the series around 0.
+
+```{r, fig.width=7,fig.height=4,message=FALSE,echo=FALSE,warning=F,fig.align='center'}
+# Difference from Mean
+require(bfast)
+evi=ts(as.vector(harvest),start=c(2005,1), frequency = 23)
+evi_m =  evi - mean(evi)
+plot(evi_m, ylab="EVI Difference")
+
+```
+
+## Example analysis
+
+
+We assume yearly seasonality and build seasonal sub-series:
+
+$$
+\begin{aligned}
+y_t^{(16)} &= (y_{2005,16},y_{2006,16},y_{2007,16},y_{2008,16}, ...) \\
+y_t^{(32)} &= (y_{2005,32},y_{2006,32},y_{2007,32},y_{2008,32}, ...) \\
+... 
+\end{aligned}
+$$
+for which we simply compute mean values.
+
+```{r, fig.width=7,fig.height=3.1,echo=FALSE,warning=F,fig.align='center'}
+# Seasonality
+a = rep(0,23)
+for (i in 1:length(a)) {
+  a[i] = mean(evi_m[seq(i,length(evi_m),by = 23)])
+}
+evi_m.St = rep(a,20)[1:length(evi_m)]
+par(mar=c(5, 4, 1, 2))
+plot(evi_m, ylab="EVI Difference", type="l", main="Seasonality" )
+lines(ts(evi_m.St,start=c(2005,1), frequency = 23), col="red")
+```
+
+## Example analysis
+
+
+After subtracting the seasonal component, the series looks like:
+
+```{r, fig.width=7,fig.height=4,echo=FALSE,warning=F,fig.align='center'}
+# Difference from Seasonality
+evi_m.St.res = evi_m - evi_m.St
+plot(evi_m.St.res,type="l", ylab="EVI Difference", main = "Difference/Residuals from seasonal trend")
+#plot(cumsum(evi_m.St.res), type="l")
+```
+
+
+## Example analysis
+
+
+After removing large parts of seasonality, we can study the trend of the data. Deforestation should be visible by abrupt changes in the trend structure. 
+To test, whether there is a structural change, we assume the following linear regression model
+$$T_t = \beta_0 + \beta_1 t$$
+and hypothesize that the regression coefficients $\beta_0, \beta_1$ do not change in time.
+
+
+## Example analysis
+
+
+
+Fitting a global trend leads to: 
+```{r, fig.width=7,fig.height=4,echo=FALSE,warning=F,fig.align='center'}
+evi_m.index =  1:length(evi_m.St)
+evi_m.St.res.lm = lm(evi_m.St.res ~ evi_m.index)
+plot(as.numeric(evi_m.St.res), type="l", ylab="EVI Differences", main="Difference/Residuals from seasonal component")
+lines(evi_m.index,evi_m.St.res.lm$coefficients[1]+evi_m.St.res.lm$coefficients[2]*evi_m.index,col="red")
+```
+
+
+## Example analysis
+
+Looking at the cumulated sum of the model's residuals shows that they do not fluctuate around 0, which we expected in our hypothesis.
+```{r, fig.width=7,fig.height=4,echo=FALSE,warning=F,fig.align='center'}
+plot(cumsum(evi_m.St.res.lm$residuals),ylab="Cumulated Residuals", type="l")
+```
+By thresholding the cumulated residuals based on a given confidence level, we can find a breakpoint around t=107. 
+
+## Example analysis
+
+
+A better model:
+
+```{r, fig.width=7,fig.height=4,echo=FALSE,warning=F,fig.align='center'}
+bp <- which.max(cumsum(evi_m.St.res.lm$residuals))
+evi_m.St.res.lm1 = lm(evi_m.St.res[1:(bp-1)] ~ evi_m.index[1:(bp-1)])
+evi_m.St.res.lm2 = lm(evi_m.St.res[bp:length(evi_m.St.res)] ~ evi_m.index[bp:length(evi_m.St.res)])
+
+plot(as.numeric(evi_m.St.res), type="l", ylab = "Trend component")
+lines(evi_m.index[1:(bp-1)],evi_m.St.res.lm1$coefficients[1]+evi_m.St.res.lm1$coefficients[2]*evi_m.index[1:(bp-1)],col="red")
+lines(evi_m.index[bp:length(evi_m.St.res)],evi_m.St.res.lm2$coefficients[1]+evi_m.St.res.lm2$coefficients[2]*evi_m.index[bp:length(evi_m.St.res)],col="red")
+```
+
+
+
+## Example analysis
+
+
+```{r, fig.width=8,fig.height=8,echo=FALSE,warning=F,fig.align='center', message=FALSE, results='hide'}
+bf = bfast(evi,season = "dummy", max.iter = 2, breaks=1,type="OLS-CUSUM")
+plot(bf, main="Example Result")
+```
+
+## Literature (sidetrack)
+
+
+1.  Verbesselt, J., Hyndman, R., Newnham, G., & Culvenor, D. (2010). Detecting trend and seasonal changes in satellite image time series. Remote Sensing of Environment, 114, 106-115. DOI: 10.1016/j.rse.2009.08.014.
+
+2.  R. B. Cleveland, W. S. Cleveland, J.E. McRae, and I. Terpenning (1990) STL: A Seasonal-Trend Decomposition Procedure Based on Loess. Journal of Official Statistics, 6, 3-73. 
+
+3. W. S. Cleveland, E. Grosse and W. M. Shyu (1992) Local regression models. Chapter 8 of Statistical Models in S eds J.M. Chambers and T.J. Hastie, Wadsworth and Brooks/Cole.

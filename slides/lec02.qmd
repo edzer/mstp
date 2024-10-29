@@ -325,6 +325,38 @@ $\alpha sin(x) + \beta cos(x)$; this is essentially a re-parameterization.
 
 
 ## A side note: fitting a phase with a linear model
+A phase shift model $\alpha \sin(x + \phi)$ can also be modelled by  
+$\alpha sin(x) + \beta cos(x)$; this is essentially a re-parameterization.
+
+Try the following code:
+
+```{r}
+#| code-fold: true
+#| echo: true
+#| eval: false
+x = seq(0, 4*pi, length.out = 200) # x plotting range
+
+sincos = function(dir, x) { # plot the combination of a sin+cos function, based on dir
+	a = sin(dir)
+	b = cos(dir)
+	# three curves:
+	plot(a * sin(x) + b * cos(x) ~ x, type = 'l', asp=1, col = 'green')
+	lines(x, a * sin(x), col = 'red')
+	lines(x, b * cos(x), col = 'blue')
+	# legend:
+	lines(c(10, 10+a), c(2,2), col = 'red')
+	lines(c(10, 10), c(2,2+b), col = 'blue')
+	arrows(x0 = 10, x1 = 10+a, y0 = 2, y1 = 2+b, .1, col = 'green')
+	title("red: sin(x), blue: cos(x), green: sum")
+}
+
+for (d in seq(0, 2*pi, length.out = 100)) {
+	sincos(d, x)
+	Sys.sleep(.1)
+}
+```
+
+## A side note: fitting a phase with a linear model
 
 So, we can fit the same model by a different parameterization:
 

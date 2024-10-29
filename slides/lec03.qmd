@@ -14,26 +14,20 @@ format: revealjs
 editor: visual
 ---
 
-```{r echo=FALSE}
-options("digits")
-```
-
 ## Optimization
 
 [**Optimization of what?**]{.green}
 
-- Mathematical models for spatiotemporal processes can be controlled by parameters. Given a particular model and a limited number of process observations (data), we want to infer *best fitting* values for the parameters.
+-   Mathematical models for spatiotemporal processes can be controlled by parameters. Given a particular model and a limited number of process observations (data), we want to infer [*best fitting*]{.green} values for the parameters.
 
 . . .
 
-- To define *best fitting*, we need to setup an *objective function* which takes parameters as arguments and yields a single scalar measure that reflects how well (or usually how badly) specific parameter values fit the the data.
-- The goal of optimization is simply to find minima of the objective function.
-
+-   To define [*best fitting*]{.green}, we need to setup an *objective function* which takes parameters as arguments and yields a single scalar measure that reflects how well (or usually how badly) specific parameter values fit the the data.
+-   The goal of optimization is simply to find minima of the objective function.
 
 ## Optimization
 
 [**Why different methods?**]{.green}
-
 
 The objective function might be
 
@@ -41,9 +35,7 @@ The objective function might be
 -   linear or nonlinear in the parameters
 -   unimodal or multimodal
 
-
-. . . 
-
+. . .
 
 Methods
 
@@ -57,6 +49,8 @@ The Objective function compares model evaluations (predictions) and known observ
 
 -   parameter values
 -   other input variables that are observed along the modeled process (e.g. time, space, compare explanatory variables in regression)
+
+. . .
 
 Consider the following notation:
 
@@ -73,7 +67,7 @@ Useful objective functions could be:
 -   $G(\theta) = \sum_{i=1}^{n}{\left(y_i-f(X_i, \theta) \right)^2}$ (Sum of squared residuals)
 -   $G(\theta) = \sum_{i=1}^{n}{\left| y_i-f(X_i, \theta) \right|}$ (Sum of absolute residuals)
 
-but might be more complex. In this course, we will concentrate on the *sum of squared residuals*. Notice, however, that the complexity of $G$ depends also on the model itself, which is evaluated for each observation. Let us start with linear models.
+but might be more complex. In this course, we will concentrate on the [*sum of squared residuals*]{.green}. Notice, however, that the complexity of $G$ depends also on the model itself, which is evaluated for each observation. Let us start with linear models.
 
 ## Objective function
 
@@ -139,7 +133,7 @@ Linear models can be written as linear equation systems which are relatively eas
 
 ## Linear systems
 
-Take $x_1$ the example
+Take the example
 
 $$
     \begin{array}{ll}
@@ -254,22 +248,40 @@ when we write $$A x = b$$ with known $A$ and $b$ and unknown $x$, the solution i
 
 ## The practice of solving systems
 
-```{r}
-m=matrix(0,3000,3000)
-diag(m)=1
-system.time(x <- solve(m))
-system.time(x <- solve(m,rep(0,3000)))
-```
+$$
+X = \left[
+  \begin{array}{ll}
+	1 & 1  \\
+	1 & 2  \\
+	1 & 3  
+	\end{array}
+	\right]  \quad 
+y = \left[
+  \begin{array}{ll}
+	1   \\
+	0  \\
+	2  
+	\end{array}
+	\right]
+$$
 
 ```{r}
+#| echo: true
+#| code-fold: true
+#| code-line-numbers: "|3"
 X=cbind(c(1,1,1),c(1,2,3))
-X
 y = c(1,0,2)
 solve(t(X) %*% X, t(X) %*% y)
-plot(X[,2], y, xlim = c(0,3), asp = 1)
-abline(lm(y~X[,2]))
-lm(y~X[,2])
 ```
+
+$$
+(X^TX)b = X^Ty \equiv b =  \left[
+  \begin{array}{ll}
+	0.0  \\
+	0.5  \\
+	\end{array}
+	\right]
+$$
 
 # Non-linear optimization
 
@@ -292,8 +304,8 @@ We will discuss the following methods:
 -   one-dimensional search on a unimodal function: golden search
 -   non-linear least squares: the Gauss Newton algorithm
 -   probabilistic methods: global search
--   Metropolis-Hastings
--   Simulated Annealing
+    -   Metropolis-Hastings
+    -   Simulated Annealing
 
 ## Golden search
 
@@ -309,10 +321,10 @@ Found in: art, sculpture, geometry (pentagrams), Egyptian pyramides, architectur
 
 Recursive zooming:
 
-1.  find three GR points, a, b and c such that the minimum lies within a and c
-2.  put a point d in the largest section according to GR, with the smallest interval closest to the smallest value
-3.  (In case of adbc) determine whether the mininum is between a and b or d and c
-4.  continue with either adb or dbc as if it were abc, unless we're sufficiently close (in terms of our goal, or of numerical resolution)
+1. determine an interval $[a,b]$, in which the minimum is expected to lie  
+2. determine two points $c$ and $d$ within this interval splitting it according to golden ratio
+3. evaluate the function at these two points, compare $f(c)$ and $f(d)$ 
+4. depending on which value is lower, update your interval to $[a,d]$ (if $f(c)$ is smaller) or to $[c,b]$ (if $f(d)$ is smaller). Continue with the new interval, repeat until we're sufficiently close (in terms of our goal, or of numerical resolution)
 
 ## Golden search example
 
@@ -331,7 +343,7 @@ plot(x,f(x),type='l')
 
 ## Golden search example: Step 1
 
--   Let $\Phi=(-1+\sqrt{5})/2$ be the golden ratio.
+-   Let $\Phi$ be the golden ratio.
 -   Set $a=-5, b=5, c=b-\Phi(b-a), d=a+\Phi(b-a)$ and evaluate $f$ at $a,b,c,d$
 
 ```{r, echo=FALSE,eval=FALSE,results='hide'}
@@ -355,7 +367,7 @@ We see that $f(c)$ is smaller than $f(d)$, so the minimum must be located betwee
 
 ## Golden search example: Step 1
 
--   Let $\Phi=(-1+\sqrt{5})/2$ be the golden ratio.
+-   Let $\Phi$ be the golden ratio.
 -   Set $a=-5, b=5, c=b-\Phi(b-a), d=a+\Phi(b-a)$ and evaluate $f$ at $a,b,c,d$
 
 ```{r, echo=FALSE,eval=FALSE,results='hide'}
@@ -383,6 +395,7 @@ We see that [$f(c)$]{style="color:blue;"} is smaller than $f(d)$, so the minimum
 
 ## Golden search example: Step 2
 
+- our new search interval is now betewen $a$ and $d$ (so $d$ is the new $b$)
 -   Set $a=-5, b:=d, c=b-\Phi(b-a), d=a+\Phi(b-a)$ and evaluate $f$ at $a,b,c,d$
 
 ```{r, echo=FALSE,eval=FALSE}
@@ -405,6 +418,7 @@ Again, $f(c)$ is smaller than $f(d)$.
 
 ## Golden search example: Step 3
 
+- again, $d$  becomes the new $b$
 -   Set $a=-5, b:=d, c=b-\Phi(b-a), d=a+\Phi(b-a)$ and evaluate $f$ at $a,b,c,d$
 
 ```{r, echo=FALSE,eval=FALSE}
@@ -427,6 +441,7 @@ Now, $f(c)$ is greater than $f(d)$ and the minimum must be located between $c$ a
 
 ## Golden search example: Step 4
 
+-   now $c$  becomes the new $a$
 -   Set $a=c, c=b-\Phi(b-a), d=a+\Phi(b-a)$ and evaluate $f$ at $a,b,c,d$
 
 ```{r, echo=FALSE,eval=FALSE}
@@ -444,6 +459,8 @@ points(c(a,b,c,d),f(c(a,b,c,d)), pch=19)
 segments(x0=c(a,b,c,d),y0=c(-5,-5,-5,-5),y1=f(c(a,b,c,d)) )
 text(x=c(a,b,c,d),y=c(12,12,12,12),label=c("a","b","c","d"))
 ```
+
+Again, $f(c)$ is greater than $f(d)$ and the minimum must be located between $c$ and $b$.
 
 ## Golden search example: 20 more iterations...
 
@@ -474,16 +491,21 @@ text(x=c(a,b,c,d),y=c(12,12,12,12),label=c("a","b","c","d"))
 
 Termination criteria can be based on the desired precision.
 
+
 ## Combined linear and golden search
 
-Spherical variogram with nugget has three parameters: nugget $c_0$, (partial) sill $c_1$ and range $a$: $$
+Spherical variogram with nugget has three parameters: nugget $c_0$,
+(partial) sill $c_1$ and range $a$:
+$$
 \gamma(h) = \left\{
 \begin{array}{ll}
-          0 & \mbox{if}\ \  h = 0 \\
-          c_0 + c_1 f(a,h) & \mbox{if}\ \  h > 0 \\
+		  0 & \mbox{if}\ \  h = 0 \\
+		  c_0 + c_1 f(a,h) & \mbox{if}\ \  h > 0 \\
 \end{array}
 \right.
-$$ with $$f(a, h)= \left\{
+$$
+with 
+$$f(a, h)= \left\{
 \begin{array}{ll}
 \frac{3h}{2a}-\frac{1}{2}(\frac{h}{a})^3 & \mbox{if} \ \ 0 \le h \le a \\
 1 & \mbox{if} \ \ h > a \\
@@ -491,12 +513,14 @@ $$ with $$f(a, h)= \left\{
 \right.
 $$
 
-## Approach
+## Combined linear and golden search - approach:
 
-Provide an initial estimate $a_0$; then iterate: 1. given current fit for $a$, fit the linear coefficients $c_0$ and $c_1$ 2. given this fit, do golden search for $a$ until convergence (vector $(a,c_0,c_1)$ does not move).
+Provide an initial estimate $a_0$; then iterate:
+1. given current fit for $a$, fit the linear coefficients $c_0$ and $c_1$
+2. given this fit, do golden search for $a$
+until convergence (vector $(a,c_0,c_1)$ does not move).
 
 ```{r fig.width=10, fig.height=5}
-#| echo: true
 library(sp)
 data(meuse)
 coordinates(meuse) = ~x+y
@@ -505,20 +529,41 @@ v = variogram(log(zinc)~1, meuse)
 m = vgm(0.5, "Sph", 700, 0.1)
 plot(v)
 ```
+## Combined linear and golden search - approach:
 
-## Approach
+Provide an initial estimate $a_0$; then iterate:
+1. given current fit for $a$, fit the linear coefficients $c_0$ and $c_1$
+2. given this fit, do golden search for $a$
+until convergence (vector $(a,c_0,c_1)$ does not move).
 
 ```{r fig.width=10, fig.height=5}
-#| echo: true
+library(sp)
+data(meuse)
+coordinates(meuse) = ~x+y
+library(gstat)
+v = variogram(log(zinc)~1, meuse)
+m = vgm(0.5, "Sph", 700, 0.1)
 plot(v, vgm(0.5, "Sph", 700, 0.1))
 ```
 
-## Approach
+## Combined linear and golden search - approach:
+
+Provide an initial estimate $a_0$; then iterate:
+1. given current fit for $a$, fit the linear coefficients $c_0$ and $c_1$
+2. given this fit, do golden search for $a$
+until convergence (vector $(a,c_0,c_1)$ does not move).
 
 ```{r fig.width=10, fig.height=5}
-#| echo: true
+library(sp)
+data(meuse)
+coordinates(meuse) = ~x+y
+library(gstat)
+v = variogram(log(zinc)~1, meuse)
+m = vgm(0.5, "Sph", 700, 0.1)
+
 plot(v, fit.variogram(v, vgm(0.5, "Sph", 700, 0.1)))
 ```
+
 
 ## Non-linear least squares
 
@@ -571,6 +616,12 @@ $$ that we can't solve this directly.
 -   
 
     4.  Repeat 2. and 3. until difference of $x_i$ and $x_{i+1}$ is below a threshold
+    
+
+**Update rule:**
+
+$$x_{i+1} = x_i - {f(x_i) \over f'(x_i)}  $$ 
+
 
 ## Newton's method (example)
 
@@ -763,7 +814,7 @@ This yields the iteration / recurrence formula of the Gauss Newton algorithm (se
 \end{aligned}
 $$
 
-## Gauss-Newton and the Normal equations
+## Side note: Gauss-Newton and the Normal equations
 
 Recall that in multiple *linear* regression, with $y=X\theta+e$ the solution is given by the normal equations $$X'X\theta = X'y$$ Note that here, the Jacobian of $y-X\theta$ is $-X$, so if we take (arbitrarily) $\theta_0 = (0,0,...,0)'$, then $$
 J_f(\theta_k)'J_f(\theta_k) \delta^k = - J_f(\theta_k) f(\theta^k)

@@ -199,7 +199,7 @@ Let´s look at some examples with different acceptance rates. These are for fitt
 
 ## Little mixing (too low acceptance rate):
 
-```{r, echo=FALSE, cache=1, cache.lazy=FALSE, fig.width=6}
+```{r, echo=FALSE, fig.width=6}
 Metropolis <- function(theta0, sigma, y, fn, n = 100, debug=FALSE) {
   m = length(theta0)
   out = matrix(NA, n, m)
@@ -246,7 +246,7 @@ plot(out$chain[3000:5000,3], type="l", ylab="c", xlab="Iteration",main="")
 
 ## Better mixing:
 
-```{r, echo=FALSE, cache=1, fig.width=6}
+```{r, echo=FALSE, fig.width=6}
 set.seed(1)
 out = Metropolis(c(18,-4,1.6), c(0.08,0.08,0.08), temp, f, n = 5000)
 par(mfcol=c(3,1))
@@ -260,7 +260,7 @@ plot(out$chain[3000:5000,3], type="l", ylab="c", xlab="Iteration",main="")
 
 ## Still better mixing:
 
-```{r, echo=FALSE, cache=1, fig.width=6}
+```{r, echo=FALSE, fig.width=6}
 set.seed(1)
 out = Metropolis(c(18,-4,1.6), c(0.03,0.03,0.03), temp, f, n = 5000)
 par(mfcol=c(3,1))
@@ -274,7 +274,7 @@ plot(out$chain[3000:5000,3], type="l", ylab="c", xlab="Iteration",main="")
 
 ## Little mixing (too high acceptance rate: too much autocorrelation)
 
-```{r, echo=FALSE, cache=1, fig.width=6}
+```{r, echo=FALSE, fig.width=6}
 set.seed(1)
 out = Metropolis(c(18,-4,1.6), c(0.003,0.003,0.003), temp, f, n = 5000)
 par(mfcol=c(3,1))
@@ -290,7 +290,7 @@ plot(out$chain[3000:5000,3], type="l", ylab="c", xlab="Iteration",main="")
 
 In the examples above we already omitted the burn-in phase (e.g. the first 3000 samples). If we start with poor parameter values, the complete series might look like:
 
-```{r, echo=FALSE, cache=F, fig.width=6, message=F}
+```{r, echo=FALSE, fig.width=6, message=F}
 set.seed(1)
 out = Metropolis(c(16,-1,3), c(0.03,0.03,0.03), temp, f, n = 5000)
 par(mfcol=c(3,1))
@@ -319,7 +319,7 @@ abline(v=500, xpd=F, col="red", lty="dashed")
 
 We can interpret the results as a sample of the parameter's probability density and use results to compute point estimates and to quantify uncertainties in parameter estimation.
 
-```{r, echo=FALSE, cache=1, fig.width=6, fig.height=2.5}
+```{r, echo=FALSE,fig.width=6, fig.height=2.5}
 set.seed(1)
 out = Metropolis(c(16,-1,3), c(0.03,0.03,0.03), temp, f, n = 5000)
 par(mfcol=c(1,3))
@@ -389,7 +389,7 @@ $$
 
 **Probability of accepting a random proposal:**
 
-```{r, echo=FALSE, cache=1, cache.lazy=FALSE, fig.width=6}
+```{r, echo=FALSE, fig.width=6}
 ssrdif = seq(-5,5,length.out = 1000) # old_ssr - proposal_ssr
 # --> ssrdif > 0 if proposal better
 # --> ssrdif < 0 if proposal worse

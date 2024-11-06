@@ -424,8 +424,7 @@ A related algorithm (stochastic optimization) is the Genetic Algorithm.
 
 **Example:** Temperature time series with given mean
 
-Our model is 
-$$18.12634 + b_1 \sin \left( \pi (x_i + b_2) / 12 \right)$$
+Our model is $$18.12634 + b_1 \sin \left( \pi (x_i + b_2) / 12 \right)$$
 
 and our parameter vector is $\theta = (b_1,b_2)$ whose elements represent the amplitude and phase respectively.
 
@@ -492,7 +491,6 @@ Let's try different optimization algorithms to find optimal values. We use the (
 ```{r, echo=F, eval=F}
 nls(y ~ m + b1 * sin(pi * (x + b2)/12), start =  c(b1 = 30, b2=4), trace=T)
 ```
-
 
 | Iteration | b1        | b2       | SSE      |
 |-----------|-----------|----------|----------|

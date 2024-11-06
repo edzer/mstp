@@ -1,6 +1,7 @@
 ---
 title: "Lecture 4"
 subtitle: "Optimization: stochastic methods"
+date: "2024-11-05"
 
 include-in-header:
   - text: |
@@ -14,44 +15,135 @@ format: revealjs
 editor: visual
 ---
 
-```{r echo=FALSE}
-options("digits")
-```
-
-
-
 ## Optimization - Determinisitc vs. stochastic
-
 
 The algorithms discussed before have been **deterministic**. Given the same input (data, objective function, initial values if non-linear) algorithms produce the same output:
 
-* Linear least squares (normal equations)
-* Non-linear one-dimensional (Golden section search)
-* Non-linear least squares (Gauss Newton)
+-   Linear least squares (normal equations)
+-   Non-linear one-dimensional (Golden section search)
+-   Non-linear least squares (Gauss Newton)
 
+. . .
+
+We will now look at **stochastic** (or probabilistic) methods, i.e. methods that do not always produce the same output, since they involve randomization.
 
 ## MCMC - Markov chain Monte Carlo methods
 
-
-The underlying principle is that of MCMC:
+The underlying principle is that of MCMC
 
 **Monte Carlo algorithms:**
 
-- Include randomization to compute results
-- Results are not deterministic, running time is (compare Las Vegas algorithms)
-- More samples typically lead to better results
-- Example: Approximate $\pi$ by counting the portion of $(U(0,1), U(0,1))$ distributed random points that lie inside the unit circle.
-
-
+-   Include randomization to compute results
+-   Results are not deterministic, running time is (compare Las Vegas algorithms)
+-   More samples typically lead to better results
+-   Example: Approximate $\pi$ by counting the portion of $(U(0,1), U(0,1))$ distributed random points that lie inside the unit circle.
 
 ## MCMC - Markov chain Monte Carlo methods
 
+**Monte Carlo algorithms:**
+
+Example: Approximate $\pi$ by counting the portion of $(U(0,1), U(0,1))$ distributed random points that lie inside the unit circle ? let´s try this out.
+
+## MCMC - Markov chain Monte Carlo methods
+
+**Monte Carlo algorithms:**
+
+Example: Approximate $\pi$ by counting the portion of $(U(0,1), U(0,1))$ distributed random points that lie inside the unit circle ? Let´s try this out.
+
+**Why does that work?**
+
+$\text{Area of the square} = \text{side} \times \text{side} = 1 \times 1 = 1$
+
+$\text{Area of the circle} = \pi \times r^2 = \pi \times (0.5)^2 = \pi \times 0.25 = \frac{\pi}{4}$
+
+$\text{proportion_square_circle} = \frac{\text{Area of the circle}}{\text{Area of the square}} = \frac{\frac{\pi}{4}}{1} = \frac{\pi}{4}$
+
+$\pi = \text{proportion_sqaure_circle} \times 4$
+
+## MCMC - Markov chain Monte Carlo methods
+
+**Monte Carlo algorithms:**
+
+Example: Approximate $\pi$ by counting the portion of $(U(0,1), U(0,1))$ distributed random points that lie inside the unit circle ? Let´s try this out.
+
+**Why does that work?**
+
+```{r}
+# Set the number of random points
+n_samples <- 1000
+
+# Generate random points within the square
+x <- runif(n_samples)
+y <- runif(n_samples)
+
+# Plot the square and points
+plot(x, y, xlim = c(0, 1), ylim = c(0, 1), main = "Monte Carlo Estimation of Pi", xlab = "x", ylab = "y", 
+     col = ifelse((x-0.5)^2 + (y-0.5)^2 <= 0.5^2, "red", "blue"), pch = 20, asp = 1)
+grid()
+
+# Add a circle
+symbols(0.5, 0.5, circles = 0.5, inches = FALSE, add = TRUE, fg = "black")
+
+# Outline the square
+rect(0, 0, 1, 1, border = "black")
+
+
+
+```
+
+## MCMC - Markov chain Monte Carlo methods
+
+**Monte Carlo algorithms:**
+
+Example: Approximate $\pi$ by counting the portion of $(U(0,1), U(0,1))$ distributed random points that lie inside the unit circle ? Let´s try this out.
+
+**How does that work?**
+
+Function in R:
+
+```{r}
+#| echo: true
+#| code-fold: true
+set.seed(123)  # Set seed for reproducibility
+monte_carlo_pi <- function(n_samples){
+  # Generate random points
+  x <- runif(n_samples)  # Uniformly distributed random numbers for x-coordinate
+  y <- runif(n_samples)  # Uniformly distributed random numbers for y-coordinate
+  # Calculate the number of points that lie inside the circle
+  inside_circle <- sum((x - 0.5)^2 + (y - 0.5)^2 <= 0.5^2)
+  
+  # Estimate Pi as shown in previous slide
+  pi_estimate <- 4 * (inside_circle / n_samples)
+  # Print the estimation
+  print(pi_estimate)
+  print(pi_estimate-pi)
+}
+```
+
+Run with 1000 samples:
+
+```{r}
+
+monte_carlo_pi(1000)
+```
+
+Run with 100000 samples:
+
+```{r}
+
+monte_carlo_pi(100000)
+```
+
+## MCMC - Markov chain Monte Carlo methods
+
+The underlying principle is that of MCMC
+
 **Markov chains:**
 
-- a one-dimensional sequence of random variables (stochastic process) where the next value depends only on the current value but not on past values 
-- $P(x_i | x_{i-1},  x_{i-2},  x_{i-3}, ...) = P(x_i | x_{i-1})$
-- are autocorrelated
-- Examples: Random walk, AR(1)
+-   a one-dimensional sequence of random variables (stochastic process) where the next value depends only on the current value but not on past values
+-   $P(x_i | x_{i-1},  x_{i-2},  x_{i-3}, ...) = P(x_i | x_{i-1})$
+-   are autocorrelated
+-   Examples: Random walk, AR(1)
 
 ```{r, error=FALSE,echo=FALSE,warning=FALSE,fig.align='center',fig.width=5, fig.height=2}
 library(png)
@@ -61,60 +153,51 @@ img <- readPNG("./data/lec04_markovchain.png")
 grid.raster(img)
 ```
 
-
-
 ## MCMC - Markov chain Monte Carlo methods
 
 **Idea of MCMC for optimization:**
 
-- Generate a Markov chain by randomly proposing new parameter values based on the current values
-- Compute how likely proposed parameters are compared to current values
-- Based on that, decide on accepting the proposal value or not
+-   Generate a Markov chain by randomly proposing new parameter values based on the current values
+-   Compute how likely proposed parameters are compared to current values
+-   Based on that, decide on accepting the proposal value or not
 
 In the end, this chain converges to the stationary distribution of the parameters.
 
-
 ## Metropolis-Hastings
+
 Why would one want probabilistic search?
 
-* global--unlikely areas are searched too (with small probability)
-* a probability distribution is richer than a point estimate:
-
-Gauss-Newton provides an estimate of $\hat\theta$ of $\theta$, given
-data $y$. What about the estimation error $\hat\theta - \theta$?
-Second-order derivatives give approximations to standard errors, but
-not the full distribution.
+-   global: unlikely areas are searched too (with small probability)
+-   a probability distribution is richer than a point estimate:
+    -   Gauss-Newton provides an estimate $\hat\theta$ of $\theta$, given data $y$. What about the estimation error $\hat\theta - \theta$? Second-order derivatives give approximations to standard errors, but not the full distribution.
 
 We explain the simplified version, the Metropolis algorithm
 
 ## Metropolis algorithm
+
 Given a point in parameter space $\theta$, say $x_t =
-(\theta_{1,t},...,\theta_{p,t})$ we evaluate whether another point, $x'$
-is a reasonable alternative. If accepted, we set $x_{t+1}\leftarrow x'$; if not
-we keep $x_t$ and set $x_{t+1}\leftarrow x_t$.
+(\theta_{1,t},...,\theta_{p,t})$ we evaluate whether another point, $x'$ is a reasonable alternative. If accepted, we set $x_{t+1}\leftarrow x'$; if not we keep $x_t$ and set $x_{t+1}\leftarrow x_t$.
 
-* if $P(x') > P(x_t)$, we accept $x'$ and set $x_{t+1}=x'$
-* if $P(x') < P(x_t)$, then
-    * we draw $U$, a random uniform value from $[0,1]$, and
-    * accept $x'$ if $U < \frac{P(x')}{P(x_t)}$
-
-Often, $x'$ is drawn from some normal distribution centered around $x_t$:
-$N(x_t,\sigma^2 I)$. Suppose we accept it always, then
-$$x_{t+1}=x_t + e_t$$
-with $e_t \sim N(0,\sigma^2 I)$. Looks familiar?
+-   if $P(x') > P(x_t)$, we accept $x'$ and set $x_{t+1}=x'$
+-   if $P(x') < P(x_t)$, then
+    -   we draw $U$, a random uniform value from $[0,1]$, and
+    -   accept $x'$ if $U < \frac{P(x')}{P(x_t)}$
 
 ## Metropolis algorithm
 
+Often, $x'$ is drawn from some normal distribution centered around $x_t$: $N(x_t,\sigma^2 I)$. Suppose we accept it always, then $$x_{t+1}=x_t + e_t$$ with $e_t \sim N(0,\sigma^2 I)$. Looks familiar?
+
+## Metropolis algorithm
 
 Two steps in the algorithm involve randomness:
 
-- The proposal density  (distribution of jumps), which is often $\theta' \sim \mathcal{N}(\theta_t, \sigma I)$, where $\sigma$ is an important tuning parameter
+-   The proposal density (distribution of jumps), which is often $\theta' \sim \mathcal{N}(\theta_t, \sigma I)$, where $\sigma$ is an important tuning parameter
 
-- The acceptance of worse proposals which depends on the likelihood function of the parameters (see later slides)
+-   The acceptance of worse proposals which depends on the likelihood function of the parameters (see later slides)
 
+Let´s look at some examples with different acceptance rates. These are for fitting the three parameters of the periodic model from earlier lectures.
 
 ## Little mixing (too low acceptance rate):
-
 
 ```{r, echo=FALSE, cache=1, cache.lazy=FALSE, fig.width=6}
 Metropolis <- function(theta0, sigma, y, fn, n = 100, debug=FALSE) {
@@ -163,7 +246,6 @@ plot(out$chain[3000:5000,3], type="l", ylab="c", xlab="Iteration",main="")
 
 ## Better mixing:
 
-
 ```{r, echo=FALSE, cache=1, fig.width=6}
 set.seed(1)
 out = Metropolis(c(18,-4,1.6), c(0.08,0.08,0.08), temp, f, n = 5000)
@@ -176,10 +258,7 @@ plot(out$chain[3000:5000,2], type="l", ylab="b", xlab="",main="")
 plot(out$chain[3000:5000,3], type="l", ylab="c", xlab="Iteration",main="")
 ```
 
-
-
 ## Still better mixing:
-
 
 ```{r, echo=FALSE, cache=1, fig.width=6}
 set.seed(1)
@@ -192,7 +271,6 @@ plot(out$chain[3000:5000,1], type="l", ylab="a", xlab="",main=paste("Acceptance 
 plot(out$chain[3000:5000,2], type="l", ylab="b", xlab="",main="")
 plot(out$chain[3000:5000,3], type="l", ylab="c", xlab="Iteration",main="")
 ```
-
 
 ## Little mixing (too high acceptance rate: too much autocorrelation)
 
@@ -208,11 +286,7 @@ plot(out$chain[3000:5000,2], type="l", ylab="b", xlab="",main="")
 plot(out$chain[3000:5000,3], type="l", ylab="c", xlab="Iteration",main="")
 ```
 
-
-
-
-## Burn-in 
-
+## Burn-in
 
 In the examples above we already omitted the burn-in phase (e.g. the first 3000 samples). If we start with poor parameter values, the complete series might look like:
 
@@ -231,28 +305,19 @@ plot(out$chain[0:5000,3], type="l", ylab="c", xlab="Iteration",main="")
 abline(v=500, xpd=F, col="red", lty="dashed")
 ```
 
-
-
 ## Burn-in, tuning $\sigma^2$
 
-* When run for a long time, the Metropolis (and its generalization Metropolis-Hastings) 
-algorithm provide a _correlated_ sample of the parameter distribution
-* M and MH algorithms provide Markov Chain Monte Carlo samples; another
-even more popular algorithm is the Gibb's sampler (WinBUGS).
-* As the starting value may be quite unlikely, the first part of the 
-chain (burn-in) is usually discarded.
-* if $\sigma^2$ is too small, the chain mixes too slowly (consecutive
-samples are too similar, and do not describe the full PDF)
-* if $\sigma^2$ is too large, most proposal values are not accepted
-* often, during burn-in, $\sigma^2$ is tuned such that acceptance rate
-is close to 60\%.
-* many chains can be run, using different starting values, in parallel
+-   When run for a long time, the Metropolis (and its generalization Metropolis-Hastings) algorithm provide a *correlated* sample of the parameter distribution
+-   M and MH algorithms provide Markov Chain Monte Carlo samples; another even more popular algorithm is the Gibb's sampler (WinBUGS).
+-   As the starting value may be quite unlikely, the first part of the chain (burn-in) is usually discarded.
+-   if $\sigma^2$ is too small, the chain mixes too slowly (consecutive samples are too similar, and do not describe the full PDF)
+-   if $\sigma^2$ is too large, most proposal values are not accepted
+-   often, during burn-in, $\sigma^2$ is tuned such that acceptance rate is close to 60%.
+-   many chains can be run, using different starting values, in parallel
 
+## The sample distribution
 
-## The sample distribution 
-
-We can interpret the results as a sample of the parameter's probability density and use results to compute point estimates and to quantify uncertainties in parameter estimation. 
-
+We can interpret the results as a sample of the parameter's probability density and use results to compute point estimates and to quantify uncertainties in parameter estimation.
 
 ```{r, echo=FALSE, cache=1, fig.width=6, fig.height=2.5}
 set.seed(1)
@@ -267,26 +332,21 @@ hist(out$chain[1000:5000,2], main="", xlab="b", freq=F)
 hist(out$chain[1000:5000,3], main="", xlab="c", freq=F)
 ```
 
-
-
 ## How do we derive $P(\theta_t)$ and $P(\theta')$
 
 How do we decide whether $\theta'$ is a reasonable alternative?
 
-Idea: We take its _likelihood_ i.e. the probability of the data given the parameters.
+Idea: We take its *likelihood* i.e. the probability of the data given the parameters.
 
 $$
 P(y_i | \theta) = \frac{1}{\sigma \sqrt{2 \pi}} e^{-\frac{\left( y_i - f_{\theta}(x_i) \right)^2}{2 \sigma^2}}
 $$
 
-where $y_i - f_{\theta}(x_i) = 0$ has the largest probability, i.e. the maximum likelihood for $\theta$.  
-
+where $y_i - f_{\theta}(x_i) = 0$ has the largest probability, i.e. the maximum likelihood for $\theta$.
 
 ## How do we derive $P(\theta_t)$ and $P(\theta')$
 
 With the independence we can build the likelihood function for $\theta$ given all measurements:
-
-
 
 $$
 \begin{aligned}
@@ -295,8 +355,6 @@ L(\theta) = P(y | \theta) &= \prod_{i=1}^{n}\frac{1}{\sigma \sqrt{2 \pi}} e^{-\f
 &= \left(\frac{1}{\sigma \sqrt{2 \pi}} \right)^n  \cdot e^{-\frac{ \sum_{i=1}^{n} \left( y_i - f_{\theta}(x_i) \right)^2 }{2 \sigma^2}} 
 \end{aligned}
 $$
-
-
 
 ## How do we derive $P(\theta_t)$ and $P(\theta')$
 
@@ -314,7 +372,6 @@ $$
 
 (see implementation of the Metropolis algorithm in the lab)
 
-
 ## How do we derive $P(\theta_t)$ and $P(\theta')$
 
 In Metropolis iterations, we need the ratio $\frac{P(\theta')}{P(\theta_t)}$. This reduces to:
@@ -327,9 +384,6 @@ $$
 &= e^{\frac{\textrm{SSE}_t - \textrm{SSE}'  }{2 \sigma^2} }
 \end{aligned}
 $$
-
-
-
 
 ## Metropolis algorithm
 
@@ -344,42 +398,192 @@ f[which(f>1)] = 1
 plot(ssrdif,f, type="l", main="", ylab = "Acceptance probability", xlab="Standardized SSE differences (SSE_current - SSE_proposal)", ylim=c(0,1) )
 ```
 
-
 ## Likelihood ratio -- side track
 
-For evaluating acceptance, the ratio $\frac{P(x')}{P(x_t)}$ is needed,
-not the individual values.
+For evaluating acceptance, the ratio $\frac{P(x')}{P(x_t)}$ is needed, not the individual values.
 
-This means that $P(x')$ and $P(x_t)$ are only needed _up to a
-normalizing constant_: if we have values $aP(x')$ and $aP(x_t)$, than
-that is sufficient as $a$ cancels out.
+This means that $P(x')$ and $P(x_t)$ are only needed *up to a normalizing constant*: if we have values $aP(x')$ and $aP(x_t)$, than that is sufficient as $a$ cancels out.
 
-This result is _key_ to the reason that MCMC and M-H are
-\color{red}the work horse\color{black}\ in Bayesian statistics, where
-$P(x')$ is extremely hard to find because it calls for the evaluation of
-a very high-dimensional integral (the normalizing constant that makes
-sure that $P(\cdot)$ is a probability) but $aP(x')$, the likelihood of
-$x$ given data, is much easier to find!
+This result is *key* to the reason that MCMC and M-H are \color{red}the work horse\color{black} in Bayesian statistics, where $P(x')$ is extremely hard to find because it calls for the evaluation of a very high-dimensional integral (the normalizing constant that makes sure that $P(\cdot)$ is a probability) but $aP(x')$, the likelihood of $x$ given data, is much easier to find!
 
 ## Simulated annealing
 
-Simulated Annealing is a related global search algorithm, does not sample
-the full parameter distribution but searches for the (global) optimimum.
+Simulated Annealing is a related global search algorithm, does not sample the full parameter distribution but searches for the (global) optimimum.
 
-The analogy with _annealing_, the forming of crystals in a slowly
-cooling substance, is the following:
+The analogy with *annealing*, the forming of crystals in a slowly cooling substance, is the following:
 
-The current solution is replaced by a worse "nearby" solution with a
-certain probability that depends on the the degree to which the "nearby"
-solution is worse, and on the temperature of the cooling process; this
-temperature slowly decreases, allowing less and smaller changes.
+The current solution is replaced by a worse "nearby" solution with a certain probability that depends on the the degree to which the "nearby" solution is worse, and on the temperature of the cooling process; this temperature slowly decreases, allowing less and smaller changes.
 
 ## Simulated annealing
 
-At the start, temperature is large and search is close to random; when
-temperature decreases search is more and more local and downhill. Random,
-uphill jumps prevent SA to fall into a local minimum.
+At the start, temperature is large and search is close to random; when temperature decreases search is more and more local and downhill. Random, uphill jumps prevent SA to fall into a local minimum.
 
 A related algorithm (stochastic optimization) is the Genetic Algorithm.
 
-## Optimization methods by example
+## Non-linear optimization methods by example
+
+**Example:** Temperature time series with given mean
+
+Our model is 
+$$18.12634 + b_1 \sin \left( \pi (x_i + b_2) / 12 \right)$$
+
+and our parameter vector is $\theta = (b_1,b_2)$ whose elements represent the amplitude and phase respectively.
+
+## Non-linear optimization methods by example
+
+**The dataset:**
+
+```{r fig.width=10, fig.height=5, echo=FALSE}
+rm(list = ls()) # clean up old data
+load("./data/meteo.RData")
+#ls()
+#names(meteo)
+plot(T.outside~hours, meteo, type='l', ylab = parse(text = "Temperature ({}*degree* C)"), xlab = "Hours since 2007-06-14 00:00:00")
+title("Outside temperature, Hauteville, FR")
+```
+
+$x = (14.91667, 14.93333, 14.95, 14.96667, ...)^T$ $y = (23.20, 23.17, 23.14, 23.09, ...)^T$
+
+## Non-linear optimization methods by example
+
+Assuming the sum of squared errors as optimization criteria, how does the objective function look like?
+
+## The objective function
+
+$\textrm{SSE}(b_1,b_2) = \sum_{i=1}^{n} \left(y_i - \left(18.12634 + b_1 \sin \left( \pi (x_i + b_2) / 12 \right)  \right) \right)^{2}$
+
+```{r, echo=F, fig.height=7,fig.width=7, fig.align='center'}
+load("./data/meteo.Rdata")
+x = meteo$hours
+y = meteo$T.outside
+
+# 1 - Given intercept
+m = mean(y)
+f = function(beta) {
+   sum((y - (m + beta[1] * sin(pi * (x + beta[2])/12)))^2)
+}
+
+library(lattice)
+
+b1  = seq(-50,50,length.out=100)
+b2  = seq(-30,30,length.out=80)
+bb = expand.grid(b1,b2)
+yy =  apply(bb,1,f)
+of = data.frame(y = yy, b1 = bb[,1], b2 = bb[,2])
+
+#install.packages("rgl")
+#library(rgl)
+# open3d()
+# bg3d("white")
+# material3d(col = "black")
+# persp3d(b1,b2,yy,col = "lightblue")
+par(mar=c(0,0,0,0))
+wireframe(y ~ b1 * b2, data=of, colorkey = TRUE, drape = TRUE, zlab="SSE", zlim=c(0,8e6))
+```
+
+## Non-linear optimization methods by example
+
+Let's try different optimization algorithms to find optimal values. We use the (poor) starting values $b_1=30$, $b_2=4$ which yield `r format(f(c(30,4)),scientific=F)` as the sum of squared differences.
+
+## Non-linear optimization methods by example
+
+**Gauss Newton**:
+
+```{r, echo=F, eval=F}
+nls(y ~ m + b1 * sin(pi * (x + b2)/12), start =  c(b1 = 30, b2=4), trace=T)
+```
+
+
+| Iteration | b1        | b2       | SSE      |
+|-----------|-----------|----------|----------|
+| 1         | 30        | 4        | 5770875  |
+| 2         | -3.969002 | 4.366534 | 162366.7 |
+| 3         | -3.674925 | 1.242831 | 117179   |
+| 4         | -4.881289 | 1.722770 | 109114.6 |
+| 5         | -4.900673 | 1.602571 | 108995.6 |
+| 6         | -4.903080 | 1.603086 | 108995.5 |
+
+## Non-linear optimization methods by example
+
+**Metropolis**:
+
+```{r, echo=F, fig.height=7,fig.width=7, fig.align='center'}
+m = mean(y)
+g = function(beta) {m + beta[1] * sin(pi * (x + beta[2])/12)}
+
+Metropolis <- function(theta0, sigma, y, fn, n = 100, debug=FALSE) {
+  m = length(theta0)
+  out = matrix(NA, n, m)
+  out[1,] = theta0 # starting value for the chain
+  lastRSS = sum((y - fn(theta0))^2)
+  accept = 0
+  for (i in 2:n) {
+  proposal = rnorm(m, out[i-1,], sigma)
+  residualSumSquaresProp = sum((y - fn(proposal))^2)
+  s2 = lastRSS/length(y)
+  # ratio = exp(-residualSumSquaresProp)/exp(-residualSumSquares0)
+  # THIS IS numerically unstable: therefore use
+  ratio = exp(-residualSumSquaresProp/(2*s2) + lastRSS/(2*s2))
+  if (ratio > 1 || runif(1) < ratio) { # accept
+  out[i,] = proposal
+  accept = accept + 1
+  if (ratio > 1)
+  lastRSS = residualSumSquaresProp
+  } else
+  out[i,] = out[i-1,]
+  if (debug && (i %% 500 == 0))
+  cat(paste("s2:", s2, "Prop:",
+  residualSumSquaresProp/length(y)), "\n")
+  }
+  #cat("acceptance rate: ", accept/(n-1), "\n")
+  class(out) = c("Metropolis", "matrix")
+  return(list(chain=out,accept=accept/(n-1)))
+}
+set.seed(1)
+out = Metropolis(c(30,4), c(0.05,0.05), y, g, n = 5000)
+par(mfcol=c(2,1))
+par(mar=c(2, 1, 2, 1))
+par(oma=c(3,1,1,0))
+par(xpd=NA)
+plot(out$chain[0:5000,1], type="l", ylab="b1", xlab="",main=paste("Acceptance rate:", round(out$accept,digits = 4)))
+abline(v=1500, xpd=F, col="red", lty="dashed")
+plot(out$chain[0:5000,2], type="l", ylab="b2", xlab="",main="")
+abline(v=1500, xpd=F, col="red", lty="dashed")
+```
+
+## Non-linear optimization methods by example
+
+Metropolis point estimations could be $b_1 = `r mean(out$chain[1500:5000,1])`$ and $b_2 =`r mean(out$chain[1500:5000,2])`$ where the sum of squared errors is `r format(f(c(mean(out$chain[1500:5000,1]),mean(out$chain[1500:5000,2]))),scientific=F)`.
+
+```{r, echo=F, fig.height=4,fig.width=7, fig.align='center'}
+par(mfcol=c(1,2))
+par(mar=c(4, 2, 0, 1))
+hist(out$chain[1500:5000,1], main=" ", xlab="b1", freq=F)
+hist(out$chain[1500:5000,2], main=" ", xlab="b2", freq=F)
+```
+
+## Non-linear optimization methods by example
+
+**Simulated annealing**:
+
+```{r, echo=F, fig.height=4,fig.width=7, fig.align='center'}
+set.seed(2)
+sann <- optim(par=c(b1 = 30, b2=4), fn=f, method="SANN")
+```
+
+After 10000 iterations, simulated annealing returns point estimates $b_1=`r sann$par[1]`$ and $b_2=`r sann$par[2]`$ with `r format(f(c(sann$par[1],sann$par[2])),scientific=F)` as the sum of squared differences.
+
+## Optimization summary
+
+```{r, error=FALSE,echo=FALSE,warning=FALSE,fig.align='center',fig.width=4, figh.height=4}
+library(png)
+library(grid)
+img <- readPNG("./data/lec04_table.png")
+ grid.raster(img)
+```
+
+## Notes
+
+-   Do the practical excercises to understand the details of optimization!
+-   Read the tutorial document (German) which we provide at Learnweb
+-   Next: Spatial models, spatial interpolation, spatial dependencies.

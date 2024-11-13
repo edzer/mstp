@@ -1,6 +1,7 @@
 ---
 title: "Lecture 5"
 subtitle: "Spatial interpolation: simple approaches"
+date: "2024-11-12"
 
 include-in-header:
   - text: |
@@ -17,54 +18,52 @@ editor: visual
 ## Time series versus spatial data
 
 Differences:
- 
-* spatial data live in 2 (or 3) dimensions
-* there's no past and future
-* there's no simple conditional independence (AR)
+
+-   spatial data live in 2 (or 3) dimensions
+-   there's no past and future
+-   there's no simple conditional independence (AR)
 
 Correspondences
 
-* nearby observations are more alike (auto-correlation)
-* we can form moving averages
-* coordinate reference systems are a bit like time zones and DST
+-   nearby observations are more alike (auto-correlation)
+-   we can form moving averages
+-   coordinate reference systems are a bit like time zones and DST
 
 ## Spatial modelling and spatial interpolation
 
-
 **What´s next?**
 
-* Simple ways of interpolation
-* Simple statistical models for interpolation
-* Geostatistical interpolation
-* Deterministic models
-* Combined approaches
-
+-   Simple ways of interpolation
+-   Simple statistical models for interpolation
+-   Geostatistical interpolation
+-   Deterministic models
+-   Combined approaches
 
 ## Taking a step back
+
 Why do we need models?
 
-* to understand _relations_ or _processes_
-* to assess (predict, forcast, map) something we do or did not measure _and cannot see_
-* to assess the consequence of decisions (scenarios) where we cannot measure
-
+-   to understand *relations* or *processes*
+-   to assess (predict, forcast, map) something we do or did not measure *and cannot see*
+-   to assess the consequence of decisions (scenarios) where we cannot measure
 
 ## What information do we have?
- 
-* We have measurements $Z(x)$, with $x$ two-dimensional (location on the map)
-* we have $x$ and $y$
-* we may have land use data 
-* we may have soil type or geological data 
-* we may have remote sensing imagery 
-* we may have all kinds of relevant information, related to processes that cause (or result from) $Z(x)$ 
-* we have google maps and other tiled web map sources
 
-_We don't want to ignore anything important_
+-   We have measurements $Z(x)$, with $x$ two-dimensional (location on the map)
+-   we have $x$ and $y$
+-   we may have land use data
+-   we may have soil type or geological data
+-   we may have remote sensing imagery
+-   we may have all kinds of relevant information, related to processes that cause (or result from) $Z(x)$
+-   we have google maps and other tiled web map sources
+
+*We don't want to ignore anything important*
 
 ## A sample dataset
 
 The `meuse` dataset is loaded from package **sp**:
 
-```{r}
+```{r, fig.height=6}
 library(sf)
 data(meuse.riv, package = "sp")
 data(meuse, package = "sp")
@@ -77,24 +76,29 @@ plot(meuse.sf["zinc"], pch = 16,
 plot(meuse.sr, col = "lightblue", add = TRUE)
 ```
 
+## Thiessen "polygons", Nearest Neighbour
 
-## Thiessen "polygons", 1-NN
-```{r, echo=TRUE}
+1-Neareast neighbour interpolation:
+
+```{r}
+#| echo: false
+#| code-fold: true
+#| output: false
 
 library(gstat)
 data(meuse.grid, package = "sp") # data.frame
 library(stars)
 meuse.grid = st_as_stars(meuse.grid) # makes it a raster
 meuse.grid
-
 meuse.th = idw(zinc~1, meuse.sf, meuse.grid, nmax = 1)
 ```
-
-## Thiessen "polygons", 1-NN
-```{r, echo=TRUE}
+```{r, fig.height=6}
+#| echo: false
+#| code-fold: true
 plot(meuse.th[1], nbreaks = 29, col = sf.colors(28),
 	main = "Zinc, 1-nearest neighbour", reset = FALSE)
 plot(st_geometry(meuse.sf), col = 3, cex=.5, add = TRUE)
+plot(meuse.sr, col = "lightblue", add = TRUE)
 ```
 
 ## Zinc concentration vs. distance to river
@@ -106,62 +110,68 @@ plot(log(zinc)~sqrt(dist), meuse)
 ```
 
 ## Zinc concentration vs. distance to river
+
 ```{r, echo=TRUE}
 plot(log(zinc)~sqrt(dist), meuse.sf)
 abline(lm(log(zinc) ~ sqrt(dist), meuse.sf))
 ```
 
+## Zinc conc. vs. distance to river 
 
-
-## Zinc conc. vs. distance to river: map of distance to river
-
+Map of distance to river
 ```{r, echo=TRUE}
 meuse.grid$sqrtdist = sqrt(meuse.grid$dist)
-plot(meuse.grid["sqrtdist"], col = sf.colors(), breaks = "equal")
+plot(meuse.grid["sqrtdist"], col = sf.colors(), breaks = "equal",reset = FALSE)
+plot(meuse.sr, col = "lightblue", add = TRUE)
 ```
 
-## Zinc conc. vs. distance to river: linear trend
+## Zinc conc. vs. distance to river 
+
+Linear trend
 
 ```{r,echo=TRUE,warning=FALSE}
 lm(log(zinc)~sqrt(dist),meuse)
 ```
 
-## Zinc conc. vs. distance to river: map of linear trend
+## Zinc conc. vs. distance to river
+
+Map of linear trend
 
 ```{r,echo=TRUE,warning=FALSE}
 meuse.grid$lmzinc = 6.994 - 2.549*sqrt(meuse.grid$dist)
-plot(meuse.grid["lmzinc"], col = sf.colors(), breaks = "equal")
+plot(meuse.grid["lmzinc"], col = sf.colors(), breaks = "equal",reset = FALSE)
+plot(meuse.sr, col = "lightblue", add = TRUE)
 ```
 
 <!-- ## Zinc conc. vs. distance to river: map of linear trend -->
 
 <!-- ```{r,echo=FALSE,warning=FALSE} -->
+
 <!-- summary(lm(log(zinc)~sqrt(dist),meuse)) -->
+
 <!-- ``` -->
 
-
 ## Inverse distance weighted interpolation
-Uses a **weighted** average:
-$$\hat{Z}(s_0) = \sum_{i=1}^n \lambda_i Z(s_i)$$
+
+Uses a **weighted** average: $$\hat{Z}(s_0) = \sum_{i=1}^n \lambda_i Z(s_i)$$
 
 . . .
 
-with $s_0 = \{x_0, y_0\}$,
-or $s_0 = \{x_0, y_0, \mbox{depth}_0\}$
-weights inverse proportional to power $p$ of distance:
-$$\lambda_i = \frac{|s_i-s_0|^{-p}}{\sum_{i=1}^n |s_i-s_0|^{-p}}$$
+with $s_0 = \{x_0, y_0\}$, or $s_0 = \{x_0, y_0, \mbox{depth}_0\}$ weights inverse proportional to power $p$ of distance: $$\lambda_i = \frac{|s_i-s_0|^{-p}}{\sum_{i=1}^n |s_i-s_0|^{-p}}$$
 
-:::{.incremental}
-* power $p$: tuning parameter
-* if for some $i$, $|s_i-s_0| = 0$, then $\lambda_i = 1$ and other weights become zero
-* $\Rightarrow$ **exact** interpolator
+::: incremental
+-   power $p$: tuning parameter
+-   if for some $i$, $|s_i-s_0| = 0$, then $\lambda_i = 1$ and other weights become zero
+-   $\Rightarrow$ **exact** interpolator
 :::
 
-## Inverse distance weighted interpolation of log(zinc) 
+## Inverse distance weighted interpolation of log(zinc)
 
 ```{r,echo=T,results="hide"}
 lzn.tp = idw(log(zinc) ~ 1, meuse.sf, meuse.grid)
-plot(lzn.tp, col = sf.colors(), breaks = "equal")
+plot(lzn.tp, col = sf.colors(), breaks = "equal", reset = FALSE)
+plot(meuse.sr, col = "lightblue", add = TRUE)
+
 ```
 
 ## Effect of power $p$
@@ -170,9 +180,54 @@ $$\hat{Z}(s_0) = \sum_{i=1}^n \lambda_i Z(s_i)$$
 
 $$\lambda_i = \frac{|s_i-s_0|^{-p}}{\sum_{i=1}^n |s_i-s_0|^{-p}}$$
 
-* the power $p$ determines the influence of distance during the interpolation
-  
+-   the power $p$ determines the influence of distance during the interpolation
+
+
 ## Effect of power $p$
+
+```{r, results='hide'}
+set.seed(13531)
+pts = data.frame(x = 1:10, y = rep(0,10), z = rnorm(10)*3 + 6)
+pts.sf = st_as_sf(pts, coords = c("x", "y"))
+xpts = 0:1100 / 100
+grd = data.frame(x = xpts, y = rep(0, length(xpts)))
+grd = st_as_sf(grd, coords = c("x", "y"))
+plot(z ~ x, as.data.frame(pts), xlab ='location', ylab = 'attribute value')
+```
+
+## Effect of power $p$
+
+```{r, results='hide'}
+set.seed(13531)
+pts = data.frame(x = 1:10, y = rep(0,10), z = rnorm(10)*3 + 6)
+pts.sf = st_as_sf(pts, coords = c("x", "y"))
+xpts = 0:1100 / 100
+grd = data.frame(x = xpts, y = rep(0, length(xpts)))
+grd = st_as_sf(grd, coords = c("x", "y"))
+plot(z ~ x, as.data.frame(pts), xlab ='location', ylab = 'attribute value')
+lines(xpts, idw(z~1, pts.sf, grd, idp = 2)$var1.pred)
+legend("bottomright", c("idw power 2"), lty = 1, 
+	col=c("black"), title = "idw interpolation")
+```
+
+## Effect of power $p$
+
+```{r, results='hide'}
+set.seed(13531)
+pts = data.frame(x = 1:10, y = rep(0,10), z = rnorm(10)*3 + 6)
+pts.sf = st_as_sf(pts, coords = c("x", "y"))
+xpts = 0:1100 / 100
+grd = data.frame(x = xpts, y = rep(0, length(xpts)))
+grd = st_as_sf(grd, coords = c("x", "y"))
+plot(z ~ x, as.data.frame(pts), xlab ='location', ylab = 'attribute value')
+lines(xpts, idw(z~1, pts.sf, grd, idp = 2)$var1.pred)
+lines(xpts, idw(z~1, pts.sf, grd, idp = 5)$var1.pred, col = 'darkgreen')
+legend("bottomright", c("idw power 2", "idw power 5"), lty = 1, 
+	col=c("black", "darkgreen"), title = "idw interpolation")
+```
+
+## Effect of power $p$
+
 ```{r, results='hide'}
 set.seed(13531)
 pts = data.frame(x = 1:10, y = rep(0,10), z = rnorm(10)*3 + 6)
@@ -184,31 +239,49 @@ plot(z ~ x, as.data.frame(pts), xlab ='location', ylab = 'attribute value')
 lines(xpts, idw(z~1, pts.sf, grd, idp = 2)$var1.pred)
 lines(xpts, idw(z~1, pts.sf, grd, idp = 5)$var1.pred, col = 'darkgreen')
 lines(xpts, idw(z~1, pts.sf, grd, idp = .5)$var1.pred, col = 'red')
-legend("bottomright", c("2", ".5", "5"), lty = 1, 
-	col=c("black", "red", "darkgreen"), title = "invese distance power")
+legend("bottomright", c("idw power 2", "idw power .5", "idw power 5"), lty = 1, 
+	col=c("black", "red", "darkgreen"), title = "idw interpolation")
+```
+
+
+## Effect of power $p$
+
+```{r, results='hide'}
+set.seed(13531)
+pts = data.frame(x = 1:10, y = rep(0,10), z = rnorm(10)*3 + 6)
+pts.sf = st_as_sf(pts, coords = c("x", "y"))
+xpts = 0:1100 / 100
+grd = data.frame(x = xpts, y = rep(0, length(xpts)))
+grd = st_as_sf(grd, coords = c("x", "y"))
+plot(z ~ x, as.data.frame(pts), xlab ='location', ylab = 'attribute value')
+lines(xpts, idw(z~1, pts.sf, grd, idp = 2)$var1.pred)
+lines(xpts, idw(z~1, pts.sf, grd, idp = 5)$var1.pred, col = 'darkgreen')
+lines(xpts, idw(z~1, pts.sf, grd, idp = .5)$var1.pred, col = 'red')
+lines(seq(0,11,1),rep(mean(pts$z),12),lty = 2)
+legend("bottomright", c("idw power 2", "idw power .5", "idw power 5", "mean of attr. val."), lty = c(1,1,1,2), 
+	col=c("black", "red", "darkgreen", "black"), title = "idw interpolation")
 ```
 
 ## IDW of log(zinc) power 2 vs power 5
 
-```{r,echo=F,results="hide", fig.width=4}
-lzn.tp1 = idw(log(zinc) ~ 1,meuse.sf, meuse.grid, idp=2)
-lzn.tp5 = idw(log(zinc) ~ 1,meuse.sf, meuse.grid,idp=5)
+```{r,echo=F,results="hide",}
 par(mfrow=c(1,2))
-plot(lzn.tp1["var1.pred"],col = sf.colors(), breaks = "equal",main="IDW of log(zinc), power 2")
-plot(lzn.tp5["var1.pred"],col = sf.colors(), breaks = "equal",main="IDW of log(zinc), power 5")
+library(tmap)
+library(sp)#for color palette
+bpy.palette <- bpy.colors()
+meuse.grid$lzn.tp1 = idw(log(zinc) ~ 1,meuse.sf, meuse.grid, idp=2)$var1.pred
+meuse.grid$lzn.tp5 = idw(log(zinc) ~ 1,meuse.sf, meuse.grid,idp=5)$var1.pred
+tm_shape(meuse.grid)+tm_raster(c("lzn.tp1","lzn.tp5"), palette = bpy.palette, n=10, title="prediction") + tm_shape(meuse.sr)+tm_polygons(col="lightblue") +
+ tm_layout(main.title = "log(zinc), inverse distance interpolation", legend.outside = TRUE, panel.labels=c("power 2","power 5"))
 ```
-
-
 
 ## Inverse distance weighted interpolation
 
-* idw estimates values as weighted sums of values at surrounding locations
-* spatial dependencies between values are only estimated according to distance 
+-   idw estimates values as weighted sums of values at surrounding locations
 
-* using geostatistical interpolation methods these dependencies can be quantified
+-   spatial dependencies between values are only estimated according to distance
 
-
-
+-   using geostatistical interpolation methods these dependencies can be quantified
 
 ## Simple statistical models for interpolation
 
@@ -220,12 +293,46 @@ plot(zinc~dist, meuse)
 plot(log(zinc)~sqrt(dist), meuse)
 ```
 
+## Simple statistical models for interpolation
+
+ - in the previous example, we did not really take space (in terms of the location of measurements) into account
+ - we simply used a linear model with a predictor variable, which in this case carried spatial information (distance to the river)
+- we will now use multiple linear regression with polynomials of coordinates as predictor variables --> trend surface analysis
+- imagine trying to fit a plane to a number of points in 3 dimensions $(x,y,z)$ where $z$ is the dependent variable (the attribute that we want to predict), this would be a first degree trend surface
+
+
+## Spatial regression - compare to sample data set
+
+```{r, eval=T,echo=F,warning=F,results='hide'}
+library(gstat)
+par(mfrow=c(1,1))
+meuse.sf$logzinc = log(meuse.sf$zinc)
+meuse.grid$tr1 = krige(log(zinc) ~ 1, meuse.sf, meuse.grid, degree = 1)$var1.pred
+tm1 <- tm_shape(meuse.grid) + tm_raster("tr1", palette = bpy.palette, n=10, title="prediction")+tm_shape(meuse.sr)+tm_polygons(col="lightblue")+ tm_layout(main.title = "log(zinc), trend surface interpolation degree 1", main.title.size = 1.3, main.title.position="center")
+tm2 <- tm_shape(meuse.sf) + tm_dots(col="logzinc", size =0.3, shape=19, palette = bpy.palette, n=6,title="measurements") + tm_shape(meuse.sr)+tm_polygons(col="lightblue") + tm_layout(main.title = "sample data set",main.title.size = 1.3, main.title.position="center")
+tmap_arrange(tm1,tm2,ncol=2)
+
+
+```
+
+## Spatial regression - compare to sample data set
+
+```{r, eval=T,echo=F,warning=F,results='hide'}
+library(gstat)
+par(mfrow=c(1,1))
+meuse.sf$logzinc = log(meuse.sf$zinc)
+meuse.grid$tr2 = krige(log(zinc) ~ 1, meuse.sf, meuse.grid, degree = 2)$var1.pred
+tm1 <- tm_shape(meuse.grid) + tm_raster("tr2", palette = bpy.palette, n=10, title="prediction")+tm_shape(meuse.sr)+tm_polygons(col="lightblue")+ tm_layout(main.title = "log(zinc), trend surface interpolation degree 2", main.title.size = 1.3, main.title.position="center")
+tm2 <- tm_shape(meuse.sf) + tm_dots(col="logzinc", size =0.3, shape=19, palette = bpy.palette, n=6,title="measurements") + tm_shape(meuse.sr)+tm_polygons(col="lightblue") + tm_layout(main.title = "sample data set",main.title.size = 1.3, main.title.position="center")
+tmap_arrange(tm1,tm2,ncol=2)
+
+
+```
 
 
 ## Regression or correlation?
 
-
-```{r,echo=FALSE, fig.width=7,fig.height=7}
+```{r,echo=FALSE, fig.width=7,fig.height=7, fig.align='center'}
 n = 500
 x = rnorm(n)
 y = rnorm(n)
@@ -244,55 +351,59 @@ plot(cbind(x,y) %*% chol(R), xlab = 'variable 1', ylab = 'variable 2')
 title("correlation 0.98")
 ```
 
-
 ## Correlation vs. regression:
 
 Correspondences:
 
-* both are in the "classic statistics" book, and may involve hypothesis testing
-* both deal with _two_ continuous variables
-* both look at (first order) _linear_ relations
-* when correlation is significant, the regression _slope_ is significant
+-   both are in the "classic statistics" book, and may involve hypothesis testing
+-   both deal with *two* continuous variables
+-   both look at (first order) *linear* relations
+-   when correlation is significant, the regression *slope* is significant
+
+
+## Correlation vs. regression:
 
 Differences:
 
-* Regression distinguishes $y$ from $x$: $y$ depends on $x$, not reverse;
-* the line $y=ax+b$ is _not_ equal to the line $x = cy + d$
-* Correlation is symmetric: $\text{Corr}(x,y)=\text{Corr}(y,x)$ 
-* Correlation coefficient is unitless and within $[-1,1]$, regression coeficients have data units
-* Regression is concerned with _prediction_ of $y$ from $x$.
+-   Regression distinguishes $y$ from $x$: $y$ depends on $x$, not reverse;
+-   the line $y=ax+b$ is *not* equal to the line $x = cy + d$
+-   Correlation is symmetric: $\text{Corr}(x,y)=\text{Corr}(y,x)$
+-   Correlation coefficient is unitless and within $[-1,1]$, regression coeficients have data units
+-   Regression is concerned with *prediction* of $y$ from $x$.
 
 ## The power of regression models for spatial prediction
 
-... is hard to overestimate. Regression and correlation are the
-fork and knife of statistics.
+... is hard to overestimate. Regression and correlation are the fork and knife of statistics.
 
-* linear models have endless application: polynomials, interactions, nested effects, ANOVA/ANCOVA models, hypothesis testing, lack of fit testing, ...
-* predictors can be transformed non-linearly
-* linear models can be generalized: logistic regression, Poisson regression, ..., to cope with discrete data (0/1 data, counts, log-normal)
-* many derived techniques solve one particular issue in regression, e.g.:
-    * ridge regression solves collinearity (extreme correlation among predictors)
-    * stepwise regression automatically selects "best" models among many candidates
-    * classification and regression trees
+::: {.incremental}
+-   linear models have endless application: polynomials, interactions, nested effects, ANOVA/ANCOVA models, hypothesis testing, lack of fit testing, ...
+-   predictors can be transformed non-linearly
+-   linear models can be generalized: logistic regression, Poisson regression, ..., to cope with discrete data (0/1 data, counts, log-normal)
+-   many derived techniques solve one particular issue in regression, e.g.:
+    -   ridge regression solves collinearity (extreme correlation among predictors)
+    -   stepwise regression automatically selects "best" models among many candidates
+    -   classification and regression trees
+:::
 
 ## Why is regression difficult in spatial problems?
 
-Regression models assume independent observations. Spatial data are always
-to some degree spatially correlated. 
+Regression models assume independent observations. Spatial data are always to some degree spatially correlated.
 
 This does not mean we should discard regression, but rather think about
 
-* to which extent is an outcome dependent on independence?
-* to which extent is regression _robust_ agains a violated assumption of independent observations?
-* to which extent _is_ the assumption violated? (how strong is the correlation)
+-   to which extent is an outcome dependent on independence?
+-   to which extent is regression *robust* agains a violated assumption of independent observations?
+-   to which extent *is* the assumption violated? (how strong is the correlation)
 
 ## What is spatial correlation?
 
-Waldo Tobler's first "law" in geography: "Everything is related
-to everything else, but near things are more related than distant
-things." [@tobler]
+Waldo Tobler's first "law" in geography: _"Everything is related to everything else, but near things are more related than distant things."_ [Tobler, 1970, p.236]*
 
-Setting aside whether Tobler was the first to acknowledge this,
-and also whether the expression can be called a "law", we wonder
-how _being related_ can be expressed?
+:::{.absolute top=200 left=0}
+Setting aside whether Tobler was the first to acknowledge this, and also whether the expression can be called a "law", we wonder how *being related* can be expressed?
+::: 
 
+:::{.absolute top=500 left=0}
+<span style="font-size:20px;">*TOBLER, W. R. (1970). "A computer model simulation of urban growth in
+the Detroit region". Economic Geography, 46(2): 234-240.</span>
+:::

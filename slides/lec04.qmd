@@ -36,27 +36,27 @@ The underlying principle is that of MCMC
 -   Include randomization to compute results
 -   Results are not deterministic, running time is (compare Las Vegas algorithms)
 -   More samples typically lead to better results
--   Example: Approximate $\pi$ by counting the portion of $(U(0,1), U(0,1))$ distributed random points that lie inside the unit circle.
+-   Example: Approximate $\pi$ by counting the portion of $(U(-1,1), U(-1,1))$ distributed random points that lie inside the unit circle.
 
 ## MCMC - Markov chain Monte Carlo methods
 
 **Monte Carlo algorithms:**
 
-Example: Approximate $\pi$ by counting the portion of $(U(0,1), U(0,1))$ distributed random points that lie inside the unit circle ? let´s try this out.
+Example: Approximate $\pi$ by counting the portion of $(U(-1,1), U(-1,1))$ distributed random points that lie inside the unit circle ? Let´s try this out.
 
 ## MCMC - Markov chain Monte Carlo methods
 
 **Monte Carlo algorithms:**
 
-Example: Approximate $\pi$ by counting the portion of $(U(0,1), U(0,1))$ distributed random points that lie inside the unit circle ? Let´s try this out.
+Example: Approximate $\pi$ by counting the portion of $(U(-1,1), U(-1,1))$ distributed random points that lie inside the unit circle ? Let´s try this out.
 
 **Why does that work?**
 
-$\text{Area of the square} = \text{side} \times \text{side} = 1 \times 1 = 1$
+$\text{Area of the square} = \text{side} \times \text{side} = 2 \times 2 = 4$
 
-$\text{Area of the circle} = \pi \times r^2 = \pi \times (0.5)^2 = \pi \times 0.25 = \frac{\pi}{4}$
+$\text{Area of the circle} = \pi \times r^2 = \pi \times (1)^2 = \pi \times 1 = \pi$
 
-$\text{proportion_square_circle} = \frac{\text{Area of the circle}}{\text{Area of the square}} = \frac{\frac{\pi}{4}}{1} = \frac{\pi}{4}$
+$\text{proportion_square_circle} = \frac{\text{Area of the circle}}{\text{Area of the square}} = \frac{\pi}{4}$
 
 $\pi = \text{proportion_sqaure_circle} \times 4$
 
@@ -64,7 +64,7 @@ $\pi = \text{proportion_sqaure_circle} \times 4$
 
 **Monte Carlo algorithms:**
 
-Example: Approximate $\pi$ by counting the portion of $(U(0,1), U(0,1))$ distributed random points that lie inside the unit circle ? Let´s try this out.
+Example: Approximate $\pi$ by counting the portion of $(U(-1,1), U(-1,1))$ distributed random points that lie inside the unit circle ? Let´s try this out.
 
 **Why does that work?**
 
@@ -73,19 +73,19 @@ Example: Approximate $\pi$ by counting the portion of $(U(0,1), U(0,1))$ distrib
 n_samples <- 1000
 
 # Generate random points within the square
-x <- runif(n_samples)
-y <- runif(n_samples)
+x <- runif(n_samples, min= -1, max = 1)
+y <- runif(n_samples,min= -1, max = 1)
 
 # Plot the square and points
-plot(x, y, xlim = c(0, 1), ylim = c(0, 1), main = "Monte Carlo Estimation of Pi", xlab = "x", ylab = "y", 
-     col = ifelse((x-0.5)^2 + (y-0.5)^2 <= 0.5^2, "red", "blue"), pch = 20, asp = 1)
+plot(x, y, xlim = c(-1, 1), ylim = c(-1, 1), main = "Monte Carlo Estimation of Pi", xlab = "x", ylab = "y", 
+     col = ifelse(x^2 + y^2 <= 1^2, "red", "blue"), pch = 20, asp = 1)
 grid()
 
 # Add a circle
-symbols(0.5, 0.5, circles = 0.5, inches = FALSE, add = TRUE, fg = "black")
+symbols(0, 0, circles = 1, inches = FALSE, add = TRUE, fg = "black")
 
 # Outline the square
-rect(0, 0, 1, 1, border = "black")
+rect(-1, -1, 1, 1, border = "black")
 
 
 
@@ -95,7 +95,7 @@ rect(0, 0, 1, 1, border = "black")
 
 **Monte Carlo algorithms:**
 
-Example: Approximate $\pi$ by counting the portion of $(U(0,1), U(0,1))$ distributed random points that lie inside the unit circle ? Let´s try this out.
+Example: Approximate $\pi$ by counting the portion of $(U(-1,1), U(-1,1))$ distributed random points that lie inside the unit circle ? Let´s try this out.
 
 **How does that work?**
 
@@ -104,13 +104,13 @@ Function in R:
 ```{r}
 #| echo: true
 #| code-fold: true
-set.seed(123)  # Set seed for reproducibility
+set.seed(321)  # Set seed for reproducibility
 monte_carlo_pi <- function(n_samples){
   # Generate random points
-  x <- runif(n_samples)  # Uniformly distributed random numbers for x-coordinate
-  y <- runif(n_samples)  # Uniformly distributed random numbers for y-coordinate
+  x <- runif(n_samples, min=-1,max = 1)  # Uniformly distributed random numbers for x-coordinate
+  y <- runif(n_samples,min=-1,max = 1)  # Uniformly distributed random numbers for y-coordinate
   # Calculate the number of points that lie inside the circle
-  inside_circle <- sum((x - 0.5)^2 + (y - 0.5)^2 <= 0.5^2)
+  inside_circle <- sum(x^2 + y^2 <= 1^2)
   
   # Estimate Pi as shown in previous slide
   pi_estimate <- 4 * (inside_circle / n_samples)

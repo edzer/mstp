@@ -58,7 +58,7 @@ $\text{Area of the circle} = \pi \times r^2 = \pi \times (1)^2 = \pi \times 1 = 
 
 $\text{proportion_square_circle} = \frac{\text{Area of the circle}}{\text{Area of the square}} = \frac{\pi}{4}$
 
-$\pi = \text{proportion_sqaure_circle} \times 4$
+$\pi = \text{proportion_square_circle} \times 4$
 
 ## MCMC - Markov chain Monte Carlo methods
 
@@ -114,7 +114,7 @@ monte_carlo_pi <- function(n_samples){
   
   # Estimate Pi as shown in previous slide
   pi_estimate <- 4 * (inside_circle / n_samples)
-  # Print the estimation
+  # Print the estimate and difference to actual Pi
   print(pi_estimate)
   print(pi_estimate-pi)
 }

@@ -17,6 +17,7 @@ format:
     chalkboard: false
     width: 1280
     height: 720
+    slide-number: true
     
 
     

@@ -306,7 +306,7 @@ Instead of predicting $Z(s_0)$ for a ''point'' location, one might be interested
 -   the estimate produced by block kriging is identical to that obtained by averaging the point estimates
     -   the average of the point estimates is the same as the direct block estimate
     -   the average of the point kriging weights for a sample is the same as the block kriging weight for the sample
--   when using block kriging variance decreases beacause variability cancels out
+-   when using block kriging variance decreases because variability cancels out
 
 ## Block Kriging - how to discretize blocks
 

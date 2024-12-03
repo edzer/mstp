@@ -1356,7 +1356,7 @@ height: 70px;
 <section id="practical-arguments-for-local-prediction" class="slide level2">
 <h2>Practical arguments for local prediction</h2>
 <ul>
-<li>The number of observations, <span class="math inline">\(n\)</span> may become very large +lidar data, 3D chemical, satellite sensors, geotechnical, seismic, …</li>
+<li>The number of observations, <span class="math inline">\(n\)</span> may become very large -lidar data, 3D chemical, satellite sensors, geotechnical, seismic, …</li>
 <li>Computing <span class="math inline">\(V^{-1}v\)</span> is the expensive part; it is <span class="math inline">\(O(N^2)\)</span> or <span class="math inline">\(O(N^3)\)</span> as <span class="math inline">\(V\)</span> is usually not of simple structure</li>
 <li>there is a trade-off; for a global neighbourhood, the expensive part, factoring <span class="math inline">\(V\)</span> needs only be done once, for a local neighbourhood for each unique neighbourhood (in practice: for each <span class="math inline">\(s_0\)</span>).</li>
 <li>selecting local neighbourhoods also costs time; naive selection <span class="math inline">\(O(n \log n)\)</span> doesn’t scale well</li>
@@ -1385,7 +1385,7 @@ height: 70px;
 <li>the average of the point estimates is the same as the direct block estimate</li>
 <li>the average of the point kriging weights for a sample is the same as the block kriging weight for the sample</li>
 </ul></li>
-<li>when using block kriging variance decreases beacause variability cancels out</li>
+<li>when using block kriging variance decreases because variability cancels out</li>
 </ul>
 </section>
 <section id="block-kriging---how-to-discretize-blocks" class="slide level2">

@@ -1,7 +1,7 @@
 ---
 title: "Lecture 8"
 subtitle: "Universal Kriging and Block Kriging"
-date: "2024-12-04"
+date: "2024-12-03"
 
 include-in-header:
   - text: |
@@ -77,7 +77,7 @@ For this, we need to know how the mean varies. Suppose we model this as a linear
 
 $$\hat{Z}(s_0) = x(s_0)\hat{\beta} + v'V^{-1} (Z-X\hat{\beta}) $$ with $x(s_0) = (X_0(s_0),...,X_p(s_0))$ and $\hat{\beta} = (X'V^{-1}X)^{-1} X'V^{-1}Z$
 
-. . . 
+. . .
 
 it has prediction error variance $$\sigma^2(s_0) = \sigma^2_0 - v'V^{-1}v + Q$$
 
@@ -88,12 +88,12 @@ This form is called external drift kriging, universal kriging or sometimes regre
 ## Universal Kriging - Example
 
 -   prediction location at (0,1)
--   three observation locations: (1,1), (2,1) and (3,1)* with attribute values (variable to be interpolated) 3,2 and 5
+-   three observation locations: (1,1), (2,1) and (3,1)\* with attribute values (variable to be interpolated) 3,2,5
 
 \
 \
 
-*note the constant second coordinate = 1, i.e. locations differ only in x-coordinate to keep this example simple 
+\*note the constant second coordinate = 1, i.e. locations differ only in x-coordinate to keep this example simple
 
 ## Universal Kriging - Example:
 
@@ -128,9 +128,10 @@ X = matrix(1,3,1)
 x0 = matrix(1, nrow(newdata), 1)
 uk(data, newdata, X, x0, cov) # mu = unknown
 ```
+
 Constant mean:
 
-estimated value at prediction location ~3.33
+estimated value at prediction location \~3.33
 
 ```{r,results='hide', fig.width=7.5}
 newdata = st_as_sf(data.frame(x = seq(-4,6,by=.1), y = 1), coords = c("x", "y"))
@@ -148,7 +149,7 @@ abline(beta, 0, col = 'blue', lty = 2)
 
 Linear trend:
 
-estimated value at prediction location ~1.7
+estimated value at prediction location \~1.7
 
 ```{r, results='hide',fig.width=7.5}
 X = cbind(matrix(1,3,1), 1:3)
@@ -169,7 +170,7 @@ abline(beta, col = 'blue', lty = 2)
 
 With Gaussian covariance:
 
-estimated value at prediction location ~2.06
+estimated value at prediction location \~2.06
 
 ```{r,results='hide',fig.width=7.5}
 cov = function(h) exp(-(h^2))
@@ -188,7 +189,7 @@ As opposed to the ordinary kriging model, the universal kriging model needs know
 
 ## Universal Kriging workflow
 
-:::{.incremental}
+::: incremental
 -   choose predictors for the mean (e.g. distance to river for zinc concentration)
 -   fit a linear regression model (estimate $\beta$)
 -   model mean for known locations and calculate residuals (differences to mean)
@@ -238,10 +239,13 @@ For an application of universal kriging in mapping of air quality variables, and
     -   has minimum variance $\sigma^2(s_0) = {\rm E}(Z(s_0)-\lambda'Z)^2$, and
     -   is unbiased ${\rm E}(\lambda'Z) = m$
     -   second constraint: $\sum_{i=1}^n \lambda_i = 1$, weights sum to one.
--   UK: 
-    - $\hat{Z}(s_0) = x(s_0)\hat{\beta} + v'V^{-1} (Z-X\hat{\beta})$ with 
-    - $\hat{\beta} = (X'V^{-1}X)^{-1} X'V^{-1}Z$ 
-    - $\sigma^2(s_0) = \sigma^2_0 - v'V^{-1}v + Q$
+
+. . .     
+    
+-   UK:
+    -   $\hat{Z}(s_0) = x(s_0)\hat{\beta} + v'V^{-1} (Z-X\hat{\beta})$ with
+    -   $\hat{\beta} = (X'V^{-1}X)^{-1} X'V^{-1}Z$
+    -   $\sigma^2(s_0) = \sigma^2_0 - v'V^{-1}v + Q$
 
 ## Global vs. local predictors
 
@@ -251,7 +255,7 @@ In many cases, instead of using all data, the number of observations used for pr
 -   distance to prediction location $s_0$
 -   possibly, in addition, directions
 
-. . . 
+. . .
 
 The reason for this is usually either
 
@@ -264,18 +268,21 @@ The reason for this is usually either
     -   $\beta$ will adjust to local situations (less bias)
     -   it will be harder to estimate $\beta$ from less information, so (slightly?) larger prediction errors will result (larger variance)
 
-. . . 
+. . .
 
 -   some authors claim that local trends are so adaptive, that one can ignore spatial correlation of the residual
 -   Using local linear regression with *weights* that decay with distance is called *geographically weighted regression*, GWR
 
 ## Practical arguments for local prediction
 
--   The number of observations, $n$ may become very large
-    +lidar data, 3D chemical, satellite sensors, geotechnical, seismic, ...
--   Computing $V^{-1}v$ is the expensive part; it is $O(N^2)$ or $O(N^3)$ as $V$ is usually not of simple structure
+-   The number of observations, $n$ may become very large 
+  -   lidar data, 3D chemical, satellite sensors, geotechnical, seismic, ...
+-   Computing $V^{-1}v$ is the expensive part
 -   there is a trade-off; for a global neighbourhood, the expensive part, factoring $V$ needs only be done once, for a local neighbourhood for each unique neighbourhood (in practice: for each $s_0$).
--   selecting local neighbourhoods also costs time; naive selection $O(n \log n)$ doesn't scale well
+
+. . .
+
+-   selecting local neighbourhoods also costs time
 -   `gstat` uses quadtrees/octtrees, inspired by http://donar.umiacs.umd.edu/quadtree/index.html
 
 ## Predicting block means - Block Kriging
@@ -293,6 +300,9 @@ Instead of predicting $Z(s_0)$ for a ''point'' location, one might be interested
 
 -   this can be computationally expensive, especially when many block estimates are required
 -   a more efficient way is to use block kriging, which does prediction and averaging at once, so only one kriging system is needed for each block estimate
+
+. . . 
+
 -   the estimate produced by block kriging is identical to that obtained by averaging the point estimates
     -   the average of the point estimates is the same as the direct block estimate
     -   the average of the point kriging weights for a sample is the same as the block kriging weight for the sample

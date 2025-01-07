@@ -23,9 +23,9 @@ editor: visual
 
 
 - Overview and motivating example: Game of Life
+- Application areas
 - Definition and properties
 - Classification
-- Applications
 - Examples
     - Nagel-Schreckenberg traffic model
     - Schelling model for segregation
@@ -180,7 +180,7 @@ A cellular automaton is a 4-tuple $(Z, S, N, f)$:
 
 1. the [**cell space**]{.green} $Z$ is a discrete space (cells)
 2. the [**state space**]{.green} $S$ is a state space, i.e. a set of valid states for each cell
-3. the [**Neighborhood definition**]{.green} $N$ is a finite neighborhood
+3. the [**neighborhood definition**]{.green} $N$ is a finite neighborhood
 4. $f$ is a [**transition function**]{.green}
 
    
@@ -390,7 +390,7 @@ In one simulation step, the transition function is applied to all cells simultan
 
 [**Synchronous updating**]{.green}: order of processing cells is **NOT**  important.
 
-[**Asynchronous updating**]{.green}order of processing cells is  influences results. All examples in this lecture are synchronous.
+[**Asynchronous updating**]{.green}: order of processing cells is  influences results. All examples in this lecture are synchronous.
 
 
 
@@ -414,7 +414,7 @@ Wolfram distinguishes four different classes of (one-dimensional) CAs based on e
 ## Classification (Wolfram)
 
 
-Examples  
+Examples (1d, $t$ is on the y-axis -> each new line is a new time step)  
 
 \footnotesize(source: http://www.uni-forst.gwdg.de/~wkurth/fs08_v05.pdf)
  
@@ -434,7 +434,7 @@ Examples
 ## Classification (Wolfram)
 
 
-Examples  
+Examples (1d, $t$ is on the y-axis -> each new line is a new time step)
 
 \footnotesize(source: http://www.uni-forst.gwdg.de/~wkurth/fs08_v05.pdf)
  
@@ -764,10 +764,9 @@ draw.grid(z,FALSE,xlab="x",ylab="t",col=c("white","black"))
 ## Example 4: Plant competition
 
 
-We consider 5 genera of grasses (Lolium, Agrostis, Holcus, Poa, Cynosurus). Certain genera might displace others over time. We can model this competition as a two-dimensional stochastic CA:
+We consider 5 genera of grasses (Lolium, Agrostis, Holcus, Poa, Cynosurus). Certain genera might displace others over time. We can model this competition as a two-dimensional stochastic CA with a von Neumann neighborhood (4 NBs):
 
 * A cell represents soil which may be vegetated by one of the grass genera.
-* A von Neumann neighborhood is used (4 NBs)
 * The transition function uses a **replacement table** $T$ with probabilities that one genus is replaced by another:
 
 |           | Lolium | Agrostis | Holcus | Poa  | Cynosurus |

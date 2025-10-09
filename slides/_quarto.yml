@@ -1,0 +1,26 @@
+project:
+  title: "slides"
+  output-dir: "./outputs"
+  execute-dir: project
+
+highlight-style: tango
+css: style.css
+
+
+format: 
+  revealjs:
+    theme: [default, custom.scss]
+    logo: Logo_ifgi_short.png
+    smaller: true
+    embed-resources: true
+    code-fold: false
+    chalkboard: false
+    width: 1280
+    height: 720
+    slide-number: true
+    
+
+    
+
+
+

@@ -1,0 +1,7 @@
+.cell-output > * {
+color: grey;
+}
+
+.cell-output-stdout > * {
+  color:grey;
+}

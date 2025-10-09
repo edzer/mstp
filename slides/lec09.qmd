@@ -1,0 +1,470 @@
+---
+title: "Lecture 9"
+subtitle: "Cokriging, Cross Validation"
+date: "2024-12-10"
+
+include-in-header:
+  - text: |
+      <style>
+      .reveal .slide-logo {
+        max-height: unset;
+        height: 70px;
+      }
+      </style>
+format: revealjs
+editor: visual
+---
+
+## Cokriging Idea
+
+-   all kriging varieties we have previously studied, derive estimates using only one variable
+
+. . . 
+
+-   universal kriging uses a predicting variable to model the mean (instead of assuming it to be constant and/or known)
+    -   but only the spatial (auto-) correlation of the target variable is used during the kriging estimation of the difference to the mean at unsampled locations $e(s)$ $$Z(s) = X(s)\beta + e(s)$$
+
+. . . 
+
+*What if we could also make use of the (cross-)correllation between the target variable and one or more additional variables?*
+
+
+## Cokriging Idea
+
+
+## Cokriging Idea
+
+![](./data/lec_09_cokri1.jpg)
+
+## Cokriging Idea
+
+![](./data/lec_09_cokri2.jpg)
+
+## Cokriging Idea
+
+![](./data/lec_09_cokri3.jpg)
+
+## Cokriging Idea
+
+:::{.incremental}
+-   instead of only using the target variable *cokriging* allows to use auxilary variables (co-variables) for the prediction, if they exhibit correlation with the target variable
+-   $\hat{z_1}(s_0)$ is not only based on observations of $Z_1$, but also on observations of variables $Z_2, ..., Z_k$
+-   the prediction error variance is reduced by exploiting the cross-correlation between the variables
+-   this is especially useful when the target variable is undersampled (e.g. because measuring this variable is expensive)
+-   the co-variables may be measured at the same points as the target (co-located), at other points, or both
+:::
+
+$$
+\newcommand{\E}{{\rm E}}       % E expectation operator
+\newcommand{\Var}{{\rm Var}}   % Var variance operator
+\newcommand{\Cov}{{\rm Cov}}   % Cov covariance operator
+\newcommand{\Cor}{{\rm Corr}}
+$$
+
+## Cokriging Idea
+
+Cokriging sets the multivariate equivalent of kriging, which is, in terms of number of dependent variables, univariate. 
+
+
+## Cases where this is useful
+
+Multiple spatially correlated variables such as
+
+-   chemical properties (auto-analyzers!)
+-   sediment composition
+-   electromagnetic spectra (imagery/remote sensing)
+-   ecological data (abiotic factors; species abundances)
+
+. . . 
+
+Two types of applications:
+
+-   undersampled case: secondary variables help prediction of a primary, because we have more samples of them (image?)
+-   equally sampled case: secondary variables don't help prediction much, but we are interested in *multivariate prediction*, i.e. prediction error covariances.
+
+## Cokriging prediction
+
+The estimator based on a sample $Z=(Z_1,Z_2,...,Z_k)$ is given by: $$\hat{z_0}(s_0) = \sum_{i=1}^n \sum_{j=1}^k \lambda_{ij} z_j(s_i)$$
+
+The weights are chosen such that the variance of the estimation error is minimized and that
+
+$\sum_{i=1}^n \lambda_{i0} = 1$ and $\sum_{i=1}^n \lambda_{ij} = 0$, $1\le j\le k$
+
+
+## Cokriging prediction
+
+The weights $\lambda_{ij}$ can be calculated by:
+
+![](./data/lec_09_cokrimatr_blank.jpg){width=700}
+
+where $1':= (1,...,1) \in \mathbb{R}^n$ and each $K_{ij}$ is a matrix of dimension $(n \times n)$.
+
+## Cokriging prediction
+
+note equivalence to univariate version (lecture 7, slide 28):
+
+![](./data/lec_09_cokrimatr.jpg){width=700}
+
+where $1':= (1,...,1) \in \mathbb{R}^n$ and each $K_{ij}$ is a matrix of dimension $(n \times n)$.
+
+## Cokriging prediction
+
+\newcommand{\Cov}{{\rm Cov}}
+
+The matrices $K_{ij}$ with $1 \le i$, $j \le k$ are defined as
+
+$$K_{ij} := 
+\begin{pmatrix}
+K_{ij}(s_1,s_1) & \cdots & K_{ij}(s_1,s_n) \\
+\vdots & \ddots & \vdots \\
+K_{ij}(s_n,s_1) & \cdots & K_{ij}(s_n,s_n) \\
+\end{pmatrix}$$
+
+while $K_{ij}(s_u,s_v)$ denotes the auto-/cross-covariance of variable $Z_i$ at location $s_u$ with variable $Z_j$ at location $s_v$:
+
+$K_{ij}(s_u,s_v):={\rm Cov}(Z_i(s_u),Z_j(s_v))$
+
+The covariance matrix needs to be positive definit, in order to achieve valid solutions.
+
+## Cokriging prediction
+
+![](./data/lec_09_cokri_ex.jpg)
+
+
+
+
+## What is needed?
+
+
+* we need the spatial autocorrelation of the target variable (like in other kriging varieties) and of all auxilary variables
+* we need the cross-correllation between the target variable and all auxilary variables
+
+_How to get the cross-covariances between variables  $Z_1 ,Z_2 ,...,Z_k$?_
+
+
+## What is needed?
+
+The main tool for estimating semivariances between different variables
+is the _cross variogram_, defined for collocated data as
+$$\gamma_{ij}(h) = \mbox{E}[(Z_i(s)-Z_i(s+h))(Z_j(s)-Z_j(s+h))]$$
+and for non-collocated data as
+$$\gamma_{ij}(h) = \mbox{E}[(Z_i(s)-m_i)(Z_j(s)-m_j)]$$
+with $m_i$ and $m_j$ the means of the respective variables.
+
+## What is needed?
+Sample cross variograms are the obvious sums over the available pairs or cross pairs,
+as in one of
+$$\hat{\gamma}_{jk}(\tilde{h})=\frac{1}{N_h}\sum_{i=1}^{N_h}(Z_j(s_i)-Z_j(s_i+h))(Z_k(s_i)-Z_k(s_i+h))$$
+$$\hat{\gamma}_{jk}(\tilde{h})=\frac{1}{N_h}\sum_{i=1}^{N_h}(Z_j(s_i)-m_j)(Z_k(s_i+h)-m_k)$$
+
+
+
+## Cokriging - summary
+
+
+* takes additional information (auxilary variables) into account
+* additional computational cost for estimating additional (cross-) variograms
+* target variable and auxilary variables need to be correlated
+* cannot, in theory, be worse than ordinary kriging
+    * if cross-correlation is 0, only the autocorrelation of the target variable is used
+
+. . . 
+
+* difference to universal kriging: 
+    * UK uses additional variables to estimate/model the mean
+    * cokriging uses additional variables during the interpolation and thereby takes the (cross-)correlation into account
+
+
+
+## How to do this?
+
+As multivariable analysis may involve numerous variables, we need to
+start organising the available information. For that reason, we collect all the
+observation data specifications in a `gstat` object, created by
+the function `gstat`. This function does nothing else than ordering
+(and actually, copying) information needed later in a single object.
+Consider the following definitions of four heavy metals:
+
+
+## How to do this?
+
+
+```{r,eval=T, results='hide',warning=F}
+#| echo: true
+#| code-fold: true
+library(sf)
+library(gstat)
+data(meuse, package = "sp")
+meuse = st_as_sf(meuse, coords = c("x", "y"))
+g <- gstat(NULL, "logCd", log(cadmium)~1, meuse)
+g <- gstat(g, "logCu", log(copper)~1, meuse)
+g <- gstat(g, "logPb", log(lead)~1, meuse)
+g <- gstat(g, "logZn", log(zinc)~1, meuse)
+vm <- variogram(g)
+vm.fit <- fit.lmc(vm, g, vgm(1, "Sph", 800, 1))
+plot(vm, vm.fit)
+```
+
+# Cross Validation
+
+
+
+## Validation of interpolation
+
+  
+**Idea:** 
+Divide observations into **training** and **validation** sets. 
+
+
+## Validation of interpolation
+
+
+Often, a randomly sampled subset including ,e.g., 70% of the observations is taken as training set, whereas remaining observations are used for validation.  We can use the training set to predict values at validation locations and compare predictions to the known values.
+
+## Validation of interpolation
+![](./data/lec09_01.png)
+
+
+
+```{r,echo=FALSE,warning=F,fig.width=5,fig.height=4,fig.align='center'}
+# library(sp)
+# library(gstat) 
+# #library(lattice)
+# data(meuse)
+# coordinates(meuse) = c("x","y")
+# trainingset = sample(1:length(meuse),size = 0.7*length(meuse) ,replace = F)
+# meuse$part = NA
+# meuse$part[trainingset] = "training observations"
+# meuse$part[-trainingset] = "validation observations"
+# meuse$part = as.factor(meuse$part)
+# #layout.height <- trellis.par.get("layout.heights")
+# #layout.height$top.padding <- 0 ### here is where margins etc. can be changed
+# #layout.height$bottom.padding <- 0
+# #trellis.par.set(layout.heights = layout.height) 
+# spplot(meuse["part"], col.regions=c("purple","orange"))
+```
+
+
+
+
+
+## Cross Validation
+
+
+A better idea could be to partition the data into $k$ equally sized subsets and consecutively use each of the subsets as validation set. As a result, we get predictions at *all* observation locations, not only for one smaller sized validation set. This method is called **k-fold cross-validation**.
+
+
+## Cross Validation
+
+**Special case 2-fold cross validation**:
+
+1. Randomly partition the data into two equally-sized subsets $A$ and $B$.
+2. Use $A$ as training set, i.e use observations of A to interpolate values at locations of $B$.
+3. Use $B$ as training set, i.e use observations of B to interpolate values at locations of $A$.
+4. Compare predicted values to true observations at all observation locations
+
+
+## Cross Validation
+
+
+**Special case n-fold cross validation**:
+
+This is also called **Leave-one-out cross-validation** (LOOCV).
+
+1. Select a single observation $z_i$
+2. Interpolate the value at the $i$-th observation location ignoring the true value $z_i$
+3. Repeat both steps for all observations $i = 1,..., n$
+4. Compare predicted values to true observations at all observation locations
+ 
+. . . 
+
+**Exhaustive Leave-$p$-out cross validation**: Use all possible subsets of size $p$ as validation datasets, i.e. consider  $n \choose p$ different validation subsets. This becomes infeasible in practice: 
+$$
+n=155, p=10 ~(\textrm{meuse dataset}) \Rightarrow \textrm{more than} ~ 10^{15} ~ \textrm{options}
+$$
+
+## Cross Validation
+
+Instead of randomly dividing the data into folds, many researchers argue for a more target-oriented validation
+
+Examples:
+
+- leave-location-out cross validation
+- leave-time-out cross validation
+- spatial cross validation
+- cross validation techniques based on distances in the feature space 
+- ...
+
+
+
+## Cross validation: what does it yield?
+
+- residuals ${z_i - \hat{z}_i}$ 
+    - maps 
+    - summary statistics
+    - ...
+
+## Measures of fit
+
+
+How can we compare predicted against true values?
+
+Standard **scores**:
+
+- Root mean squared error (RMSE): $\sqrt{\frac{1}{n} \sum_{i=1}^{n}\left( z_i - \hat{z}_i   \right)^2}$
+- Mean absolute error (MAE): $\frac{1}{n} \sum_{i=1}^{n}\left| z_i - \hat{z}_i   \right|$
+- Correllation: $\textrm{cor}(z,\hat{z})$
+- ... 
+
+
+Standard plots:
+
+- Predictions vs. observations
+- Residual histogram
+- ...
+
+
+## Measures of fit
+
+
+
+**z-score**:
+
+To include the kriging variance, the $\textrm{zscore}_i = \frac{z_i - \hat{z}_i}{\hat{\sigma}_i}$ can be computed for all observations. The z-score shows the difference between predicted and observed value in standard deviations. 
+
+. . . 
+
+Its mean and standard deviation should be close to 0 and 1 respectively if the variogram model fits well to the data. If its standard deviation is larger (smaller) than 1, the kriging standard error is underestimating (overestimating) the true interpolation error, on average.
+
+
+
+
+
+## Example: Simple vs. Ordinary Kriging
+
+
+We want to compare SK and OK to predict logarithmic zinc concentrations in the meuse datase. We arbitrarily set the SK mean to 10 and use the same variogram models.
+
+![](./data/lec09_02.png)
+```{r, echo=FALSE, fig.align='center', fig.width=10,fig.height=5}
+# library(sp)
+# library(gstat)
+# data(meuse)
+# coordinates(meuse) <- ~x+y
+# m <- vgm(.59, "Sph", 874, .04)
+# # five-fold cross validation:
+# x.ok <- krige.cv(log(zinc)~1, meuse, m, nfold=155)
+# x.sk <- krige.cv(log(zinc)~1, meuse, m, beta=10, nfold=155)
+# 
+# 
+# fig1 = bubble(x.sk, "residual", main = "log(zinc): LOOCV residuals (SK)")
+# fig2 = bubble(x.ok, "residual", main = "log(zinc): LOOCV residuals (OK)")
+# 
+# library(gridExtra)
+# grid.arrange(fig1,fig2,  ncol=2)
+```
+
+
+## Example: Simple vs. Ordinary Kriging
+
+
+```{r, echo=FALSE,comment=NA,fig.width=8,fig.height=4,fig.align='center' }
+library(sp)
+library(gstat)
+data(meuse)
+coordinates(meuse) <- ~x+y
+m <- vgm(.59, "Sph", 874, .04)
+x.ok <- krige.cv(log(zinc)~1, meuse, m, nfold=155)
+x.sk <- krige.cv(log(zinc)~1, meuse, m, beta=10, nfold=155)
+ par(mfrow=c(1,2))
+plot(x.sk$var1.pred, x.sk$observed, ylab="Observed", xlab="Predicted (SK)",xlim=c(5,7.5))
+abline(a = 0,b=1)
+plot(x.ok$var1.pred, x.ok$observed, ylab="Observed", xlab="Predicted (OK)", xlim=c(5,7.5))
+abline(a = 0,b=1)
+#dev.off()
+```
+
+
+
+
+
+
+## Example: Simple vs. Ordinary Kriging
+
+
+**Simple Kriging Cross-Validation Scores**:
+```{r, warning=F,echo=FALSE,comment=NA}
+library(sp)
+library(gstat)
+data(meuse)
+coordinates(meuse) <- ~x+y
+m <- vgm(.59, "Sph", 874, .04)
+# five-fold cross validation:
+x.ok <- krige.cv(log(zinc)~1, meuse, m, nfold=155)
+x.sk <- krige.cv(log(zinc)~1, meuse, m, beta=10, nfold=155)
+RMSE=sqrt(mean(sum(x.sk$residual^2)))
+MAE=mean(abs(x.sk$residual))
+COR=cor(x.sk$observed,x.sk$var1.pred)
+MEANZ=mean(x.sk$zscore)
+SDZ=sd(x.sk$zscore)
+cat(paste("RMSE:        ", round(RMSE,digits=4), "\n",
+      "MAE:         ", round(MAE,digits=4), "\n",
+      "COR:         ", round(COR,digits=4), "\n",
+      "ZSCORE mean: ", round(MEANZ,digits=4), "\n",
+      "ZSCORE sd:   ", round(SDZ,digits=4), "\n",sep=""))
+```
+
+**Ordinary Kriging Cross-Validation Scores**:
+```{r,warning=F, echo=FALSE,comment=NA}
+RMSE=sqrt(mean(sum(x.ok$residual^2)))
+MAE=mean(abs(x.ok$residual))
+COR=cor(x.ok$observed,x.ok$var1.pred)
+MEANZ=mean(x.ok$zscore)
+SDZ=sd(x.ok$zscore)
+cat(paste("RMSE:        ", round(RMSE,digits=4), "\n",
+      "MAE:         ", round(MAE,digits=4), "\n",
+      "COR:         ", round(COR,digits=4), "\n",
+      "ZSCORE mean: ", round(MEANZ,digits=4), "\n",
+      "ZSCORE sd:   ", round(SDZ,digits=4), "\n",sep=""))
+```
+
+
+
+
+
+
+## Cross-validation properties and limitations
+
+
+- Computations can be slow (e.g. LOOCV for global Kriging with large $n$)
+- Can be extended to multivariable settings (Co-kriging)
+- Cross-validation is also applicable to regression
+- Can be useful to analyze overfitting (e.g. for regression models)
+- CV cannot detect anything which is not in the data (e.g. say something about how well a selected variogram fits at smaller distances which are not in the data)
+- Refit variogram or not?
+
+
+
+
+
+
+
+
+
+## Spatial interpolation: Summary
+
+
+* Heuristic methods: IDW, Nearest neighbour
+* Geostatistical interpolation (Kriging)
+    * Variograms (Experimental + theoretical model) are used to measure spatial dependencies between observation pairs
+    * Simple Kriging: Constant known mean
+    * Ordinary Kriging: Unknown constant mean
+    * Universal Kriging: Varying unknown mean, include external variables in the trend
+    * Block Kriging: Interpolation of averages inside particular areas / blocks
+    * Co-Kriging: Include external variables in spatial depdencies
+* Cross validation 
+
+
+
+  
+

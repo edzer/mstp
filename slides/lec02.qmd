@@ -1,0 +1,575 @@
+---
+title: "Lecture 2"
+subtitle: "Fitting and Choosing Models"
+
+include-in-header:
+  - text: |
+      <style>
+      .reveal .slide-logo {
+        max-height: unset;
+        height: 70px;
+      }
+      </style>
+format: revealjs
+editor: visual
+
+---
+
+## Components of time series data
+
++ traditional time series analysis tries to divide time series into a limited number of components, each one a function of time $t$
+    + trend
+    + season
+    + other cyclic components
+    + noise
++ noise is what we consider the remaining variability that cannot be explained by the other components
+
+## Components of time series data
+
++ there is not the one correct decomposition
++ the choice of components and how we try to model them depends on what we know about the process
+   + say we know that daily mean temperature (at a certain location) follows a seasonal periodicity, so we could try to model this
+component with a periodic function of time $f(t)$, like a sinus function
+    + there could also be another (overlaying) trend, e.g., for temperature a long term increase (climate change)
++ the following slide shows a similar example using CO2 measurements
+
+## Components of time series data (here CO2)
+
+```{r}
+#| echo: TRUE
+#| code-fold: true
+
+library(graphics) #load package including data
+data(co2) # load data
+m=decompose(co2) 
+plot(m)
+
+```
+
+## Components of time series data
+
++ in this course we will build on a basic additive component model
+
+$$y(t) = m(t) + e(t)$$
+
++ $m(t)$ is the deterministic component, which we can explain by, e.g., a constant increase (linear trend), a periodic function, a combination of both, ... 
+
++ $e(t)$ is the stochastic component, that  may or may not be random (white noise)
+  + cannot be explained by the deterministic functions we know (in the context of this course)
+  + can have different forms, can show patterns
+  + might be modelled by, e.g., AR(p) or MA(q) processes
+ 
+ 
+## Back to the temperature series
+
+```{r}
+#| echo: FALSE
+
+load("data/meteo.RData")
+# plot data:
+plot(T.outside~date,meteo,type='l')
+
+```
+
+
+## Removing the diurnal periodicity
+Assuming this is a sinus function, 
+$$\alpha_1 + \alpha_2 \sin(t + \alpha_3)$$,
+we need non-linear regression (function is non-linear in $\alpha_3$)
+
+. . .
+
+```{r}
+#| echo: TRUE
+
+attach(meteo) # so we can use variable names directly:
+f = function(x) sum((T.outside - (x[1]+x[2]*sin(pi*(hours+x[3])/12)))^2)
+nlm(f,c(0,0,0))
+```
+
+## Removing the diurnal periodicity
+```{r}
+#| echo: TRUE
+#| code-fold: TRUE
+# plot data and trend:
+plot(T.outside~date,meteo,type='l')
+meteo$T.per = 18.2-4.9*sin(pi*(meteo$hours+1.6)/12) #use parameters fitted before (previous slide)
+lines(T.per~date,meteo,col='red')
+```
+
+## Temperature anomaly
+```{r}
+#| echo: TRUE
+#| code-fold: true
+plot(T.outside-T.per~date, meteo, type='l')
+title("anomaly")
+```
+
+
+## Temperature anomaly
+
+* Can we also make estimates of this anomaly? 
+
+
+## Temperature anomaly
+
+
+```{r, echo=FALSE,fig.align="center"}
+an = T.outside-T.per
+x.an = arima(an, c(6,0,0)) # model the anomaly by AR(6)
+pltpred = function(xlim, Title) {
+  plot(an, xlim = xlim, type='l')
+  start = nrow(meteo) + 1
+  pr = predict(x.an, n.ahead = xlim[2] - start + 1)
+  lines(start:xlim[2], pr$pred, col='blue')
+  title(Title)
+}
+pltpred(c(9400, 10000), "e.g. using an AR(p) model?")
+```
+
+
+## What can we do with such models?
+* try to find out which model fits best (model selection)
+* learn how they were/could have been generated
+* predict future observations (estimation/prediction/forecasting)
+* generate similar data ourselves (simulation)
+
+## How to select a "best" model?
+A possible approach is to find the minimum for _Akaike's Information Criterion (AIC)_ for ARMA($p,q$) models and series of length $n$:
+$$AIC = \log \hat{\sigma}^2 + 2(p+q+1)/n$$
+with $\hat{\sigma}^2$ the estimated residual (noise) variance.
+
+. . .
+
+Instead of finding a single best model using this single criterion, it
+may be better to select a small group of "best" models, and look
+at model diagnostics for each: is the residual white noise? does it have
+stationary variance?
+
+Even better may be to keep a number of "fit" models and consider each as
+(equally?) suitable candidates.
+
+## AIC for AR(p), and as as a function of $p$
+```{r}
+n = 10
+aic = numeric(n)
+for (i in 1:n)
+   aic[i] = arima(T.outside, c(i,0,0))$aic  # AR(i)
+aic
+plot(aic[2:10], type='l')
+```
+
+## Anomaly AIC as a function of $p$, for AR(p)
+```{r}
+an = T.outside - T.per
+aic_an = numeric(n)
+for (i in 1:n)
+    aic_an[i] = arima(an,c(i,0,0))$aic  # AR(i)
+aic_an
+plot(aic_an[2:10], type='l')
+```
+
+## Prediction, e.g. with AR(6) - 10 minutes
+
+```{r}
+#| echo: true
+#| code-fold: true
+
+# Prediction, e.g. with AR(6)
+x = arima(T.outside, c(6,0,0))
+
+pltpred = function(xlim, Title) {
+  plot(T.outside, xlim = xlim, type='l')
+  start = nrow(meteo) + 1
+  pr = predict(x, n.ahead = xlim[2] - start + 1)
+  lines(start:xlim[2], pr$pred, col='red')
+  lines(start:xlim[2], pr$pred+2*pr$se, col='green')
+  lines(start:xlim[2], pr$pred-2*pr$se, col='green')
+  title(Title)
+}
+pltpred(c(9860, 9900), "10 minutes")
+```
+
+
+## Prediction of Anomaly, e.g. with AR(6) - 10 minutes
+
+```{r}
+#| echo: true
+#| code-fold: true
+# Prediction, e.g. with AR(6)
+T.per = 18.2-4.9*sin(pi*(hours+1.6)/12)
+an = T.outside - T.per
+x2 = arima(an, c(6,0,0))
+
+pltpred2 = function(xlim, Title) {
+  plot(an, xlim = xlim, type='l')
+  start = nrow(meteo) + 1
+  pr = predict(x2, n.ahead = xlim[2] - start + 1)
+  lines(start:xlim[2], pr$pred, col='red')
+  lines(start:xlim[2], pr$pred+2*pr$se, col='green')
+  lines(start:xlim[2], pr$pred-2*pr$se, col='green')
+  title(Title)
+}
+pltpred2(c(9860, 9900), "10 minutes")
+```
+
+
+
+## Prediction, e.g. with AR(6) - 110 minutes
+
+```{r}
+#| echo: true
+#| code-fold: true
+pltpred(c(9400, 10000), "110 minutes")
+```
+
+## Prediction of Anomaly, e.g. with AR(6) - 110 minutes
+
+```{r}
+#| echo: true
+#| code-fold: true
+pltpred2(c(9400, 10000), "110 minutes")
+```
+
+## Prediction, e.g. with AR(6) - 1 day
+
+```{r}
+#| echo: true
+#| code-fold: true
+pltpred(c(8000, 11330), "predicting 1 day")
+```
+
+## Prediction of Anomaly, e.g. with AR(6) - 1 day
+
+```{r}
+#| echo: true
+#| code-fold: true
+pltpred2(c(8000, 11330), "predicting 1 day")
+```
+
+## Prediction, e.g. with AR(6) - 1 week
+
+```{r}
+#| echo: true
+#| code-fold: true
+pltpred(c(1, 19970), "predicting 1 week")
+```
+
+## Prediction of Anomaly, e.g. with AR(6) - 1 week
+
+```{r}
+#| echo: true
+#| code-fold: true
+pltpred2(c(1, 19970), "predicting 1 week")
+```
+
+## Predicting 1 week: periodic trend + ar(6) for anomaly
+
+Now that we have an idea of the trend and the anomaly, we
+can combine them to make predictions
+
+
+## Predicting 1 week: periodic trend + ar(6) for anomaly
+```{r}
+#| echo: true
+#| code-fold: true
+
+plot(T.outside,xlim=c(1,19970), type='l')
+x.an = arima(an, c(6,0,0)) # model the anomaly by AR(6)
+x.pr = as.numeric(predict(x.an, 10080)$pred) 
+x.se = as.numeric(predict(x.an, 10080)$se)
+hours.all = c(meteo$hours, max(meteo$hours) + (1:10080)/60)
+T.per = 18.2-4.9*sin(pi*(hours.all+1.6)/12)
+lines(T.per, col = 'blue')
+hours.pr = c(max(meteo$hours) + (1:10080)/60)
+T.pr = 18.2-4.9*sin(pi*(hours.pr+1.6)/12)
+lines(9891:19970, T.pr+x.pr, col='red')
+lines(9891:19970, T.pr+x.pr+2*x.se, col='green')
+lines(9891:19970, T.pr+x.pr-2*x.se, col='green')
+title("predicting 1 week: periodic trend + ar(6) for anomaly")
+```
+
+## Simulation with and without trend
+
+We can also use these models to simulate data
+
+```{r}
+#| echo: true
+#| code-fold: true
+x = arima(T.outside, c(6,0,0))
+plot(T.pr + arima.sim(list(ar = x.an$coef[1:6]), 10080, sd = sqrt(0.002556)), 
+	col = 'red', ylab="Temperature")
+lines(18+arima.sim(list(ar = x$coef[1:6]), 10080, sd=sqrt(0.002589)), 
+	col = 'blue')
+title("red: with trend, blue: without trend")
+```
+
+
+
+
+## What can we learn from this?
+Prediction/forecasting:
+
+* AR(6) prediction is a compromise between the end of the series and the trend
+* the closer we are to observations, the more similar the prediction is to the
+nearest (last) observation
+* further in the future the prediction converges to the trend
+* the more useful (realistic) the trend is, the more realistic 
+the far-into-the-future prediction becomes
+* the standard error of prediction increases when predictions are further in the
+future.
+
+## A side note: fitting a phase with a linear model
+A phase shift model $\alpha \sin(x + \phi)$ can also be modelled by  
+$\alpha sin(x) + \beta cos(x)$; this is essentially a re-parameterization.
+
+
+## A side note: fitting a phase with a linear model
+A phase shift model $\alpha \sin(x + \phi)$ can also be modelled by  
+$\alpha sin(x) + \beta cos(x)$; this is essentially a re-parameterization.
+
+Try the following code:
+
+```{r}
+#| code-fold: true
+#| echo: true
+#| eval: false
+x = seq(0, 4*pi, length.out = 200) # x plotting range
+
+sincos = function(dir, x) { # plot the combination of a sin+cos function, based on dir
+	a = sin(dir)
+	b = cos(dir)
+	# three curves:
+	plot(a * sin(x) + b * cos(x) ~ x, type = 'l', asp=1, col = 'green')
+	lines(x, a * sin(x), col = 'red')
+	lines(x, b * cos(x), col = 'blue')
+	# legend:
+	lines(c(10, 10+a), c(2,2), col = 'red')
+	lines(c(10, 10), c(2,2+b), col = 'blue')
+	arrows(x0 = 10, x1 = 10+a, y0 = 2, y1 = 2+b, .1, col = 'green')
+	title("red: sin(x), blue: cos(x), green: sum")
+}
+
+for (d in seq(0, 2*pi, length.out = 100)) {
+	sincos(d, x)
+	Sys.sleep(.1)
+}
+```
+
+## A side note: fitting a phase with a linear model
+
+So, we can fit the same model by a different parameterization:
+
+```{r}
+#| echo: true
+#| 
+nlm(f,c(0,0,0))$minimum
+# [1] 108956
+tt = pi * hours / 12
+g = function(x) sum((T.outside - (x[1]+x[2]*sin(tt)+x[3]*cos(tt)))^2)
+nlm(g,c(0,0,0))
+```
+
+## A side note: fitting a phase with a linear model
+
+...which is a linear model, identical to:
+
+```{r}
+#| echo: true
+lm(T.outside~sin(tt)+cos(tt))
+
+```
+
+## Next lectures: how do we fit coefficients?
+
++ we have now seen how to select models and fit them to the data using R-functions like `nlm()`
++ in the next lectures, we will have a look at different methods that are used for this fitting (optimization)
+  
+  
+## Sidetrack: time series analysis for satellite-based land use change detection
+
+
+* Satellites continusouly observe the surface of the earth
+* How can we use this information to detect and monitor changes like deforestration?
+* Example dataset: MODIS 16 day vegetation index measaurements over the Brazilian amazon
+```{r fig.width=2.5,fig.height=1.7, echo=FALSE,warning=F,fig.align='center'}
+library(png)
+library(grid)
+img <- readPNG("./data/lec02_googleearth.png")
+par(mar=rep(0,4))
+grid.newpage()
+grid.raster(img,x=0.5,y=0.5)
+```
+
+## A time-series of images
+
+
+The EVI (enhanced vegetation index) is a one-dimensional index computed from near infrared, red, and blue reflection measurements. Values can be interpreted as "greenness" and range from -1 to 1.
+```{r fig.width=3.5,fig.height=2.4,echo=FALSE,warning=F,fig.align='center'}
+library(png)
+library(grid)
+img <- readPNG("./data/lec02_evi.png")
+par(mar=rep(0,4))
+ grid.raster(img)
+```
+
+## A time-series of images
+
+For each of the $1200^2$ pixels, we interpret the set of observations as time series.
+
+Consider the general model:
+$$y_t = T_t + S_t + R_t$$
+
+- $T_t$ describes the trend
+- $S_t$ describes seasonal effects
+- $R_t$ describes remaining variation
+
+We could be interested in both, changes in the trend and seasonality.
+
+
+## Example analysis
+
+
+An example series (1 pixel in forest area):
+
+```{r, fig.width=7,fig.height=4,message=FALSE,echo=FALSE,warning=F,fig.align='center'}
+# One pixel time series
+require(bfast)
+evi=ts(as.vector(harvest),start=c(2005,1), frequency = 23)
+plot(evi, ylab="EVI")
+
+
+```
+
+
+## Example analysis
+
+
+We compute differences from the overall mean to center the series around 0.
+
+```{r, fig.width=7,fig.height=4,message=FALSE,echo=FALSE,warning=F,fig.align='center'}
+# One pixel time series and mean
+require(bfast)
+evi=ts(as.vector(harvest),start=c(2005,1), frequency = 23)
+plot(evi, ylab="EVI")
+evi_m =  evi - mean(evi)
+lines(ts(rep(mean(evi),length(evi)),start=c(2005,1), frequency = 23), col="red")
+```
+
+
+## Example analysis
+
+
+We compute differences from the overall mean to center the series around 0.
+
+```{r, fig.width=7,fig.height=4,message=FALSE,echo=FALSE,warning=F,fig.align='center'}
+# Difference from Mean
+require(bfast)
+evi=ts(as.vector(harvest),start=c(2005,1), frequency = 23)
+evi_m =  evi - mean(evi)
+plot(evi_m, ylab="EVI Difference")
+
+```
+
+## Example analysis
+
+
+We assume yearly seasonality and build seasonal sub-series:
+
+$$
+\begin{aligned}
+y_t^{(16)} &= (y_{2005,16},y_{2006,16},y_{2007,16},y_{2008,16}, ...) \\
+y_t^{(32)} &= (y_{2005,32},y_{2006,32},y_{2007,32},y_{2008,32}, ...) \\
+... 
+\end{aligned}
+$$
+for which we simply compute mean values.
+
+```{r, fig.width=7,fig.height=3.1,echo=FALSE,warning=F,fig.align='center'}
+# Seasonality
+a = rep(0,23)
+for (i in 1:length(a)) {
+  a[i] = mean(evi_m[seq(i,length(evi_m),by = 23)])
+}
+evi_m.St = rep(a,20)[1:length(evi_m)]
+par(mar=c(5, 4, 1, 2))
+plot(evi_m, ylab="EVI Difference", type="l", main="Seasonality" )
+lines(ts(evi_m.St,start=c(2005,1), frequency = 23), col="red")
+```
+
+## Example analysis
+
+
+After subtracting the seasonal component, the series looks like:
+
+```{r, fig.width=7,fig.height=4,echo=FALSE,warning=F,fig.align='center'}
+# Difference from Seasonality
+evi_m.St.res = evi_m - evi_m.St
+plot(evi_m.St.res,type="l", ylab="EVI Difference", main = "Difference/Residuals from seasonal trend")
+#plot(cumsum(evi_m.St.res), type="l")
+```
+
+
+## Example analysis
+
+
+After removing large parts of seasonality, we can study the trend of the data. Deforestation should be visible by abrupt changes in the trend structure. 
+To test, whether there is a structural change, we assume the following linear regression model
+$$T_t = \beta_0 + \beta_1 t$$
+and hypothesize that the regression coefficients $\beta_0, \beta_1$ do not change in time.
+
+
+## Example analysis
+
+
+
+Fitting a global trend leads to: 
+```{r, fig.width=7,fig.height=4,echo=FALSE,warning=F,fig.align='center'}
+evi_m.index =  1:length(evi_m.St)
+evi_m.St.res.lm = lm(evi_m.St.res ~ evi_m.index)
+plot(as.numeric(evi_m.St.res), type="l", ylab="EVI Differences", main="Difference/Residuals from seasonal component")
+lines(evi_m.index,evi_m.St.res.lm$coefficients[1]+evi_m.St.res.lm$coefficients[2]*evi_m.index,col="red")
+```
+
+
+## Example analysis
+
+Looking at the cumulated sum of the model's residuals shows that they do not fluctuate around 0, which we expected in our hypothesis.
+```{r, fig.width=7,fig.height=4,echo=FALSE,warning=F,fig.align='center'}
+plot(cumsum(evi_m.St.res.lm$residuals),ylab="Cumulated Residuals", type="l")
+```
+By thresholding the cumulated residuals based on a given confidence level, we can find a breakpoint around t=107. 
+
+## Example analysis
+
+
+A better model:
+
+```{r, fig.width=7,fig.height=4,echo=FALSE,warning=F,fig.align='center'}
+bp <- which.max(cumsum(evi_m.St.res.lm$residuals))
+evi_m.St.res.lm1 = lm(evi_m.St.res[1:(bp-1)] ~ evi_m.index[1:(bp-1)])
+evi_m.St.res.lm2 = lm(evi_m.St.res[bp:length(evi_m.St.res)] ~ evi_m.index[bp:length(evi_m.St.res)])
+
+plot(as.numeric(evi_m.St.res), type="l", ylab = "Trend component")
+lines(evi_m.index[1:(bp-1)],evi_m.St.res.lm1$coefficients[1]+evi_m.St.res.lm1$coefficients[2]*evi_m.index[1:(bp-1)],col="red")
+lines(evi_m.index[bp:length(evi_m.St.res)],evi_m.St.res.lm2$coefficients[1]+evi_m.St.res.lm2$coefficients[2]*evi_m.index[bp:length(evi_m.St.res)],col="red")
+```
+
+
+
+## Example analysis
+
+
+```{r, fig.width=8,fig.height=8,echo=FALSE,warning=F,fig.align='center', message=FALSE, results='hide'}
+bf = bfast(evi,season = "dummy", max.iter = 2, breaks=1,type="OLS-CUSUM")
+plot(bf, main="Example Result")
+```
+
+## Literature (sidetrack)
+
+
+1.  Verbesselt, J., Hyndman, R., Newnham, G., & Culvenor, D. (2010). Detecting trend and seasonal changes in satellite image time series. Remote Sensing of Environment, 114, 106-115. DOI: 10.1016/j.rse.2009.08.014.
+
+2.  R. B. Cleveland, W. S. Cleveland, J.E. McRae, and I. Terpenning (1990) STL: A Seasonal-Trend Decomposition Procedure Based on Loess. Journal of Official Statistics, 6, 3-73. 
+
+3. W. S. Cleveland, E. Grosse and W. M. Shyu (1992) Local regression models. Chapter 8 of Statistical Models in S eds J.M. Chambers and T.J. Hastie, Wadsworth and Brooks/Cole.

@@ -564,7 +564,7 @@ window.Quarto = {
 <section id="a-side-note-fitting-a-phase-with-a-linear-model" class="level2" data-number="2.9">
 <h2 data-number="2.9" class="anchored" data-anchor-id="a-side-note-fitting-a-phase-with-a-linear-model"><span class="header-section-number">2.9</span> A side note: fitting a phase with a linear model</h2>
 <p>A phase shift model <span class="math inline">\(\alpha \sin(x + \phi)\)</span> can also be modelled by<br>
-<span class="math inline">\(\alpha sin(x) + \beta cos(x)\)</span>; this is essentially a re-parameterization. Try the following code: ::: {.cell}</p>
+<span class="math inline">\(\alpha \sin(x) + \beta \cos(x)\)</span>; this is essentially a re-parameterization. Try the following code: ::: {.cell}</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">=</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">4</span><span class="sc">*</span>pi, <span class="at">length.out =</span> <span class="dv">200</span>) <span class="co"># x plotting range</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>f <span class="ot">=</span> <span class="cf">function</span>(dir, x) { <span class="co"># plot the combination of a sin+cos function, based on dir</span></span>

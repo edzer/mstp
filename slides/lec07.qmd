@@ -1,0 +1,404 @@
+---
+title: "Lecture 7"
+subtitle: "Simple and Ordinary Kriging"
+date: "2024-11-26"
+
+include-in-header:
+  - text: |
+      <style>
+      .reveal .slide-logo {
+        max-height: unset;
+        height: 70px;
+      }
+      </style>
+format: revealjs
+editor: visual
+---
+
+## Normal distribution
+
+\newcommand{\E}{{\rm E}}       
+\newcommand{\Var}{{\rm Var}}   
+\newcommand{\Cov}{{\rm Cov}}   
+\newcommand{\Cor}{{\rm Corr}}
+
+-   *univariate*: If $Z$ follows a normal distribution, its probability distribution is *completely* characterized by its mean $E(Z)=\mu$ and variance ${\rm Var}(Z)=\sigma^2$
+-   *multivariate*: If the vector $Z=(Z_1,Z_2,...,Z_p)$ follows a *multivariate* normal distribution, its marginal distributions are univariate normal, and its *joint* probability distribution is *completely* characterized by the mean vector $E(Z)=\mu=(\mu_1,...\mu_p)$ and covariance matrix $V$, of which element $(i,j)$ equals ${\rm Cov}(Z_i,Z_j)$
+-   covariance matrices have variances on the diagonal
+
+## How can correlation help prediction?
+
+Problem:
+
+![](./data/interp.png)
+
+Questions: Given observation $z(s_1)$, how to predict $z(s_0)$?
+
+-   What is the best predicted value at $s_0$, $\hat{z}(s_0)$?
+-   How can we compute a measure of error for $\hat{z}(s_0)-z(s_0)$?
+-   Can we compute e.g.\~95% prediction intervals for the unknown $z(s_0)$?
+
+## How can correlation help prediction?
+
+Problem:
+
+![](./data/interp.png)
+
+Obviously, given *only* $z(s_1)$, the best predictor for $z(s_0)$ is $\hat{z}(s_0)=z(s_1)$.
+
+But what is the error variance, i.e. $\mbox{Var}(\hat{z}(s_0)-z(s_0))$?
+
+## How can correlation help prediction?
+
+Estimation error:
+
+Let both $z(s_1)$ and $z(s_0)$ come from a field that has variance 1, i.e. $\mbox{Var}(z(s_0)) = \mbox{Var}(z(s_1))=1$, and that has a constant mean: $\mbox{E}(z(s_0)) = \mbox{E}(z(s_1))=m$
+
+Then, $$\mbox{Var}(\hat{z}(s_0)-z(s_0)) = \mbox{Var}(z(s_1)-z(s_0))$$
+
+. . . 
+
+As both have the same mean, this can be written as $$\mbox{E}(\hat{z}(s_0)-z(s_0))^2 = \mbox{Var}(z(s_1)) + \mbox{Var}(z(s_0)) - 2\mbox{Cov}(z(s_1),z(s_0))$$
+
+. . . 
+
+As both have variance 1, this equals $2(1-r)$ with $r$ the correlation between $z(s_0)$ and $z(s_1)$. Examples follow.
+
+## How can correlation help prediction?
+
+Suppose we know the mean:
+
+If we know the mean $\mu$, it may be a good idea to use a compromise between the observation and the mean, e.g. $$\hat{z}(s_0) = (1-r) \mu + r z(s_1)$$
+
+## How can correlation help prediction?
+
+Next Problems...
+
+![](./data/interp2.png)
+
+## How can correlation help prediction?
+
+Next Problems...
+
+![](./data/interp3.png)
+
+## What is geostatistical interpolation
+
+Geostatistical interpolation (kriging) uses linear predictors $$\hat{z}(s_0) = \sum_{i=1}^n \lambda_i z(s_i)$$ with weights chosen such that
+
+-   the interpolated values is unbiased: $\mbox{E}(\hat{z}(s_0)-z(s_0))=0$ and
+-   has mininum variance: $\mbox{Var}(\hat{z}(s_0)-z(s_0))$ is at minimum.
+
+All that is needed is variances and correlations.
+
+## Simple Kriging
+
+-   First, we assume that the mean of the observed process is known and constant
+
+-   This case of prediction is called simple kriging
+
+## Simple Kriging - procedure 
+
+
+:::{.incremental}
+-   compute covariance matrix $V$ containing the covariances between all pairs of the known points $Z(s_i)$ and $Z(s_j)$
+-   compute covariance vector $V_0$ between all known points $Z(s_i)$ and the prediction point $Z(s_0)$
+-   then the vector of the kriging weights $\lambda$ is computed as:
+$$\lambda = V^{-1}v$$
+-   the covariances can be calculated using the covariance function optained from the *variogram* (see last lecture) and the distances between the points
+:::
+
+## Simple Kriging - procedure
+:::{.incremental}
+-   simple kriging assumes the mean $\mu$ to be known and constant
+
+-   so we can compute the difference of $\hat{Z}(s_0)$ to $\mu$ using the differences of all points to $\mu$: $\Delta = Z(s_i) - \mu$
+
+-   given the vector of all these differences $\Delta$ and the vector of all weights $\lambda$ the predicted value is $$\hat{Z}(s_0) = \mu + \lambda'\Delta$$
+
+-   so we compute the scalar product of the vector of all differences to the mean $\Delta$ and the weight vector $\lambda$ and add the mean $\mu$
+:::
+
+## Simple Kriging - explanation
+
+But how did we get this equation?? $$\lambda = V^{-1}v$$
+
+## Simple Kriging - explanation
+
+recall from slide 9
+
+Geostatistical interpolation (kriging) uses linear predictors $$\hat{z}(s_0) = \sum_{i=1}^n \lambda_i z(s_i)$$ with weights chosen such that
+
+-   the interpolated values is unbiased: $\mbox{E}(\hat{z}(s_0)-z(s_0))=0$ and
+-   has mininum variance: $\mbox{Var}(\hat{z}(s_0)-z(s_0))$ is at minimum.
+
+All that is needed is variances and correlations.
+
+## The quadratic form
+
+We will not consider single random variables, but rather large collections of them. In fact, we will consider each observation $z(s_i)$ as a realisation (outcome) of a random variable $Z(s_i)$, and consider the $Z$ variable at all other locations also as separate random variables, say $Z(s_0)$ for any $s_0$ in the domain of interest.
+
+Let $Z = [Z(s_1)\ Z(s_2)\ ...\ Z(s_n)]'$ then ${\rm Var}(Z)=V$ is the covariance matrix of vector $Z$, with $i,j$-th element ${\rm Cov}(Z(s_i),Z(s_j))$, implying it has variances on the diagonal.
+
+Then, it is easy to show that for non-random weights $\lambda = [\lambda_1 ... \lambda_n]'$ the quadratic form $\lambda'Z = \sum_{i=1}^n \lambda_i Z(s_i)$ has variance $$ {\rm Var}(\lambda'Z) = \lambda' {\rm Var}(Z) \lambda = 
+\sum_{i=1}^n \sum_{j=1}^n \lambda_i \lambda_j {\rm Cov}(Z(s_i),Z(s_j)) = \lambda'V\lambda$$
+
+## Simple Kriging - explanation
+
+Why do we need this?
+
+When we predict (interpolate), we're forming linear combinations, $\sum_{i=1}^n \lambda_i Z(s_i)$, and want to know the variance of $\sum_{i=1}^n
+\lambda_i Z(s_i) - Z(s_0)$, the interpolation error variance. Only then can we find weights such that it is minimum.
+
+What is the scalar ${\rm Var}(\sum_{i=1}^n \lambda_i Z(s_i)-Z(s_0))$? Write as $${\rm Var}(\lambda'Z - Z(s_0)) = {\rm Var}(\lambda'Z) + {\rm Var}(Z(s_0)) - 2{\rm Cov}(\lambda'Z,Z(s_0))$$ $$=\lambda'V\lambda + \sigma_0^2 + \sum_{i=1}^n \lambda_i {\rm Cov}(Z(s_i),Z(s_0)) $$ with $\sigma_0^2 = {\rm Var}(Z(s_0))$
+
+## Simple Kriging - explanation
+
+So, we need variances of all $Z(s_i)$, including for all $s_0$, and all covariances between pairs $Z(s_i)$ and $Z(s_j)$, including all $s_0$.
+
+## Simple Kriging - explanation
+
+Suppose we know all that:
+
+-   Kriging: find weights $\lambda$ such that ${\rm Var}(Z(s_0)-\hat{Z}(s_0))=
+    {\rm Var}(Z(s_0)-\sum_{i=1}^n\lambda_i Z(s_i))$ is minimized, and we have the best (minimum variance) linear predictor.
+
+-   Best linear prediction weights: Let $V={\rm Var}(Z)\ \ (n\times n)$ and $v={\rm Cov}(Z(s_0),Z)\ \ (n\times 1)$, and scalar ${\rm Var}(Z(s_0)) = \sigma^2_0$.
+
+-   Expected squared prediction error: ${\rm E}(Z(s_0)-\hat{Z}(s_0))^2$= $\sigma^2(s_0)$
+
+-   we need to minimize $\sigma^2(s_0)$ (Why?)
+
+## Simple Kriging - explanation
+
+-   Since the *mean* of the prediction error is 0 (unbiasedness condition) ${\rm E}(Z(s_0)-\hat{Z}(s_0))^2$ equals the *variance* of the prediction error ${\rm Var}(Z(s_0)-\hat{Z}(s_0))$
+
+-   recall the following formula for variance, try to think of our prediction error as X and the mean of the prediction error as $m$:
+
+$$\sigma^2(X) = {\rm E}(X-m)^2$$
+
+if $m = 0$ then
+
+$$\sigma^2(X) = {\rm E}(X)^2$$
+
+-   Expected squared prediction error ${\rm E}(Z(s_0)-\hat{Z}(s_0))^2 = \sigma^2(s_0)$
+-   we need to minimize $\sigma^2(s_0)$
+
+## Simple Kriging - explanation
+
+-   Replace $Z$ with $Z-\mu$ (or assume $\mu=0$) $$\sigma^2(s_0) = {\rm E}(Z(s_0)-\lambda ' Z)^2 =
+    {\rm E}(Z(s_0))^2 - 2 \lambda '{\rm E}(Z(s_0) Z)+\lambda'{\rm E}(Z Z')\lambda $$ $$ = {\rm Var}(Z(s_0)) - 2 \lambda'{\rm Cov}(Z(s_0),Z) + \lambda'{\rm Var}(Z)\lambda
+    = \sigma^2_0 - 2 \lambda'v + \lambda'V\lambda $$
+
+-   Choose $\lambda$ such that $\frac{\delta \sigma^2(s_0)}{\delta\lambda} = -2 v' + 2\lambda'V = 0$
+
+-   $\lambda' = v' V^{-1}$
+
+BLP/Simple kriging:
+
+1.  $\hat{Z}(s_0) = \mu + v'V^{-1} (Z-\mu)$
+2.  $\sigma^2(s_0) = \sigma^2_0 - v'V^{-1}v$
+
+## Simple Kriging - summary
+
+-   $\lambda' = v' V^{-1}$ is the same as $\lambda = V^{-1}v$
+
+-   so that is how we get the equation on slide 11
+
+![](./data/simplekriging.jpg)
+
+-   to predict unknown values $\hat{Z}(s_0)$ we interpolate their differences to the mean $\mu$ (using the differences to $\mu$ of the known points and the corresponding weights) and then add $\mu$ again
+
+## Simple Kriging: Step-by-step example
+
+Suppose we already know the (constant) mean $\mu = 4$ and the theoretical covariance function $$
+\textrm{cov}(h) = 
+\begin{cases}
+1 & h = 0 \\
+0.9 ~ \textrm{exp}\left(\frac{-h}{3} \right)& h > 0
+\end{cases}
+$$ which is the exponential model with nugget $0.1$, psill $0.9$, and range $3$. We want to predict a value for $(x,y) = (1,2)$.
+
+## Simple Kriging: Step-by-step example
+
+**Step 1**: Compute pairwise distances of known observations:
+
+$$
+D_{ij} = \sqrt{(x_i-x_j)^2 + (y_i-y_j)^2}
+$$
+
+$$
+D_{ij} \approx
+\begin{pmatrix}
+0.00&3.16&4.47&2.24 \\
+3.16&0.00&3.16&4.12 \\
+4.47&3.16&0.00&3.61 \\
+2.24&4.12&3.61&0.00 \\
+\end{pmatrix}
+$$
+
+## Simple Kriging: Step-by-step example
+
+**Step 2**: Compute pairwise covariance matrix of known observations:
+
+$$
+V_{ij} = \textrm{cov}(D_{ij})
+$$
+
+$$
+V_{ij} \approx
+\begin{pmatrix}
+1.00&0.31&0.20&0.43 \\
+0.31&1.00&0.31&0.23 \\
+0.20&0.31&1.00&0.27 \\
+0.43&0.23&0.27&1.00 \\
+\end{pmatrix}
+$$
+
+## Simple Kriging: Step-by-step example
+
+**Step 3**: Compute distances and covariances between predication location and observation locations:
+
+$$
+d_i = \sqrt{(x_i-x_0)^2 + (y_i-y_0)^2} ~~~~~~ v_i = \textrm{cov}(d_i) 
+$$
+
+$$
+d_i \approx (1, 3, 3.61, 1.41)'  ~~~~~~ v_i \approx (0.64, 0.33, 0.27, 0.56)' 
+$$
+
+## Simple Kriging: Step-by-step example
+
+**Step 4**: Solve the Kriging system:
+
+$$
+\lambda = V^{-1}v ~~~~~ \Rightarrow ~~~~~ \lambda \approx (0.46,0.09,0.06,0.33)'
+$$
+
+**Step 5**: Predict the value $z_0$:
+
+$$
+\begin{aligned}
+\hat{z_0} &= \mu + \lambda' (z - \mu) \\
+& \approx 4 + (0.46,0.09,0.06,0.33) \cdot (0,  1, -1, -2)' \\
+&\approx 3.38
+\end {aligned} 
+$$
+
+**Step 6**: Compute the Kriging variance:
+
+$$ 
+\begin {aligned} 
+\hat{\sigma}^2_0 &= \textrm{cov}(0) - \lambda' v \\
+& \approx 1 - (0.46,0.09,0.06,0.33) \cdot (0.64,0.33,0.27,0.56)' \\
+& \approx 0.47
+\end {aligned} 
+$$
+
+## Example in R
+
+```{r}
+#| echo: true
+#| code-fold: show  
+library(sf) # st_distance()
+cov = function(h) exp(-h)
+
+sk = function(data, newdata, mu, cov) {
+	V = cov(st_distance(data))
+	v = cov(st_distance(data, newdata))
+	mu + t(v) %*% solve(V, data[[1]] - mu)
+}
+
+# prediction location at (0,1):
+newdata = st_as_sf(data.frame(x = 0, y = 1), coords = c("x", "y"))
+
+# observation location at (1,1), with attribute value (y) 3:
+data = st_as_sf(data.frame(x = 1, y = 1, z = 3), coords = c("x", "y"))
+
+sk(data, newdata, 0, cov) # mu = 0
+newdata = st_as_sf(data.frame(x = .1 * 0:20, y = 1), coords = c("x", "y"))
+sk(data, newdata, 0, cov) # mu = 0
+```
+
+## Example in R
+
+Plotting them:
+
+```{r}
+#| echo: true
+
+newdata = st_as_sf(data.frame(x = seq(-4, 6, by = .1), y = 1), coords = c("x", "y"))
+Z = sk(data, newdata, 0, cov) # mu = 0
+plot(st_coordinates(newdata)[,1], Z, type = 'l', ylim = c(0, 3))
+points(1, 3, col = 'red', pch = 16)
+abline(0, 0, col = 'blue', lty = 2)
+```
+
+## Example with zinc data
+
+```{r}
+#| echo: true
+#| code-fold: show 
+data(meuse, package = "sp")
+meuse = st_as_sf(meuse, coords = c("x", "y"))
+data(meuse.grid, package = "sp")
+meuse[[1]] = log(meuse$zinc)
+library(stars)
+meuse.grid = st_as_stars(meuse.grid)
+meuse.grid$sk = sk(meuse, 
+				   st_as_sf(meuse.grid, as_points = TRUE, na.rm = FALSE), 
+				   mu = mean(log(meuse$zinc)), 
+				   cov = function(h) exp(-h/300))
+# mask:
+meuse.grid$sk[ is.na(meuse.grid$dist) ] = NA
+plot(meuse.grid["sk"], main = "simple kriging", axes = TRUE,
+	col = sf.colors(), breaks = "equal", reset = FALSE)
+plot(st_geometry(meuse), add = TRUE)
+```
+
+## Known, varying mean
+
+This is nothing else then simple kriging, except that the mean is no longer constant; BLP/Simple kriging: $$\hat{Z}(s_0) = \mu(s_0) + v'V^{-1} (Z-\mu(s))$$ $$\sigma^2(s_0) = \sigma^2_0 - v'V^{-1}v$$ with $\mu(s) = (\mu(s_1),\mu(s_2),...,\mu(s_n))'$.
+
+## Unknown, constant mean - Ordinary Kriging
+
+Now suppose the mean is constant, but not known. This is the most simple *realistic* scenario. In this case we include it in the estimation of the weights $\lambda$. In order not to violate the condition of *unbiasedness* we need to make sure that the sum of the weights is 1.
+
+$$\sum_{i=1}^n \lambda_i = 1$$
+
+This can be done by extending the covariance matrix $V$ by one coloumn and one row and the covariance vector $v$ by one element using the *Lagrange* multiplier.
+
+## Unknown, constant mean - Ordinary Kriging
+
+Suppose the mean is constant, but not known. This is the most simple *realistic* scenario. We can estimate it from the data, taking into account their covariance (i.e., using weighted averaging):
+
+$$\hat{m} = ({\bf 1}'V^{-1}{\bf 1})^{-1} {\bf 1}'V^{-1}Z$$ with ${\bf 1}$ a conforming vector with ones, and substitute this mean in the SK prediction equations: BLUP/Ordinary kriging: $$\hat{Z}(s_0) = \hat{m} + v'V^{-1} (Z-\hat{m})$$ $$\sigma^2(s_0) = \sigma^2_0 - v'V^{-1}v + Q$$ with $Q = (1 - {\bf 1}'V^{-1}v)'({\bf 1}'V^{-1}{\bf 1})^{-1}(1 - {\bf 1}'V^{-1}v)$
+
+## Stationarity
+
+Given prediction location $s_0$, and data locations $s_1$ and $s_2$, we need: ${\rm Var}(Z(s_0))$, ${\rm Var}(Z(s_1))$, ${\rm Var}(Z(s_2))$, ${\rm Cov}(Z(s_0),Z(s_1))$, ${\rm Cov}(Z(s_0),Z(s_2))$, ${\rm Cov}(Z(s_1),Z(s_2))$.
+
+How to get these covariances?
+
+-   given a single measurement $z(s_1)$, we can not infer ${\rm Var}(Z(s_1))$
+-   given two measurements $z(s_1)$ and $z(s_2)$, we can *never* infer ${\rm Cov}(Z(s_1),Z(s_2))$
+-   given a time series at $s_1$ and $s_2$, we can infer
+-   ${\rm Cov}(Z(s_1),Z(s_2))$, but how to infer
+-   ${\rm Cov}(Z(s_0),Z(s_1))$ and
+-   ${\rm Cov}(Z(s_0),Z(s_2))$?
+
+Solution: assume *stationarity*.
+
+## Stationarity
+
+Stationarity of the
+
+-   *mean* ${\rm E}(Z(s_1)) = {\rm E}(Z(s_2)) = ... = m$
+-   *variance* ${\rm Var}(Z(s_1)) = {\rm Var}(Z(s_2)) = ... = \sigma^2_0$
+-   *covariance* ${\rm Cov}(Z(s_1),Z(s_2)) = {\rm Cov}(Z(s_3),Z(s_4))$ if $s_1-s_2=s_3-s_4$: distance/direction dependence
+
+Second order stationarity: ${\rm Cov}(Z(s),Z(s+h)) = C(h)$
+
+which implies: ${\rm Cov}(Z(s),Z(s)) = {\rm Var}(Z(s))= C(0)$
+
+The function $C(h)$ is the *covariogram* of the random function $Z(s)$

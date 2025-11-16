@@ -1,0 +1,945 @@
+---
+title: "Lecture 10"
+subtitle: "Cellular Automata (CA)"
+date: "2025-01-07"
+
+include-in-header:
+  - text: |
+      <style>
+      .reveal .slide-logo {
+        max-height: unset;
+        height: 70px;
+      }
+      </style>
+format: revealjs
+editor: visual
+---
+
+
+
+
+## Agenda for this lecture
+
+
+
+- Overview and motivating example: Game of Life
+- Application areas
+- Definition and properties
+- Classification
+- Examples
+    - Nagel-Schreckenberg traffic model
+    - Schelling model for segregation
+    - 1d diffusion
+    - ecological competitions
+
+  
+  
+  
+## Conway's Game of Life
+
+
+Consider cells on a two-dimensional regular grid. Each cell can be either 1 (alive) or 0 (dead). Based on an initial population, new generations are derived from the current state according to the following rules:
+
+   - A dead cell is reborn if and only if it has three living neighbors.
+   - Living cells die if they have less than two living neighbors.
+   - Living cells with two or three living neighbors stay alive.
+   - Living cells with more than three living neighbors die due to overpopulation. 
+
+
+## Conway's Game of Life
+
+
+**Example based on random initial state**:
+```{r,echo=F,warning=FALSE, message=FALSE,fig.width=25,fig.height=14, fig.align='center',out.height="14cm",out.width="25cm"}
+
+library(simecol)
+draw.grid <- function(z, ...) {
+  image(t(z[nrow(z):1,]), axes=F,...)
+  dx = 1/(ncol(z)-1)
+  dy = 1/(nrow(z)-1)
+  abline(v=0-dx/2)
+  abline(v=1+dx/2)
+  abline(h=0-dy/2)
+  abline(h=1+dy/2)
+  grid(ncol(z), nrow(z), lwd = 1,lty=1,col="black") 
+} 
+ 
+ 
+par(mar=c(1,1,3,1))
+#par(oma=c(0,2,2,0))
+par(mfrow=(c(2,3)))
+par(cex.main = 3)
+
+
+data(conway)
+conway@times=1:1000
+x = sim(conway,animation=F)
+#plot(sim(conway,animation=T,delay=100))
+
+
+t=1
+x@out[[t]][which(x@out[[t]] == 0,arr.ind = T)] = NA
+draw.grid(x@out[[t]],col=heat.colors(1, alpha = 1))
+title(main=paste("t=",t,sep=""),line = 1,xpd=NA)
+
+t=20
+x@out[[t]][which(x@out[[t]] == 0,arr.ind = T)] = NA
+draw.grid(x@out[[t]],col=heat.colors(1, alpha = 1))
+title(main=paste("t=",t,sep=""),line = 1,xpd=NA)
+
+t=50
+x@out[[t]][which(x@out[[t]] == 0,arr.ind = T)] = NA
+draw.grid(x@out[[t]],col=heat.colors(1, alpha = 1))
+title(main=paste("t=",t,sep=""),line = 1,xpd=NA)
+
+t=100
+x@out[[t]][which(x@out[[t]] == 0,arr.ind = T)] = NA
+draw.grid(x@out[[t]],col=heat.colors(1, alpha = 1))
+title(main=paste("t=",t,sep=""),line = 1,xpd=NA)
+
+t=200
+x@out[[t]][which(x@out[[t]] == 0,arr.ind = T)] = NA
+draw.grid(x@out[[t]],col=heat.colors(1, alpha = 1))
+title(main=paste("t=",t,sep=""),line = 1,xpd=NA)
+
+
+t=1000
+x@out[[t]][which(x@out[[t]] == 0,arr.ind = T)] = NA
+draw.grid(x@out[[t]],col=heat.colors(1, alpha = 1))
+title(main=paste("t=",t,sep=""),line = 1,xpd=NA)
+```
+  
+  
+
+  
+## Conway's Game of Life
+
+
+Result shows complex structures:
+
+- static or moving objects
+- oscillations
+  
+![](./data/gameoflife.png)
+
+![](./data/gameoflife2.png)
+
+- Given a initial configuration, will there be a steady state?  
+
+  
+## Why is that interesting?
+
+
+- theory: the question whether a configuration may emerge from another configuration is an undecidable problem.
+- studying system behavior as a result of simple individual rules
+- top down (differential equations) vs. bottom-up (agent-based models)
+- Discrete vs. continuous modeling
+- self-organization of complex systems
+
+
+
+## Historic Overview
+
+
+Stanislaw Ulam (1940s): modeling growth of chrystals on lattice networks
+
+John von Neumann (1940s): work on self-replicating systems
+
+John Horton Conways (1970s): Game of Life
+
+Stephen Wolfram (1983): Fundamental theoretical work
+
+Stephen Wolfram (2002): "A New Kind of Science"
+
+Numerous practical applications evolved at the same time.
+
+
+
+
+
+
+
+## Applications
+
+
+Cellular automata are suitable to model dynamic spatiotemporal processes / systems in:
+
+* physics (e.g. simulation of wave-like spreading)
+* biology (e.g. Corona virus propagation)
+* social sciences (e.g. segregation of population groups)
+* ecology (e.g. spreading of forest fires)
+* ...
+
+
+
+
+## Formal Definition
+
+
+A cellular automaton is a 4-tuple $(Z, S, N, f)$:
+
+1. the [**cell space**]{.green} $Z$ is a discrete space (cells)
+2. the [**state space**]{.green} $S$ is a state space, i.e. a set of valid states for each cell
+3. the [**neighborhood definition**]{.green} $N$ is a finite neighborhood
+4. $f$ is a [**transition function**]{.green}
+
+   
+   
+## Cell space $(\boldsymbol{Z}, S , N , f)$
+
+
+Space is partitioned into equal geometric objects:
+
+- 1d cells
+- 2d squares, triangles, or hexagons 
+- 3d, or 4d possible but most applications in 1d or 2d.
+   
+   
+   
+## State space $(Z, \boldsymbol{S}, N , f)$
+
+
+At each point in time, the state of a cell is unique. The finite number of possible cell states cells are based on a set $S$ containing numbers or letters from an alphabet $A$: $S = \{s | s \in A\}$
+
+A function $C : Z \rightarrow S$ that assigns states to all cells is called **configuration**. The configuration at the simulation start is called **initial configuration**, **start configuration**, or sometimes **initial conditions**.
+
+
+
+ 
+## Neighborhood Definition (2d) $(Z, S, \boldsymbol{N}, f)$
+
+
+- **von Neumann: ** $N_r(x_0,y_0) = \{(x,y) : |x-x_0| + |y-y_0| \leq r \}$
+- **Moore:** $N_r(x_0,y_0) = \{(x,y) : |x-x_0| \leq r \land |y-y_0| \leq r \}$
+
+```{r,echo=F,warning=FALSE, fig.width=11,fig.height=11, fig.align='center',out.height="11cm",out.width="11cm"}
+ 
+draw.grid <- function(x,y) {
+  dx = 1/(length(x)-1)
+  dy = 1/(length(y)-1)
+  abline(v=0-dx/2)
+  abline(v=1+dx/2)
+  abline(h=0-dy/2)
+  abline(h=1+dy/2)
+  grid(length(x), length(y), lwd = 1,lty=1,col="black") 
+} 
+ 
+par(mar=rep(1.3,4))
+par(oma=c(0,2,2,0))
+par(mfrow=(c(2,2)))
+par(cex.main=4)
+par(cex.lab=4)
+x = 0:6
+y = 0:6
+z = matrix(rep(NA,length(x)*length(y)),nrow=length(y),ncol=length(x))
+m = c(ceiling(length(x)/2),ceiling(length(y)/2))
+z[m,m]=2
+z[m,m-1]=z[m-1,m]=z[m+1,m]=z[m,m+1]=1
+image(z,axes=F,col=cm.colors(2, alpha = 1))
+title(main = "von Neumann",line = 1,xpd=NA)
+title(ylab = "r = 1",line = 1,xpd=NA)
+draw.grid(x,y)
+
+z = matrix(rep(NA,length(x)*length(y)),nrow=length(y),ncol=length(x))
+m = c(ceiling(length(x)/2),ceiling(length(y)/2))
+z[m,m]=2
+z[m,m-1]=z[m-1,m]=z[m+1,m]=z[m,m+1]= z[m+1,m+1] = z[m-1,m-1] = z[m-1,m+1] = z[m+1,m-1] =  1
+image(z,axes=F,col=cm.colors(2, alpha = 1))
+title(main = "Moore",line = 1,xpd=NA)
+draw.grid(x,y)
+
+
+
+
+z = matrix(rep(NA,length(x)*length(y)),nrow=length(y),ncol=length(x))
+m = c(ceiling(length(x)/2),ceiling(length(y)/2))
+z[m,m]=2
+z[m,m-1]=z[m-1,m]=z[m+1,m]=z[m,m+1]=1
+z[m,m-2]=z[m-2,m]=z[m+2,m]=z[m,m+2]=1
+z[m+1,m+1] = z[m-1,m-1] = z[m-1,m+1] = z[m+1,m-1] =  1
+
+image(z,axes=F,col=cm.colors(2, alpha = 1))
+title(ylab = "r = 2",line = 1,xpd=NA)
+draw.grid(x,y)
+
+
+z = matrix(rep(NA,length(x)*length(y)),nrow=length(y),ncol=length(x))
+m = c(ceiling(length(x)/2),ceiling(length(y)/2))
+z[m,m]=2
+z[m,m-1]=z[m-1,m]=z[m+1,m]=z[m,m+1]= z[m+1,m+1] = z[m-1,m-1] = z[m-1,m+1] = z[m+1,m-1] =  1
+z[m-2,(m-2):(m+2)] = 1
+z[m+2,(m-2):(m+2)] = 1
+z[(m-2):(m+2),m-2] = 1
+z[(m-2):(m+2),m+2] = 1
+
+image(z,axes=F,col=cm.colors(2, alpha = 1))
+draw.grid(x,y)
+
+```
+
+
+## Transition function $(Z, S, N, \boldsymbol{f})$
+
+
+The state of a cell at time $t$ depends on
+
+- the state of the cell at time $t-1$ and
+- the state of neighbouring cells at time $t-1$.
+
+$$f: Q^n \rightarrow Q$$
+
+$f$ might be
+
+- a mathematical function, well-defined rules, or transition tables
+- stochastic or deterministic
+
+
+## Transition function
+
+
+For the same initial conditions, **deterministic automata** always lead to the same simulation results. **Stochastic automata** include randomness in $f$ and generally lead to different results for the same initial conditions.
+
+
+
+
+## Formal definition: Game of Life 
+
+
+
+A two-dimensional regular grid:
+$$Z = \{ (i,j) | i,j \in \mathbb{N} \land 0 \leq i < n  \land 0 \leq j < m \}$$
+
+Moore neighborhood:
+$$N_{i,j} = \{(k,l) \in Z  : |x-x_0| \leq 1 \land |y-y_0| \leq 1 \}$$
+
+State space (dead or alive):
+$$S = \{0,1\}$$
+
+Transition function:
+$$
+f_{i,j}(t+1) = 
+\begin{cases}
+1 & \textrm{for} ~ \sum_{(k,l) \in N_{i,j}} f_{k,l}(t) = 3 \\
+1 & \textrm{for} ~ \sum_{(k,l) \in N_{i,j}} f_{k,l}(t) = 2 \land f_{i,j}(t) = 1\\
+0 & \textrm{else}
+\end{cases}
+$$
+
+  
+
+
+## Boundary conditions
+
+
+Formally, cellular automata assume infinite grids but practical simulation requires finite grids. At the grid boundaries / corners, the neighbourhood is different and must be specified.
+
+
+```{r,echo=F,warning=FALSE, fig.width=8,fig.height=4, fig.align='center',out.height="8cm",out.width="16cm"}
+
+
+draw.grid <- function(z,...) {
+  image(t(matrix(z,nrow=1)), axes=F,...)
+  grid(length(z),1,  lwd = 1,lty=1,col="black") 
+  dx = 1/(length(x)-1)
+  abline(v=0-dx/2)
+  abline(v=1+dx/2)
+  abline(h=-1)
+  abline(h=1)
+} 
+ 
+write.gridvals <- function(z,...) {
+   x = seq(0,1,length.out=length(z))
+   text(labels = as.character(as.character(z)),cex=2, x=x,y=0,...)
+}
+
+ 
+par(mar=rep(1.2,4)+c(0,0.2,2.7,0.2))
+#par(oma=c(0,2,2,0))
+par(mfrow=(c(3,1)))
+par(cex.main=2)
+
+z = c(NA,NA,NA,1,1,1,1,NA,NA,NA)
+
+
+a1 = c(1,1,1,1,2,3,4,4,4,4)
+draw.grid(z,col=heat.colors(2, alpha = 1))
+title(main="Repeated boundaries",line = 1)
+write.gridvals(a1)
+
+# Reflective boundaries
+a2 = c(3,2,1,1,2,3,4,4,3,2)
+draw.grid(z,col=heat.colors(2, alpha = 1))
+title(main="Reflective boundaries",line = 1)
+write.gridvals(a2)
+
+
+# circular
+a2 = c(2,3,4,1,2,3,4,1,2,3)
+draw.grid(z,col=heat.colors(2, alpha = 1))
+title(main="Periodic boundaries",line = 1)
+write.gridvals(a2)
+```
+
+
+
+## Update order
+
+
+In one simulation step, the transition function is applied to all cells simultaneously (though usually implemented in a sequential for-loop style). To compute the next state of a cell $z_{i,j}(t+1)$ we only use neighbours and the actual cell at time $t$. This is called [**synchronous updating**]{.green}. In contrast, [**asynchronous updating**]{.green} also uses neighbours at time $t+1$ if they have been already computed. 
+
+
+[**Synchronous updating**]{.green}: order of processing cells is **NOT**  important.
+
+[**Asynchronous updating**]{.green}: order of processing cells is  influences results. All examples in this lecture are synchronous.
+
+
+
+
+## Classification (Wolfram)
+
+
+Wolfram distinguishes four different classes of (one-dimensional) CAs based on evolving patterns:
+
+1. Initial configurations evolve into a homogeneous configuration, patterns disappear.
+2. Initial configurations evolve into stable oscilating patterns
+3. Initial configurations evolve into chaotic structures
+4. Initial configurations evolve into complex local structures
+
+
+
+
+
+
+
+## Classification (Wolfram)
+
+
+Examples (1d, $t$ is on the y-axis -> each new line is a new time step)  
+
+\footnotesize(source: http://www.uni-forst.gwdg.de/~wkurth/fs08_v05.pdf)
+ 
+\normalsize
+
+1. homogeneous state
+
+![](./data/class1.png){width=500}
+
+2. stable / oscilating
+
+![](./data/class2.png){width=500}
+
+
+
+
+## Classification (Wolfram)
+
+
+Examples (1d, $t$ is on the y-axis -> each new line is a new time step)
+
+\footnotesize(source: http://www.uni-forst.gwdg.de/~wkurth/fs08_v05.pdf)
+ 
+\normalsize
+
+3. Chaotic development
+
+![](./data/class3.png){width=500}
+
+4. Complex structures
+
+![](./data/class4.png){width=500}
+
+
+
+
+## Example 1: Nagel-Schreckenberg traffic model
+
+
+Modeling traffic: 
+
+- Road (single-lane, 1d, circular) is divided into cells. Each cell is either empty or holds a single car.
+- Velocity of cars is an integer between 0 and 5.
+- Update rules:
+
+    1. Cars with velocity < 5 increase by 1.
+    2. Cars with distance less than its current velocity to another car in front slow down to the number of empty cells. 
+    3. Random lingering: decrease speed of some cars by one with a given probability.
+    4. Move cars according their speed
+
+## Example 1: Nagel-Schreckenberg traffic model
+
+
+```{r,echo=F,warning=FALSE, fig.width=22,fig.height=14, fig.align='center',out.height="14cm",out.width="22cm"}
+ 
+draw.grid <- function(z, ...) {
+  image(t(z[nrow(z):1,]), axes=F,...)
+  dx = 1/(ncol(z)-1)
+  dy = 1/(nrow(z)-1)
+  abline(v=0-dx/2)
+  abline(v=1+dx/2)
+  abline(h=0-dy/2)
+  abline(h=1+dy/2)
+  grid(ncol(z), nrow(z), lwd = 1,lty=1,col="black") 
+} 
+ 
+VMAX = 5
+P = 0.5
+NT = 100
+NX = 200
+z = matrix(rep(NA,NX*NT),nrow=NT,ncol=NX)
+
+idx = which(runif(NX) < 0.2)
+#z[1,idx] = as.integer(runif(length(idx),1,VMAX))
+#z[1,idx] = sample(0:VMAX,size=length(idx),replace = TRUE)
+#z[1,idx] = 5
+z[1,seq(1,NX,length.out=round(NX/6))] = 5
+
+for (i in 2:NT) {
+  a = z[i-1,]
+  # 1. acceleration
+  a[which(a <VMAX )] = a[which(a <VMAX )] + 1 
+  
+  # 2. slowing down
+  b_idx = which(!is.na(a))
+  if (length(b_idx) > 1) a[b_idx[1:(length(b_idx)-1)]] = pmin(diff(b_idx)-1,a[b_idx[1:(length(b_idx)-1)]])
+  
+  # 3. random slow down
+  b_idx = which(a >= 1)[runif(length( which(a >= 1))) < P]
+  a[ b_idx] = a[ b_idx] - 1
+
+ # 4. move
+ for (j in NX:1) {
+   
+    z[i,((j+a[j]-1) %% NX)+1] = a[j]
+   
+    
+   #if (!is.na(a[j])) {
+    # if (j+a[j] <= NX) z[i,j+a[j]] = a[j]
+   #}
+ }
+}
+
+#apply(z,1,function(x) sum(!is.na(x)))
+
+par(mar=c(2,2,1,1))
+par(mgp=c(1, 0, 0))
+draw.grid(z,xlab="x",ylab="t",col=rainbow(5,start=0.0,end=0.3))
+
+```
+
+
+
+  
+
+## Example 1: Nagel-Schreckenberg traffic model
+
+
+Based on varying input parameters (lingering probability, maximum speed), it can be seen that traffic flow depending on traffic density has different optima. This model explains traffic jams as a result of overreactions and not complying with safety gaps.
+
+Extensions:
+
+- multiple lanes
+- cars have different maximum speeds
+- velocity dependent randomization (VDR)
+
+
+
+
+
+## Example 2: Schelling-model
+
+
+Schelling (1971) presented a simple CA to explain social segregation:
+
+* CA e.g. represents a city
+* Two distinct groups live in the city, at most one agent in a cell.
+* Cells might be uninhabitated.
+* Agents only accept a limited number of neighbours of the other group. If this number is exceeded, agents move to a different cell which fulfills their requirements.
+
+
+## Example 2: Schelling-model
+
+
+Parameters:
+
+* Tolerance of both groups (might be different)
+* Size of the automaton
+* initial conditions
+
+Algorithm update:
+
+1. Find all "unhappy" agents with too many neighbors of the other group
+2. Identify target cells for both groups where agents can move
+3. Randomly assign target cells to "unhappy" agents
+4. If there are not enough target cells, some unhappy agents may not move.
+
+
+
+
+## Example: Schelling-model
+
+
+```{r,echo=F,warning=FALSE,message=FALSE, fig.width=20,fig.height=10, fig.align='center',out.height="10cm",out.width="20cm"}
+
+draw.grid <- function(z, ...) {
+  image(t(z[nrow(z):1,]), axes=F,...)
+  dx = 1/(ncol(z)-1)
+  dy = 1/(nrow(z)-1)
+  abline(v=0-dx/2)
+  abline(v=1+dx/2)
+  abline(h=0-dy/2)
+  abline(h=1+dy/2)
+  grid(ncol(z), nrow(z), lwd = 1,lty=1,col="black") 
+} 
+Schelling <- function(raster=NULL, tol_a=3,tol_b=3,times=200) {
+ 	
+  if(is.null(raster))
+	stop("Grid muss initialisiert werden!")
+
+  # Nachbarschaftsverh?ltnisse mit Funktion eightneighnours aus simecol ermitteln
+  require(simecol)
+
+  # Anfangszustand speichern
+  grid0 = raster
+  unzufrieden = 0
+
+  for(i in 1:times) {
+
+    # Raster f?r Funktion eightneighbours() aufbereiten
+    gruppe_a = raster; 
+    # gruppe_a Wert 1 bedeutet Zelle, die von Gruppe A bewohnt wird, alle anderen Zellen haben den Wert 0
+    gruppe_a[gruppe_a==2] = 0
+    # gruppe_b Wert 1 bedeutet Zelle, die von Gruppe B bewohnt wird, alle anderen Zellen werden auf 0 gesetzt
+    # hier geschieht das in 3 Schritten	
+    gruppe_b <- raster
+    gruppe_b[gruppe_b==1] = 0
+    gruppe_b[gruppe_b==2] = 1
+    
+    # Nachbarschaften bestimmen
+    nachbarn_a <- eightneighbours(gruppe_a) # pro raster Zelle Anzahl Nachbarn Gruppe A 
+    nachbarn_b <- eightneighbours(gruppe_b) # pro raster Zelle Anzahl Nachbarn Gruppe B
+
+    # Zum Testen: tol_a=3; tol_b=3
+    # Mit which() und arr.ind = TRUE kommt dabei eine Liste mit Indices heraus
+    # A (raster Wert 1) will umziehen, wenn Anzahl Nachbarn aus Gruppe B Toleranzgrenze ?bersteigt
+    umziehenwill_a = which(raster==1&nachbarn_b>tol_a, arr.ind = TRUE)
+    # B (raster Wert 2) will umziehen, wenn Anzahl Nachbarn aus Gruppe A Toleranzgrenze ?bersteigt
+    umziehenwill_b = which(raster==2&nachbarn_a>tol_b, arr.ind = TRUE)
+
+    # A kann in unbewohnte Zellen umziehen, wo die Anzahl Nachbarn aus Gruppe B unter Toleranzgrenze liegt
+    wohin_a <- which(raster==0&nachbarn_b<=tol_a, arr.ind = TRUE)
+    # A kann in unbewohnte Zellen umziehen, wo die Anzahl Nachbarn aus Gruppe A unter Toleranzgrenze liegt
+    wohin_b <- which(raster==0&nachbarn_a<=tol_b, arr.ind = TRUE)
+
+    # Wieviele sind unzufrieden?
+    # dim()[1] ergibt Anzahl der Kandidaten
+    # zum Testen i=1
+    unzufrieden[i] = dim(umziehenwill_a)[1]+dim(umziehenwill_b)[1]
+
+    # Abbruch wenn niemand mehr umziehen kann, weil alle guten Zellen besetzt sind
+    if (dim(wohin_a)[1]+dim(wohin_b)[1]==0) break
+    # Oder wenn niemand mehr unzufrieden ist
+    if(unzufrieden[i]==0) break
+
+    # Zuf?llig ausw?hlen, wer von den Unzufriedenen umziehen darf
+    kandidat <- sample(c(1:unzufrieden[i]),1)
+
+    # Kandidat aus Gruppe A zieht um
+    # kandidat<=dim(umziehenwill_a)[1]
+
+    if (kandidat<=dim(umziehenwill_a)[1] & dim(umziehenwill_a)[1]>0 & dim(wohin_a)[1]>0) {
+    # Zuf?llig eine der Zellen ausw?hlen, in die der Kandidat umziehen kann
+    wohin <- sample(c(1:(dim(wohin_a)[1])),1)
+    # Ausziehen aus alter Zelle
+    raster[umziehenwill_a[kandidat,1],umziehenwill_a[kandidat,2]] = 0
+    # Einziehen in neue Zelle
+    raster[wohin_a[wohin,1],wohin_a[wohin,2]] = 1    
+    }
+
+    ## Kandidat aus Gruppe B zieht um
+    # kandidat>dim(umziehenwill_a)[1]
+
+    if (kandidat>dim(umziehenwill_a)[1] & dim(umziehenwill_b)[1]>0 & dim(wohin_b)[1]>0) {
+    wohin = sample(c(1:(dim(wohin_b)[1])),1)
+    raster[wohin_b[wohin,1],wohin_b[wohin,2]] = 2
+    raster[umziehenwill_b[kandidat-dim(umziehenwill_a)[1],1],umziehenwill_b[kandidat-dim(umziehenwill_a)[1],2]] <- 0
+    }
+  }
+
+  # Return
+  #ergebnis <- list(grid0, raster, unzufrieden)
+  #class(ergebnis) <- "Schelling"
+  #ergebnis
+  return(raster)
+  
+}
+
+par(cex.main=3)
+par(mar=rep(1.2,4))
+par(oma=c(0,2,2,0))
+par(mfrow=(c(1,2)))
+
+n = 50
+raster = sample(x=c(0,1,2), size=n*n, replace = TRUE, prob = c(0.3, 0.35, 0.35))
+dim(raster) = c(n,n)
+x <- Schelling(raster,times = 3000,tol_a = 2,tol_b = 2)
+draw.grid(raster,col=c("white","purple","orange"))
+title(main=paste("t=",0,sep=""),line = 1,xpd=NA)
+#x[which(x==0,arr.ind = T)] = NA
+draw.grid(x,col=c("white","purple","orange"))
+title(main=paste("t=",3000,sep=""),line = 1,xpd=NA)
+
+
+
+```
+
+
+
+## Example 3: 1d diffusion
+
+
+Instead of continous diffusion models through partial differential equations, one can look at diffusion at the partcile level and use a one-dimensional CA:
+
+
+- Regular one-dimensional grid with $n$ cells
+- State space is $\{0,1\}$
+- Periodic boundaries (conservation of energy)
+- Transition function:
+    - Particles want to move to the left or right (stochastic rule)
+    - Movement is possible only to empty cells ($0$) where no other particle wants to move to as well
+  
+  
+
+## Example 3: 1d diffusion
+
+
+
+
+```{r,echo=F,warning=FALSE, fig.width=22,fig.height=14, fig.align='center',out.height="14cm",out.width="22cm"}
+ 
+draw.grid <- function(z, drawgridlines=TRUE,...) {
+  image(t(z[nrow(z):1,]), axes=F,...)
+  dx = 1/(ncol(z)-1)
+  dy = 1/(nrow(z)-1)
+  abline(v=0-dx/2)
+  abline(v=1+dx/2)
+  abline(h=0-dy/2)
+  abline(h=1+dy/2)
+  if (drawgridlines) grid(ncol(z), nrow(z), lwd = 1,lty=1,col="black") 
+} 
+ 
+NX = 200
+NT = 500
+z = matrix(rep(NA,NX*NT),nrow=NT,ncol=NX)
+#z = matrix(round(runif(NX*NT)),nrow=NT,ncol=NX)
+z[1,] = round(runif(NX)) 
+z[1,] = 0
+z[1,40:60] = 1
+z[1,100:120] = 1
+z[1,160:180] = 1
+
+for (i in 2:NT) {
+  idx = which(z[i-1,] == 1)
+  idx_innov = (idx + sign(runif(length(idx)) - 0.5) - 1) %% NX + 1
+  
+  sel = rep(TRUE,length(idx))
+  sel = sel & !idx_innov %in% idx
+  sel = sel & !idx_innov %in% idx_innov[duplicated(idx_innov)]
+
+  z[i,] = 0
+  z[i,c(idx_innov[sel],idx[!sel] )] = 1
+}
+
+
+par(mar=c(3,3,1,1))
+par(cex.lab=3)
+par(mgp=c(1, 0, 0))
+draw.grid(z,FALSE,xlab="x",ylab="t",col=c("white","black"))
+```
+
+
+
+
+
+
+## Example 4: Plant competition
+
+
+We consider 5 genera of grasses (Lolium, Agrostis, Holcus, Poa, Cynosurus). Certain genera might displace others over time. We can model this competition as a two-dimensional stochastic CA with a von Neumann neighborhood (4 NBs):
+
+* A cell represents soil which may be vegetated by one of the grass genera.
+* The transition function uses a **replacement table** $T$ with probabilities that one genus is replaced by another:
+
+|           | Lolium | Agrostis | Holcus | Poa  | Cynosurus |
+|-----------|--------|----------|--------|------|-----------|
+| Lolium    |    1   |   0.02   |  0.06  | 0.05 |    0.03   |
+| Agrostis  |  0.23  |     1    |  0.09  | 0.32 |    0.37   |
+| Holcus    |  0.06  |   0.08   |    1   | 0.16 |    0.09   |
+| Poa       |  0.44  |   0.06   |  0.06  |   1  |    0.11   |
+| Cynosurus |  0.03  |   0.02   |  0.03  | 0.05 |     1     |
+
+
+
+
+## Example 4: Plant competition
+
+
+$T$ is not symmetric, rows represent neighbours whereas columns represent a certain cell that may or may not be replaced.
+
+Let $z_{i,j}(t)$ denote a cell and let $T(s,n)$ be a function that returns column $s$ and row $n$ of the replacement table $T$. To derive the next state of a cell we perform the following operations:
+
+
+1. Obtain genus of neighbors and plug them in $T$:
+
+$$
+p = \frac{1}{4}
+\begin{pmatrix}
+T(z_{i,j}(t), z_{i-1,j}(t)) \\
+T(z_{i,j}(t), z_{i,j-1}(t)) \\
+T(z_{i,j}(t), z_{i+1,j}(t)) \\
+T(z_{i,j}(t), z_{i,j+1}(t))
+\end{pmatrix}
+$$
+
+$p_k$ is the probability that a cell is replalced by the $k$-th neighbor.
+
+
+
+## Example 4: Plant competition
+
+
+2. Draw a random number $r \sim U(0,1)$ and create four nonintersecting intervals $(0,p_1],(p_1,p_1+p_2],(p_1+p_2,p_1+p_2+p_3],(p_1+p_2+p_3,p_1+p_2+p_3+4]$.
+
+3. If $r$ falls into one of these intervals, $z_{i,j}(t)$ is replaced by the corresponding neighbor, otherwise it is not replaced.
+
+
+Example: Cell $z_{i,j}(t)$ is Agrostis, neighbors are (Holcus,Agrostis, Holcus, Lolium). The replacement table yields 
+$$p = \frac{1}{4}(0.08, 1, 0.08, 0.06)^T =  (0.02, 0.25, 0.02, 0.015)^T$$ and the intervals are thus $(0,0.02], (0.02, 0.27], (0.27, 0.29], (0.29, 0.305]$.
+
+Assuming e.g. $r=0.28$, the cell would be replaced by Holcus.
+
+
+
+
+
+
+## Example 4: Plant competition
+
+
+
+The **replacement table** may come from lab experiments or empirical field studies.
+
+
+```{r,echo=F,warning=FALSE, fig.width=11,fig.height=4, fig.align='center',out.height="8cm",out.width="22cm"}
+ 
+draw.grid <- function(z, drawgridlines=TRUE,...) {
+  image(t(z[nrow(z):1,]), axes=F,...)
+  dx = 1/(ncol(z)-1)
+  dy = 1/(nrow(z)-1)
+  abline(v=0-dx/2)
+  abline(v=1+dx/2)
+  abline(h=0-dy/2)
+  abline(h=1+dy/2)
+  if (drawgridlines) grid(ncol(z), nrow(z), lwd = 1,lty=1,col="black") 
+} 
+ 
+species = c("Lolium", "Agrostis", "Holcus", "Poa", "Cynosurus")
+
+replacement = matrix(ncol=5, byrow=TRUE, data=c(
+1, 0.02, 0.06, 0.05, 0.03,
+0.23, 1, 0.09, 0.32, 0.37,
+0.06, 0.08, 1, 0.16, 0.09,
+0.44, 0.06, 0.06, 1, 0.11,
+0.03, 0.02, 0.03, 0.05, 1))
+
+competition = function(cells, nstep=100) {
+nind = nrow(replacement)
+ncell = nrow(cells)
+dens = matrix(nrow=nstep, ncol=nind)
+
+for (ss in 1:nstep) {
+dn = rbind(cells[ncell,], cells[1:(ncell-1),])
+up = rbind(cells[2:ncell,], cells[1,])
+le = cbind(cells[,2:ncell], cells[,1])
+ri = cbind(cells[,ncell], cells[,1:(ncell-1)])
+
+rnd = matrix(nr=ncell, nc=ncell, runif(ncell*ncell))
+
+for(i in 1:ncell) {
+for(j in 1:ncell) {
+ii = cells[i,j]
+neigb = c(dn[i,j], up[i,j], le[i,j], ri[i,j])
+p = replacement[neigb, ii]
+cump = c(cumsum(p/4), 1)
+rep = min(which(cump>=rnd[i,j]))
+if (rep<5) cells[i,j]=neigb[rep]
+}
+}
+for(i in 1:nind) dens[ss,i]=sum(cells==i)
+}
+return(list(cells=cells, density=dens))
+}
+
+
+ini = c(4,5,1,3,2)
+cells = matrix(40, 40, data=0)
+cells[1:8,] = ini[1] # Poa
+cells[9:16,] = ini[2] # Cynosurus
+cells[17:24,] = ini[3] # Lolium
+cells[25:32,] = ini[4] # Holcus
+cells[33:40,] = ini[5] # Agrostis
+
+A50 = competition(cells,nstep = 50)
+A75 = competition(cells,nstep = 75)
+A100 = competition(cells)
+A200 = competition(A100$cells)
+
+# Plotten
+col=c("violet", "red", "darkgreen", "darkolivegreen3", "orange")
+
+
+par(mar=rep(1.2,4))
+par(cex.main=2)
+par(oma=c(0,2,2,0))
+par(mfrow=(c(1,4)))
+
+
+draw.grid(cells,col=col)
+title(main=paste("t=",0,sep=""),line = 1,xpd=NA)
+text(x=rep(0.1,5), y=seq(0.9, 0.1, length.out=5), labels=species[ini], col="white",adj=0, font=2, srt=0, cex=2.5) 
+draw.grid(A50$cells,col=col)
+title(main=paste("t=",50,sep=""),line = 1,xpd=NA)
+draw.grid(A75$cells,col=col)
+title(main=paste("t=",75,sep=""),line = 1,xpd=NA)
+draw.grid(A100$cells,col=col)
+title(main=paste("t=",100,sep=""),line = 1,xpd=NA)
+
+
+```
+
+
+
+
+
+
+
+## Example 4: Plant competition
+
+
+
+Simulation results show that the Agrostis genus "wins".
+
+```{r,echo=F,warning=FALSE, fig.width=10,fig.height=7, fig.align='center',out.height="14cm",out.width="20cm"}
+par(mar=c(4,4,1,1))
+plot(A100$density[,1]/40^2,col=col[1],type="l",ylim=c(0,1),xlab="t",ylab="Density")
+lines(A100$density[,2]/40^2,col=col[2], type="l")
+lines(A100$density[,3]/40^2,col=col[3], type="l")
+lines(A100$density[,4]/40^2,col=col[4], type="l")
+lines(A100$density[,5]/40^2,col=col[5], type="l")
+```
+
+
+## More Examples and Software
+
+
+The (free) NetLogo software (https://ccl.northwestern.edu/netlogo) contains numerous cellular automata as well as many other agent-based models. 
+

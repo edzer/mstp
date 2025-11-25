@@ -134,7 +134,7 @@ future.
 
 ## A side note: fitting a phase with a linear model
 A phase shift model $\alpha \sin(x + \phi)$ can also be modelled by  
-$\alpha sin(x) + \beta cos(x)$; this is essentially a re-parameterization.
+$\alpha \sin(x) + \beta \cos(x)$; this is essentially a re-parameterization.
 Try the following code:
 ```{r eval=FALSE}
 x = seq(0, 4*pi, length.out = 200) # x plotting range

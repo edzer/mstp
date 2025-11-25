@@ -214,9 +214,9 @@ obtained by plotting both series of length $n-2$, and computing
 correlation
 + Lag-2 _partial_ autocorrelation of $y_t$ and $y_{t-2}$, given
 the value inbetween $y_{t-1}$ is obtained by
- + computing residuals $\hat{e}_t$ from regressing of $y_t$ on $y_{t-1}$
- + computing residuals $\hat{e}_{t-2}$ from regressing of $y_{t-2}$ on $y_{t-1}$
- + computing the correlation between both residual series $\hat{e}_t$ and
+    + computing residuals $\hat{e}_t$ from regressing of $y_t$ on $y_{t-1}$
+    + computing residuals $\hat{e}_{t-2}$ from regressing of $y_{t-2}$ on $y_{t-1}$
+    + computing the correlation between both residual series $\hat{e}_t$ and
  $\hat{e}_{t-2}$.
 + Lag-3 partial autocorrelation regresses $y_t$ and $y_{t-3}$ 
 on _both_ intermediate values $y_{t-1}$ and $y_{t-2}$

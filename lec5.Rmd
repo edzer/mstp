@@ -213,7 +213,7 @@ find weights such that it is minimum.
 What is the scalar $\Var(\sum_{i=1}^n \lambda_i Z(s_i)-Z(s_0))$? Write as
 
 $$\Var(\lambda'Z - Z(s_0)) = \Var(\lambda'Z) + \Var(Z(s_0)) - 2\Cov(\lambda'Z,Z(s_0))$$
-$$=\lambda'V\lambda + \sigma_0^2 + \sum_{i=1}^n \lambda_i \Cov(Z(s_i),Z(s_0)) $$
+$$=\lambda'V\lambda + \sigma_0^2 - 2 \sum_{i=1}^n \lambda_i \Cov(Z(s_i),Z(s_0)) $$
 with $\sigma_0^2 = \Var(Z(s_0))$
 
 So, we need variances of all $Z(s_i)$, including for all $s_0$,

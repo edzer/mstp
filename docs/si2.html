@@ -437,7 +437,7 @@ window.Quarto = {
 <p>When we predict (interpolate), we’re forming linear combinations, <span class="math inline">\(\sum_{i=1}^n \lambda_i Z(s_i)\)</span>, and want to know the variance of <span class="math inline">\(\sum_{i=1}^n
 \lambda_i Z(s_i) - Z(s_0)\)</span>, the interpolation error variance. Only then can we find weights such that it is minimum.</p>
 <p>What is the scalar <span class="math inline">\(\Var(\sum_{i=1}^n \lambda_i Z(s_i)-Z(s_0))\)</span>? Write as</p>
-<p><span class="math display">\[\Var(\lambda'Z - Z(s_0)) = \Var(\lambda'Z) + \Var(Z(s_0)) - 2\Cov(\lambda'Z,Z(s_0))\]</span> <span class="math display">\[=\lambda'V\lambda + \sigma_0^2 + \sum_{i=1}^n \lambda_i \Cov(Z(s_i),Z(s_0)) \]</span> with <span class="math inline">\(\sigma_0^2 = \Var(Z(s_0))\)</span></p>
+<p><span class="math display">\[\Var(\lambda'Z - Z(s_0)) = \Var(\lambda'Z) + \Var(Z(s_0)) - 2\Cov(\lambda'Z,Z(s_0))\]</span> <span class="math display">\[=\lambda'V\lambda + \sigma_0^2 - 2 \sum_{i=1}^n \lambda_i \Cov(Z(s_i),Z(s_0)) \]</span> with <span class="math inline">\(\sigma_0^2 = \Var(Z(s_0))\)</span></p>
 <p>So, we need variances of all <span class="math inline">\(Z(s_i)\)</span>, including for all <span class="math inline">\(s_0\)</span>, and all covariances between pairs <span class="math inline">\(Z(s_i)\)</span> and <span class="math inline">\(Z(s_j)\)</span>, including all <span class="math inline">\(s_0\)</span>.</p>
 </section>
 <section id="suppose-we-know-all-that" class="level3">

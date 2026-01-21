@@ -1,0 +1,318 @@
+---
+title: "Lecture 8"
+subtitle: "Universal Kriging and Block Kriging"
+date: "2024-12-04"
+
+include-in-header:
+  - text: |
+      <style>
+      .reveal .slide-logo {
+        max-height: unset;
+        height: 70px;
+      }
+      </style>
+format: revealjs
+editor: visual
+---
+
+## Recall from the last lecture
+
+So far we have looked at geostatistical interpolation with:
+
+-   Simple Kriging
+-   Ordinary Kriging
+
+## Recall from the last lecture
+
+*Let´s look at the Kriging equation and its components:*
+
+$\hat{Z}_i = \mu + e_i$
+
+The two components can be understood as:
+
+$\hat{Z}_i$ = global mean + local variation
+
+## Recall from the last lecture
+
+[**Simple Kriging:**]{.green}
+
+-   assume the mean $\mu$ to be known and constant
+-   model local variation $e(s_0)$ as a weighted linear combination of the local variation at the known points $\lambda (Z-\mu)$, then add the mean: $\hat{Z}(s_0) = \mu + \lambda (Z-\mu)$ <br> with $\lambda = v' V^{-1}$ (see last lecture)
+
+[**Ordinary Kriging:**]{.green}
+
+-   assume the global mean $\mu$ to be constant but *unknown*
+-   model global mean $\mu$ and local variation $\lambda (Z-\mu)$ at the same time by estimating the absolute value $\hat{Z}(s_0)$ and making sure that the weights $\lambda$ sum up to 1
+
+## Recall from the last lecture
+
+We also saw what to do when the mean is *varying* but *known*:
+
+-   this is simple kriging with a vector of known means $\mu(s) = (\mu(s_1),\mu(s_2),...,\mu(s_n))'$.
+
+## Recall from the last lecture
+
+So far we have looked at geostatistical interpolation with:
+
+-   known and constant mean: Simple Kriging
+-   unknown and constant mean: Ordinary Kriging
+-   known, but varying mean: Simple Kriging with mean $\mu(s) = (\mu(s_1),\mu(s_2),...,\mu(s_n))'$.
+
+*What if the mean is unknown and varying?*
+
+## Unknown, varying mean - Universal Kriging
+
+-   Universal Kriging assumes the mean to be varying (trend/external drift) and unknown
+-   seeks to model the two components simultaneously
+-   needs a model for both, the trend and the local variation (covariance structure)
+
+## Unknown, varying mean - Universal Kriging
+
+For this, we need to know how the mean varies. Suppose we model this as a linear regression model in $p$ known predictors: $$Z(s_i) = \sum_{j=0}^p \beta_j X_j(s_i) + e(s_i)$$ $$Z(s) = \sum_{j=0}^p \beta_j X_j(s) + e(s) = X(s)\beta + e(s)$$ with $X(s)$ the matrix with predictors, and row $i$ and column $j$ containing $X_j(s_i)$, and with $\beta =
+(\beta_0,...\beta_p)$. Usually, the first column of $X$ contains zeroes in which case $\beta_0$ is an intercept.
+
+## Unknown, varying mean - Universal Kriging
+
+[**Predictor:**]{.green}
+
+$$\hat{Z}(s_0) = x(s_0)\hat{\beta} + v'V^{-1} (Z-X\hat{\beta}) $$ with $x(s_0) = (X_0(s_0),...,X_p(s_0))$ and $\hat{\beta} = (X'V^{-1}X)^{-1} X'V^{-1}Z$
+
+. . .
+
+it has prediction error variance $$\sigma^2(s_0) = \sigma^2_0 - v'V^{-1}v + Q$$
+
+with $Q = (x(s_0) - X'V^{-1}v)'(X'V^{-1}X)^{-1}(x(s_0) - X'V^{-1}v)$
+
+This form is called external drift kriging, universal kriging or sometimes regression kriging.
+
+## Universal Kriging - Example
+
+-   prediction location at (0,1)
+-   three observation locations: (1,1), (2,1) and (3,1)\* with attribute values (variable to be interpolated) 3,2 and 5
+
+\
+\
+
+\*note the constant second coordinate = 1, i.e. locations differ only in x-coordinate to keep this example simple
+
+## Universal Kriging - Example:
+
+```{r, results='hide'}
+library(sf) # st_distance
+cov = function(h) exp(-h)
+
+calc_beta = function(X, V, z) {
+	XtVinv = t(solve(V, X))
+	solve(XtVinv %*% X, XtVinv %*% z)
+}
+
+uk = function(data, newdata, X, x0, cov, beta) {
+	V = cov(st_distance(data))
+	v = cov(st_distance(data, newdata))
+	z = data[[1]]
+	if (missing(beta))
+		beta = calc_beta(X, V, z)
+	mu = X %*% beta
+	x0 %*% beta + t(v) %*% solve(V, z - mu)
+}
+
+# prediction location at (0,1):
+newdata = st_as_sf(data.frame(x = 0, y = 1), coords = c("x", "y"))
+
+
+# three observations location, with attribute values (y) 3,2,5:
+data = st_as_sf(data.frame(x = c(1,2,3), y = c(1,1,1), z = c(3, 2, 5)),
+			   coords = c("x", "y"))
+newdata = st_as_sf(data.frame(x = .1 * 0:20, y = 1), coords = c("x", "y"))
+X = matrix(1,3,1)
+x0 = matrix(1, nrow(newdata), 1)
+uk(data, newdata, X, x0, cov) # mu = unknown
+```
+
+Constant mean:
+
+estimated value at prediction location \~3.33
+
+```{r,results='hide', fig.width=7.5}
+newdata = st_as_sf(data.frame(x = seq(-4,6,by=.1), y = 1), coords = c("x", "y"))
+x0 = matrix(1, nrow(newdata), 1)
+z_hat = uk(data, newdata, X, x0, cov) # mu unknown
+plot(st_coordinates(newdata)[,1], z_hat, type='l', ylim = c(-2,8),xlim = c(-4,6),ylab="estimated value",xlab="coordinates(,1)")
+points(st_coordinates(data)[,1], data$z, col='red', pch=16)
+points(0, z_hat[41], col='green', pch=16)
+beta = calc_beta(X, cov(st_distance(data)), data[[1]])
+beta
+abline(beta, 0, col = 'blue', lty = 2)
+```
+
+## Universal Kriging - Example:
+
+Linear trend:
+
+estimated value at prediction location \~1.7
+
+```{r, results='hide',fig.width=7.5}
+X = cbind(matrix(1,3,1), 1:3)
+X
+xcoord = seq(-4,6,by=.1)
+newdata = st_as_sf(data.frame(x = xcoord, y = 1), coords = c("x", "y"))
+x0 = cbind(matrix(1, nrow(newdata), 1), xcoord)
+z_hat = uk(data, newdata, X, x0, cov) # mu unknown
+plot(st_coordinates(newdata)[,1], z_hat, type='l', ylim = c(-2,8),xlim = c(-4,6),ylab="estimated value",xlab="coordinates(,1)")
+points(st_coordinates(data)[,1], data$z, col='red', pch=16)
+points(0, z_hat[41], col='green', pch=16)
+beta = calc_beta(X, cov(st_distance(data)), data[[1]])
+beta
+abline(beta, col = 'blue', lty = 2)
+```
+
+## Universal Kriging - Example:
+
+With Gaussian covariance:
+
+estimated value at prediction location \~2.06
+
+```{r,results='hide',fig.width=7.5}
+cov = function(h) exp(-(h^2))
+z_hat = uk(data, newdata, X, x0, cov) # mu unknown
+plot(st_coordinates(newdata)[,1], z_hat, type='l',ylim = c(-2,8),xlim = c(-4,6), ylab="estimated value",xlab="coordinates(,1)")
+points(st_coordinates(data)[,1], data$z, col='red', pch=16)
+points(0, z_hat[41], col='green', pch=16)
+beta = calc_beta(X, cov(st_distance(data)), data[[1]])
+beta
+abline(beta, col = 'blue', lty = 2)
+```
+
+## Estimating spatial correlation under the UK model
+
+As opposed to the ordinary kriging model, the universal kriging model needs knowledge of the mean vector in order to estimate the semivariance (or covariance) from the residual vector: $$\hat{e}(s) = Z(s) - X\hat\beta$$ but how to get $\hat\beta$ without knowing $V$? This is a chicken-egg problem. The simplest, but not best, solution is to plug $\hat{\beta}_{OLS}$ in, and from the $e_{OLS}(s)$, estimate $V$ (i.e., the variogram of $Z$)
+
+## Universal Kriging workflow
+
+::: incremental
+-   choose predictors for the mean (e.g. distance to river for zinc concentration)
+-   fit a linear regression model (estimate $\beta$)
+-   model mean for known locations and calculate residuals (differences to mean)
+-   fit a (semi-) variogram to the residuals
+-   apply kriging on the residuals
+-   apply the regression model on all prediction points
+-   at each prediction location add the (modeled) mean and the (modeled) residual
+:::
+
+## Spatial Prediction
+
+... involves errors, uncertainties
+
+## UK and linear regression
+
+If $Z$ has no spatial correlation, all covariances are zero and $v=0$ and $V=\mbox{diag}(\sigma^2)$. This implies that $$\hat{Z}(s_0) = x(s_0)\hat{\beta} + v'V^{-1} (Z-X\hat{\beta}) $$ with $\hat{\beta} = (X'V^{-1}X)^{-1} X'V^{-1}Z$ reduces to
+
+$$\hat{Z}(s_0) = x(s_0)\hat{\beta}$$ with $\hat{\beta} = (X'X)^{-1} X'Z$, i.e., ordinary least squares regression.
+
+## UK and linear regression
+
+Note that
+
+-   under this model the residual does not carry information, as it is white noise
+-   in spatial prediction, UK can not be worse than linear regression, as linear regression is a limiting case of a more general model.
+
+## Application
+
+For an application of universal kriging in mapping of air quality variables, and a comparison to linear regression, see
+
+-   Rob Beelen, Gerard Hoek, Edzer Pebesma, Danielle Vienneau, Kees de Hoogh, David J. Briggs, Mapping of background air pollution at a fine spatial scale across the European Union, Science of The Total Environment, Volume 407, Issue 6, 2009, Pages 1852-1867, https://doi.org/10.1016/j.scitotenv.2008.11.048
+
+## Kriging varieties
+
+[**Simple kriging:**]{.green} $Z(s)=\mu+e(s)$, $\mu$ known
+
+[**Ordinary kriging:**]{.green} $Z(s)=m+e(s)$, $m$ unknown
+
+[**Universal kriging:**]{.green} $Z(s)=X\beta+e(s)$, $\beta$ unknown
+
+## Kriging varieties
+
+\newcommand{\E}{{\rm E}}
+
+-   SK: $\lambda'Z$ with $\lambda$ such that $\sigma^2(s_0) = {\rm E}(Z(s_0)-\lambda'Z)^2$ is minimized
+-   OK: $\lambda'Z$ with $\lambda$ such that it
+    -   has minimum variance $\sigma^2(s_0) = {\rm E}(Z(s_0)-\lambda'Z)^2$, and
+    -   is unbiased ${\rm E}(\lambda'Z) = m$
+    -   second constraint: $\sum_{i=1}^n \lambda_i = 1$, weights sum to one.
+-   UK:
+    -   $\hat{Z}(s_0) = x(s_0)\hat{\beta} + v'V^{-1} (Z-X\hat{\beta})$ with
+    -   $\hat{\beta} = (X'V^{-1}X)^{-1} X'V^{-1}Z$
+    -   $\sigma^2(s_0) = \sigma^2_0 - v'V^{-1}v + Q$
+
+## Global vs. local predictors
+
+In many cases, instead of using all data, the number of observations used for prediction are limited to a selection of nearest observations, based on
+
+-   number of observations or
+-   distance to prediction location $s_0$
+-   possibly, in addition, directions
+
+. . .
+
+The reason for this is usually either
+
+-   statistical, allowing for a more flexible mean/trend structure
+-   practical, if $n$ gets large
+
+## Statistical arguments for local prediction
+
+-   estimating $\beta$ locally instead of globally means that
+    -   $\beta$ will adjust to local situations (less bias)
+    -   it will be harder to estimate $\beta$ from less information, so (slightly?) larger prediction errors will result (larger variance)
+
+. . .
+
+-   some authors claim that local trends are so adaptive, that one can ignore spatial correlation of the residual
+-   Using local linear regression with *weights* that decay with distance is called *geographically weighted regression*, GWR
+
+## Practical arguments for local prediction
+
+-   The number of observations, $n$ may become very large 
+    -lidar data, 3D chemical, satellite sensors, geotechnical, seismic, ...
+-   Computing $V^{-1}v$ is the expensive part; it is $O(N^2)$ or $O(N^3)$ as $V$ is usually not of simple structure
+-   there is a trade-off; for a global neighbourhood, the expensive part, factoring $V$ needs only be done once, for a local neighbourhood for each unique neighbourhood (in practice: for each $s_0$).
+-   selecting local neighbourhoods also costs time; naive selection $O(n \log n)$ doesn't scale well
+-   `gstat` uses quadtrees/octtrees, inspired by http://donar.umiacs.umd.edu/quadtree/index.html
+
+## Predicting block means - Block Kriging
+
+Instead of predicting $Z(s_0)$ for a ''point'' location, one might be interested in predicting the average of $Z(s)$ over a block, $B_0$, i.e. $$Z(B_0) = \frac{1}{|B_0|}\int_{B_0} Z(u)du$$
+
+## Predicting block means - Block Kriging
+
+-   This can (naively) be done by predicting $Z$ over a large number of points $s_0$ inside $B_0$, and averaging
+-   For the prediction *error*, of $\hat{Z}(B_0)$, we then need the covariances between all point predictions
+
+![](./data/BlockKriging.jpg){fig-align="center"}
+
+## Predicting block means - Block Kriging
+
+-   this can be computationally expensive, especially when many block estimates are required
+-   a more efficient way is to use block kriging, which does prediction and averaging at once, so only one kriging system is needed for each block estimate
+-   the estimate produced by block kriging is identical to that obtained by averaging the point estimates
+    -   the average of the point estimates is the same as the direct block estimate
+    -   the average of the point kriging weights for a sample is the same as the block kriging weight for the sample
+-   when using block kriging variance decreases because variability cancels out
+
+## Block Kriging - how to discretize blocks
+
+-   the grid of discretizing points should always be regular
+-   the spacing between points may be larger in one direction than in the other to account for anisotropy
+
+![](./data/BlockKriging2.jpg){fig-align="center"}
+
+## Reason why one wants block means
+
+Examples
+
+-   mining: we cannot mine point values
+-   soil remediation: we cannot remediate points
+-   RS: we can match satellite image pixels
+-   disaster management: we cannot evacuate points
+-   environment: legislation may be related to blocks
+-   accuracy: block means can be estimated with smaller errors than points

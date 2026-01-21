@@ -1,0 +1,554 @@
+--- 
+title: "Lecture 1"
+subtitle: "Modelling spatio-temporal processes"
+
+include-in-header:
+  - text: |
+      <style>
+      .reveal .slide-logo {
+        max-height: unset;
+        height: 70px;
+      }
+      </style>
+format: revealjs
+editor: visual
+
+---
+
+## Overview
+
+
+[**Where we come from...**](.green)
+
++ mathematics, linear algebra, computer science, 
++ **introduction to geostatistics**
+    + types of variables: Stevens' measurement scales -- nominal, ordinal, interval, ratio 
+    + or: discrete, continuous
+    + t-tests, ANOVA
+    + regression, multiple regression (but now how we compute it)
+    + assumption was: observations are independent
+    + what does independence mean?
+
+
+## Overview
+
+[**In this course, **](.green)
+
++ we will study dependence in observations, in space, time, or space-time
++ in space and/or time, Stevens' measurement scales are not enough! 
++ Examples:
+    + linear time, cyclic time
+    + space: functions, fields
++ we will study how we can represent phenomena, by
+    + mathematical representations (models)
+    + computer representations (models)
++ we will consider how well these models correspond to our observations
+
+
+## Topics (planned)
+
+- **Time series models**
+  + (Partial) autocorrelations, ARIMA(p,d,q)
+  + Model selection, AIC
+  + Forecasting, decomposition
+  
+  
+## Topics (planned)
+
+- **Optimisation**
+  + Linear models, least squares, normal equations
+  + Non-linear:
+    + One-dimensional: golden search
+    + Multi-dimensional least squares: Newton
+    + Multi-dimensional stochastic search: Metropolis
+    + Multi-dimensional stochastic optimisation: Simulated annealing 
+
+
+
+## Topics (planned)
+
+- **Spatial models**
+  + Simple, heuristic spatial interpolation approaches
+  + Spatial correlation
+  + Regression with spatially correlated data
+  + Kriging: best linear (unbiased) prediction 
+  + Stationarity, variogram
+  + Kriging varieties: simple, ordinary, universal kriging
+  + Kriging as a probabilistic spatial predictor
+
++ Spatio-temporal variation modelled by partial differential equations
++ Agent-based approaches
+
+
+## Course Organization
+
+
+**Teachers**: Edzer Pebesma / Christian Knoth
+
++ Course style: Lecture + Exercises
++ Lecture discusses the theory, exercises teach you how to work with and analyze data in practice (using R)
++ 5 ECTS (2 lecture, 3 exercises): 150 hours of work
++ Lectures: Tuesday 10-12 Room 130
++ Exercises: Wednesday 12-14 Room 130
+
+
+
+
+## Course Organization
+
+
+**Learnweb**: [EIDMDRP-2024_2](https://sso.uni-muenster.de/LearnWeb/learnweb2/course/view.php?id=80651), password -> kriging
+
+**Slides**:  Weekly updates in Learnweb
+
+**Exam**:
+
++ 21.01.2025, 10:15 - 11:45
++ "single choice", 4 possibilities, 40 questions, 20 need to be correct.
+
+**Exercise**:
+
++ weekly exercises + "Weihnachtsaufgabe"
++ more details in the first exercise meeting
+
+**Communication**:
+
++ Use learnweb forum to ask questions, student answers are very welcome (!)
+
+
+
+## Literature
+
+
++ Full script from 2023: [http://edzer.github.io/mstp/](http://edzer.github.io/mstp/)
++ C. Chatfield (2003): The analysis of time series: an introduction. Chapman and Hall: chapters 1, 2 and 3
++ R. Hyndman, G. Athanasopoulos: [Foreasting: Principles and Practice](https://otexts.com/fpp3/)
++ E. Pebesma , R. Bivand: [Spatial Data Science, with applications in R](https://r-spatial.org/book/):
+    + Ch 1 (intro), 7 (sf, stars)
+    + Ch 12 (interpolation)
+    
+
+## Spatio-temporal phenomena are everywhere
+
++ if we think about it, there are no data that can be non-spatial or non-temporal
++ in many cases, the spatial or temporal references are not essential
+    + think: brain image of a person: time matters, but mostly referenced with respect to the age of the person, spatial location of the MRI scanner does not
+    + but: ID of the patient does!
+    + and: time of scan matters too!
++ we will "pigeon-hole" (classify) phenomena into: fields, objects, aggregations
+
+
+## Fields
+
++ many processes can be represented by fields, meaning they could be measured everywhere
++ Examples: 
+    + temperature in this room
+    + sea surface temperature
+    + radioactivity of the ground
+    + Concentration of pollutants in the air
+    + elevation
+    + ...
++ typical problems: interpolation, patterns, trends, temporal development, forecasting?
+
+## Objects and events
+
++ objects can be identified 
++ objects are identified within a frame (or _window_) of observation
++ within this window, between objects, there are no objects (no point of interpolation)
++ objects can be moving (people), or static (buildings)
++ objects or events are sometimes obtained by thresholding fields, think heat wave, earthquake, hurricane, see, e.g. [Camara et al. (2014)](https://link.springer.com/chapter/10.1007/978-3-319-11593-1_11)
++ sometimes this view is rather artificial, think cars, persons, buildings
+
+## Fields - objects/events conversions
++ we can convert a field into an object by thresholding (wind field, storm or hurricane)
++ we can convert objects into a field e.g. by computing the density as a continuous function
+
+## Aggregations
++ we can aggregate fields, or objects, but do this differently:
+  + population can be summed, temperature cannot (see [intensive/extensive properties](https://en.wikipedia.org/wiki/Intensive_and_extensive_properties))
+  + What are the CO2 emissions of powerplants where no powerplant is?
+  
+## Reasons for modelling
+... could be
+
++ curiousity
++ fun: studying models is easier than measuring the world around us
+
+More scientific aims of modelling are 
+
++ to learn about the world around us
++ to predict the past, current or future, in case where measurement is not feasible.
+
+## What is a model?
+
++ conceptual models, e.g. the water cycle ([wikipedia](http://en.wikipedia.org/wiki/File:Water_cycle.png):) 
+
+
+![the water cycle](https://upload.wikimedia.org/wikipedia/commons/9/94/Water_cycle.png){height="400"}
+
+
+## What is a model?
++ conceptual models, e.g. the water cycle ([wikipedia](https://en.wikipedia.org/wiki/Water_cycle#/media/File:USGS_WaterCycle_English_ONLINE_20221013.png):) 
+
+
+ ![the water cycle, updated](https://i0.wp.com/eos.org/wp-content/uploads/2022/10/usgs-water-cycle.png){height="400"}
+
+## What is a model?
++ object models, such as UML ([wikipedia](http://en.wikipedia.org/wiki/File:UML_diagrams_overview.svg):) ![UML](https://upload.wikimedia.org/wikipedia/commons/e/ed/UML_diagrams_overview.svg)
+
+## What is a model?
++ mathematical models, such as Navier Stokes' equation, ([wikipedia](https://en.wikipedia.org/wiki/Navier%E2%80%93Stokes_equations):)
+
+
+$$\rho \left(\frac{\partial v}{\partial t} + v \cdot \nabla v \right) = - \nabla p + \nabla \cdot T + f$$
+
+## What is a mathematical model?
+A mathematical model is an abstract model that uses mathematical
+language to describe the behaviour of a system. 
+
+
+
+> _a representation of the essential aspects of an existing system (or
+> a system to be constructed) which presents knowledge of that system in
+> usable form_ (P. Eykhoff, 1974, System Identification, J. Wiley, London.)
+
+. . . 
+
+In the natural sciences, a model is always an approximation, a
+simplification of reality. If degree of approximation meets the required
+accuracy, the model is useful, or valid (of value). A validated model
+does not imply that the model is "true"; more than one model can be
+valid at the same time.
+ 
+ 
+## Time series models
+
+we will first look into time series models, because they are
+
++ simple
++ easy to write down
++ well understood
+
+time series models are roughly divided in 
+
+1. time domain models, which look at correlations and memory, and
+2. frequency domain models, which focus on periodicities 
+
+Spatial equivalents are mostly found in (1), although (2) has
+spatial equivalences as well (e.g. wavelets).
+
+
+## Some data
+
+Consider the following process ($\Delta t$  = 1 min):
+
+```{r fig.width=10, fig.height=5}
+#| code-fold: true
+#| echo: true
+#| results: false
+
+load("./data/meteo.RData") # should be available in the current working directory
+plot(T.outside~date, meteo, type='l', ylab = parse(text = "Temperature ({}*degree* C)"), xlab = "date, 2007")
+title("Outside temperature, Hauteville, FR")
+```
+
+## Some questions
++ how can we describe this process in statistical terms?
++ how can we model this process?
++ (how) can we predict future observations?
+
+## White noise
+Perhaps the simplest time series model is _white noise_ with mean $m$:
+
+$$y_t = m + e_t, \ \ e_t \sim N(0,\sigma^2)$$
+
+$N(0,\sigma^2)$ denoting the normal distribution with mean 0 and
+variance $\sigma^2$, <br>
+and $\sim$ meaning _distributed as_ or _coming from_.
+
+$t$ is the index $t=1,2,...,n$ of the observation, and refers to
+specific times, which, when not otherwise specified are at regular
+intervals.
+
+. . . 
+
+A *white noise* process is completely without memory: each observation is
+independent from its past or future.
+
+
+
+
+## White noise
+
+Plotting independent, standard normal values against their index (the default for plotting a vector in R) shows
+how a white noise time series would look like:
+
+```{r fig.width=10, fig.height=5}
+white.noise = rnorm(100)
+plot(white.noise, type='b')
+title("100 independent observations from N(0,1)")
+```
+
+## White noise
+Plotting independent, standard normal values against their index (the default for plotting a vector in R) shows
+how a white noise time series would look like:
+
+```{r fig.width=10, fig.height=5}
+white.noise = rnorm(1000)
+plot(white.noise, type='l')
+title("1000 independent observations from N(0,1)")
+```
+
+## White noise
+
+Plotting independent, standard normal values against their index (the default for plotting a vector in R) shows
+how a white noise time series would look like:
+
+```{r fig.width=10, fig.height=5}
+white.noise = rnorm(10000)
+plot(white.noise, type='l')
+title("10000 independent observations from N(0,1)")
+```
+
+
+## Autocorrelation
+Autocorrelation (or lagged correlation) is the correlation between $y_i$ and $y_{i+h}$, as a function of the lag $h$:
+$$
+r(h) = \frac{\sum_{i=1}^{n-h}(y_i-\bar{y})(y_{i+h}-\bar{y})}{\sum_{i=1}^n (y_i-\bar{y})^2}
+$$
+with $\bar{y} = \frac{1}{n} \sum_{i=1}^n y_i$
+
+
+## Autocorrelation of white noise
+
+We can look at the auto-correlation function of a white noise
+process, and find it is uncorrelated for any lag larger than 0:
+
+```{r fig.width=8, fig.height=4, echo=FALSE}
+#| code-fold: true
+#| echo: true
+plot(acf(rnorm(10000), plot=FALSE), main="ACF of white noise")
+```
+
+
+
+## Random walk
+A simple, next model to look at is that of _random walk_, where each
+time step a change is made according to a white noise process:
+$$y_t = y_{t-1} + e_t$$
+
+. . . 
+
+Such a process has memory, and long-range correlation. If we take the first-order
+differences,
+$$y_t - y_{t-1} = e_t$$
+we obtain the white noise process.
+
+Further, the variance of the process increases with increasing domain
+(i.e., it is non-stationary)
+
+## Example random walk:
+We can compute it as the cumulative sum of standard normal deviates: $y_n = \sum_{i=1}^n
+e_i$:
+
+```{r fig.width=10, fig.height=5}
+#| echo: true
+#| code-fold: true
+#
+# generate three series:
+rw1 = cumsum(rnorm(5000))
+rw2 = cumsum(rnorm(5000))
+rw3 = cumsum(rnorm(5000))
+plot(rw1, type='l', ylim = range(c(rw1,rw2,rw3)))
+lines(rw2, type='l', col='red')
+lines(rw3, type='l', col='blue')
+```
+
+
+## Example random walk:
+
+
+```{r, fig.height=3.1, echo=FALSE}
+plot(acf(rw3,plot=FALSE,lag.max = 200),main="ACF of random walk")
+```
+
+```{r, fig.height=3.1, echo=FALSE}
+plot(acf(diff(rw3),plot=FALSE, lag.max = 200),main="ACF of first order random walk differences")
+```
+
+
+## Moving Average: MA(1), MA(q)
+Let $e_t$ be a white noise process. A moving average process of
+order $q$ is generated by
+$$y_t = \beta_0 e_t + \beta_1 e_{t-1} + ... + \beta_q e_{t-q}$$
+
+Note that the $\beta_j$ are weights, and could be $\frac{1}{q+1}$ to
+obtain an unweighted average. Moving averaging smoothes the white
+noise series $e_t$.
+
+## Moving Average: MA(1), MA(q)
+Moving average over monthly CO2 measurements on Mauna Loa:
+```{r fig.width=10, fig.height=5}
+plot(co2)
+lines(filter(co2, rep(1/12, 12)), col='blue')
+```
+
+## Moving Average: MA(1), MA(q)
+Moving averages, over a white noise process (MA(5) in red, MA(20) in blue):
+```{r fig.width=10, fig.height=5}
+#set.seed(13531)
+e = rnorm(2000)
+plot(e, type='l')
+e5 = filter(e, rep(1/5, 5))
+e20 = filter(e, rep(1/20, 20))
+lines(e5, col='red')
+lines(e20, col='blue')
+```
+
+## Moving Average: MA(1), MA(q)
+
+Wider moving average filters give new processes with
++ less variation
++ stronger correlation, over larger lags
+
+```{r}
+acf(e, main = "ACF of white noise")
+```
+
+## Moving Average: MA(1), MA(q)
+
+Wider moving average filters give new processes with
++ less variation
++ stronger correlation, over larger lags
+
+```{r}
+acf(e5, na.action = na.pass, main = "ACF of MA(5) over white noise")
+```
+
+## Moving Average: MA(1), MA(q)
+
+Wider moving average filters give new processes with
++ less variation
++ stronger correlation, over larger lags
+
+```{r}
+acf(e20, na.action = na.pass, main = "ACF of MA(20) over white noise")
+```
+
+
+
+## Autoregressive process: AR(1)
+An auto-regressive (1) model, or AR(1) model is generated by
+$$y_t = \phi_1 y_{t-1}+e_t$$
+and is sometimes called a Markov process. Given knowledge of $y_{t-1}$,
+observations further back carry no information; more formally:
+$$\Pr(y_t|y_{t-1},y_{t-2},...,y_{t-q}) = \Pr(y_t|y_{t-1})$$
+
+. . . 
+
++ $\phi_1 = 1$ gives random walk, $\phi_1=0$ gives white noise.
++ AR(1) processes have correlations beyond lag 1
++ AR(1) processes have non-significant _partial autocorrelations_ beyond lag 1
+
+## Autoregressive process: AR(p)
+$$y_t = \phi_1 y_{t-1}+ \phi_2 y_{t-2} + ... + \phi_p y_{t-p} + e_t$$
+or
+$$y_t = \sum_{j=1}^p \phi_j y_{t-j}+e_t$$
+**Properties**:
+
++ The state of $y_t$ does not _only_ depend on $y_{t-1}$, but
+observations further back contain information
++ AR(p) have autocorrelations beyond lag p
++ AR(p) have "zero" _partial_ autocorrelations beyond lag p
+
+## Autoregressive process: AR(1), AR(p)
+As an example, we create (simulate) an AR(1) process with $\phi_1=0.85$ and $e$
+drawn from the standard normal distribution (mean 0, variance 1).
+
+```{r, fig.height=4}
+
+n = 1000
+y = rep(NA_real_, n) # initialise the variable: not needed, but good practice
+y[1] = 0
+for (i in 2:n) y[i] = 0.85 * y[i-1] + rnorm(1)
+plot(y, type = 'l', main = "AR(1)")
+
+```
+
+## Autoregressive process: AR(1), AR(p)
+As an example, we create (simulate) an AR(1) process with $\phi_1=0.85$ and $e$
+drawn from the standard normal distribution (mean 0, variance 1).
+
+```{r, fig.height=4}
+
+n = 1000
+y = rep(NA_real_, n) # initialise the variable: not needed, but good practice
+y[1] = 0
+for (i in 2:n) y[i] = 0.85 * y[i-1] + rnorm(1)
+plot(acf(y))
+```
+
+
+## Autoregressive process: AR(1), AR(p)
+
+Now we create (simulate) an AR(2) process with $\phi_1=0.5$,  $\phi_2=0.15$ and $e$
+drawn from the standard normal distribution (mean 0, variance 1).
+
+```{r}
+y2 = rep(NA_real_, 1000) # initialise the variable: not needed, but good practice
+y2[1] = 0; y2[2] = rnorm(1)
+for (i in 3:1000) y2[i] = 0.5 * y2[i-1] + 0.15 * y2[i-2] + rnorm(1)
+plot(y2, type = 'l', main = "AR(2)")
+
+```
+
+## Autoregressive process: AR(1), AR(p)
+```{r}
+y2 = rep(NA_real_, 1000) # initialise the variable: not needed, but good practice
+y2[1] = 0; y2[2] = rnorm(1)
+for (i in 3:1000) y2[i] = 0.5 * y2[i-1] + 0.15 * y2[i-2] + rnorm(1)
+plot(acf(y2))
+```
+
+
+
+## Partial correlation
++ Correlation between $y_t$ and $y_{t-2}$ is simply
+obtained by plotting both series of length $n-2$, and computing 
+correlation
++ Lag-2 _partial_ autocorrelation of $y_t$ and $y_{t-2}$, given
+the value inbetween $y_{t-1}$ is obtained by
+  + computing residuals $\hat{e}_t$ from regressing of $y_t$ on $y_{t-1}$
+  + computing residuals $\hat{e}_{t-2}$ from regressing of $y_{t-2}$ on $y_{t-1}$
+  + computing the correlation between both residual series $\hat{e}_t$ and
+  $\hat{e}_{t-2}$.
++ Lag-3 partial autocorrelation regresses $y_t$ and $y_{t-3}$ 
+  on _both_ intermediate values $y_{t-1}$ and $y_{t-2}$
++ etc...
+
+
+## Partial correlation
+Partial correlation can help reveal what the order of an MA(q) or AR(p) series is:
+
+
+```{r}
+pacf(y,main = "PACF of AR(1)")
+```
+
+## Partial correlation
+Partial correlation can help reveal what the order of an MA(q) or AR(p) series is:
+
+```{r}
+pacf(y2, main= "PACF of AR(2)")
+```
+
+## Relation between AR and MA processes
+Chatfield has more details about this.  Substitute the AR(1) as follows
+
+$$y_t = \phi_1 y_{t-1} + e_t$$
+$$y_t = \phi_1 (\phi_1 y_{t-2} + e_{t-1}) + e_t$$
+$$y_t = \phi_1^2 (\phi_1 y_{t-3} + e_{t-2}) + \phi_1 e_{t-1} + e_t$$
+
+etc. In the limit, we can write any AR process as an (infinite)
+MA process, and vice versa.
+
